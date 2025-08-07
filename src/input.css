@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+/* Custom Base Styles */
+@layer base {
+  html {
+    font-family: 'Orbitron', monospace;
+  }
+  
+  body {
+    @apply bg-cyber-dark-bg text-white;
+    font-family: 'Orbitron', monospace;
+  }
+}
+
+/* Custom Component Styles */
+@layer components {
+  .cyber-panel {
+    @apply bg-cyber-panel-bg border border-cyber-border rounded-lg p-6 shadow-cyber;
+  }
+  
+  .neon-text {
+    @apply text-cyber-neon-blue animate-cyber-glow;
+  }
+  
+  .cyber-button {
+    @apply bg-transparent border border-cyber-neon-blue text-cyber-neon-blue px-6 py-3 rounded-lg 
+           hover:bg-cyber-neon-blue hover:text-cyber-dark-bg transition-all duration-300
+           shadow-neon hover:shadow-lg;
+  }
+  
+  .cyber-input {
+    @apply bg-cyber-panel-bg border border-cyber-border text-white px-4 py-2 rounded-lg
+           focus:border-cyber-neon-blue focus:outline-none focus:shadow-neon
+           placeholder-gray-400;
+  }
+  
+  .glow-effect {
+    @apply shadow-neon;
+  }
+  
+  .cyber-card {
+    @apply bg-cyber-panel-bg border border-cyber-border rounded-lg p-4 shadow-cyber;
+  }
+  
+  .cyber-grid {
+    @apply grid gap-4;
+  }
+  
+  .cyber-flex {
+    @apply flex items-center justify-center;
+  }
+}
+
+/* Custom Utility Styles */
+@layer utilities {
+  .text-shadow-neon {
+    text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #00f3ff;
+  }
+  
+  .border-neon {
+    border-color: #00f3ff;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  }
+  
+  .bg-cyber-gradient {
+    background: linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  }
+  
+  .bg-neon-gradient {
+    background: linear-gradient(90deg, #00f3ff, #00ff41, #ff0080);
+  }
+} 

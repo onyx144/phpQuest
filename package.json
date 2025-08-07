@@ -1,0 +1,19 @@
+{
+    "name": "intelescape",
+    "version": "1.0.0",
+    "description": "Intelescape PHP Project with Tailwind CSS",
+    "main": "index.php",
+    "scripts": {
+      "build": "tailwindcss -i ./src/input.css -o ./view/css/tailwind.css --watch",
+      "build:prod": "tailwindcss -i ./src/input.css -o ./view/css/tailwind.css --minify",
+      "dev": "tailwindcss -i ./src/input.css -o ./view/css/tailwind.css --watch"
+    },
+    "keywords": ["php", "tailwind", "css", "game"],
+    "author": "Intelescape Team",
+    "license": "MIT",
+    "devDependencies": {
+      "tailwindcss": "^3.4.0",
+      "autoprefixer": "^10.4.16",
+      "postcss": "^8.4.32"
+    }
+  } 

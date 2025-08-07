@@ -1,0 +1,26 @@
+AddDefaultCharset utf-8
+
+RewriteEngine on
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php
+
+<files .htaccess>
+order allow,deny
+deny from all
+</files>
+
+# RewriteCond %{HTTPS} off
+# RewriteCond %{HTTP:X-Forwarded-Proto} !https
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# без www
+# RewriteCond %{HTTP_HOST} ^www.intelescape.com$ [NC]
+# RewriteRule ^(.*)$ https://intelescape.com/$1 [R=301,L]
+
+# Order deny,allow
+# deny from all
+# Allow from 91.200.10.42

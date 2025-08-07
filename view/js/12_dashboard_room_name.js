@@ -1,0 +1,471 @@
+/* === DASHBOARD - ROOM NAME === */
+
+/* ОБЩИЕ ФУНКЦИИ */
+	// ввели верно, открываем попап исходящего звонка
+	function roomNameOpenOutgoingCall() {
+		// запускаем отображение времени
+		updateIncomingTime();
+		incomingCallTimer = setInterval(function(){
+			updateIncomingTime();
+		}, 1000);
+
+		$('#popup_video_phone .popup_video_phone_wifi_icons').html('<img src="/images/wifi_icons.png" alt="">');
+		$('#popup_video_phone .popup_video_phone_name').html('Jane Blond');
+		$('#popup_video_phone').attr('class','').addClass('popup_video_phone_outgoing_room_name');
+
+		// звук вызова
+		// music_before = music;
+		// if (music) {
+			stopMusic();
+		// }
+
+		if (!incomingAudio || !isPlaying(incomingAudio)) {
+			incomingAudio = new Audio;
+			incomingAudio.src = '/music/incoming.mp3';
+			// incomingAudio.play();
+
+			// Autoplay
+			var promise = incomingAudio.play();
+
+			if (promise !== undefined) {
+				promise.then(_ => {
+					// console.log('autoplay');
+
+					incomingMusicTimer = setInterval(function(){
+						incomingAudio = new Audio;
+						incomingAudio.src = '/music/incoming.mp3';
+						incomingAudio.play();
+					}, incomingMusicDuration);
+				}).catch(error => {
+					// console.log('autoplay ERR');
+				});
+			}
+
+			/*incomingMusicTimer = setInterval(function(){
+				incomingAudio = new Audio;
+				incomingAudio.src = '/music/incoming.mp3';
+				incomingAudio.play();
+			}, incomingMusicDuration);*/
+		}
+
+		// отображаем окошко
+		$('#popup_video_phone').fadeIn(200);
+	}
+
+	// ввели верно - просмотрели incoming video либо закрыли попап с видео
+	function roomName() {
+		var formData = new FormData();
+    	formData.append('op', 'roomNameUpdateHint');
+    	formData.append('lang_abbr', $('html').attr('lang'));
+
+    	$.ajax({
+			url: '/ajax/ajax_dashboard.php',
+	        type: "POST",
+	        dataType: "json",
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        data: formData,
+			success: function(json) {
+				if (json.error_verify) {
+					window.location.href = json.error_verify;
+				} else {
+					$.when(getTeamInfo()).done(function(teamResponse){
+						var teamInfo = teamResponse.success;
+
+						// добавляем очки
+						incrementScore(parseInt(teamInfo.score, 10) + 150, 'main', teamInfo.score);
+					});
+
+					// обновляем mission progress
+					incrementProgressMission(10);
+
+					// открываем экран с минигрой
+					hiddenMainGameWindow();
+					openMiniGameWindow();
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {	
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+	// если запуск из сокета дубляж (не увеличиваем значения в бд)
+	function roomNameFromSocket() {
+		// добавляем очки
+		incrementScoreWithoutSaveDb(scoreBeforeDashboardRoomName + 150, 'main', scoreBeforeDashboardRoomName);
+
+		// обновляем mission progress
+		incrementProgressMissionWithoutSaveDb(10);
+
+		// открываем экран с минигрой
+		hiddenMainGameWindow();
+		openMiniGameWindow();
+	}
+
+	// нажали на кнопку отправки данных
+	function roomNameSubmit(roomName, lang_abbr2) {
+		// звук поиска
+		setTimeout(function(){
+			dataTransferAudio = new Audio;
+			dataTransferAudio.src = '/music/data_transfer.mp3';
+			// dataTransferAudio.play();
+
+			// Autoplay
+			var promise = dataTransferAudio.play();
+
+			if (promise !== undefined) {
+				promise.then(_ => {
+					// console.log('autoplay');
+				}).catch(error => {
+					// console.log('autoplay ERR');
+				});
+			}
+		}, 500);
+
+		// обнуляем значение процентов
+		$('.popup_data_transfer_percent span').html('0');
+		$('.popup_data_transfer_progress_inner').css('width', '0%');
+
+		setTimeout(function(){
+			// запускаем анимацию смены рандомных цифр в Data Transfer
+			var dataTransferInterval1 = false; // переменная для интервала
+			var dataTransferSecondIteration = 50; // сколько милисекунд длится итерация смены цифры
+			var dataTransferSecondTotal = 0; // для прерывания интервала
+			
+			dataTransferInterval1 = setInterval(function(){
+				if (dataTransferSecondTotal >= (dataTransferMusicDuration + 1500)) { // докидываем 1500. Считытает быстрее, чем вторая анимация
+					// прерываем интервал
+					clearInterval(dataTransferInterval1);
+					dataTransferInterval1 = false;
+				}
+
+				// увеличиваем общее к-во секунд для отслеживания прерывания
+				dataTransferSecondTotal += dataTransferSecondIteration;
+
+				// непосредственно пишем новые числа
+				$('.popup_data_transfer_numbers_one').html(selfRandom(100, 9999));
+				$('.popup_data_transfer_numbers_two').html(selfRandom(100, 999));
+			}, dataTransferSecondIteration);
+
+			// запускаем анимацию смены процентов загрузки (текст и полоса) в Data Transfer
+			var dataTransferInterval2 = false; // переменная для интервала
+			var dataTransferPlus = Math.round(100 / dataTransferIteration); // на столько увеличиваем за итерацию
+
+			dataTransferInterval2 = setInterval(function(){
+				var current = parseInt($('.popup_data_transfer_percent span').html(), 10);
+				var next = current + selfRandom(1, dataTransferPlus);
+
+				if (next >= 100) {
+					next = 100;
+				}
+
+				$('.popup_data_transfer_progress_inner').css('width', next + '%');
+				$('.popup_data_transfer_percent span').html(next);
+
+				if (next == 100) {
+					// прерываем интервал
+					clearInterval(dataTransferInterval2);
+					dataTransferInterval2 = false;
+
+					// правильные ли данные введены и действие дальше
+					var formData = new FormData();
+			    	formData.append('op', 'validateRoomNameSearch');
+			    	formData.append('room_name', roomName);
+			    	formData.append('lang_abbr', lang_abbr2);
+
+			    	$.ajax({
+						url: '/ajax/ajax_dashboard.php',
+				        type: "POST",
+				        dataType: "json",
+				        cache: false,
+				        contentType: false,
+				        processData: false,
+				        data: formData,
+						success: function(json) {
+							// скрываем попап
+							$('#popup_data_transfer').fadeOut(200);
+
+							if (dataTransferAudio && isPlaying(dataTransferAudio)) {
+								dataTransferAudio.pause();
+							}
+
+							if (json.success) {
+								// открываем попап входящего звонка
+								roomNameOpenOutgoingCall();
+							} else {
+								// отображаем попап ошибки
+								$('#popup_search_error .popup_search_error_input').html(json.error_lang[$('html').attr('lang')].error_input);
+								$('#popup_search_error .popup_search_error_text').html(json.error_lang[$('html').attr('lang')].error_text);
+								$('#popup_search_error').css('display','block');
+
+								// звук ошибки
+								errorAudio = new Audio;
+								errorAudio.src = '/music/error.mp3';
+								// errorAudio.play();
+
+								// Autoplay
+								var promise = errorAudio.play();
+
+								if (promise !== undefined) {
+									promise.then(_ => {
+										// console.log('autoplay');
+									}).catch(error => {
+										// console.log('autoplay ERR');
+									});
+								}
+							}
+						},
+						error: function(xhr, ajaxOptions, thrownError) {	
+							console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});
+				}
+			}, (dataTransferMusicDuration / dataTransferIteration));
+
+			// отображаем попап с гифкой
+			$('#popup_data_transfer').css('display','block');
+		}, 210);
+	}
+
+	// закрыть попап входящего звонка
+	function roomNameCloseIncomingCall() {
+		// останавливаем звук звонка и запускаем фоновое
+		// if (music_before) {
+		if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
+			playMusic();
+		}
+		// music_before = false;
+
+		clearInterval(incomingMusicTimer);
+		incomingMusicTimer = false;
+
+		if (incomingAudio && isPlaying(incomingAudio)) {
+			incomingAudio.pause();
+		}
+
+		// останавливаем обновление времени
+		clearInterval(incomingCallTimer);
+		incomingCallTimer = false;
+
+		// скрываем блок с телефоном
+		$('#popup_video_phone').fadeOut(200);
+
+		/*// повторно показываем попап, что правильно ввели данные в форме
+		$('#popup_success').addClass('popup_success_room_name').fadeIn(200);*/
+
+		// очищаем данные
+		setTimeout(function(){
+			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
+			$('#popup_video_phone .popup_video_phone_name').html('');
+			$('#popup_video_phone').attr('class','');
+		}, 210);
+	}
+
+$(function() {
+	// ввод данных в поля формы
+	$('.dashboard_tabs[data-dashboard="dashboard"]').on('keyup', '.dashboard_room_name_room_name', function(e){
+		if (e.which == 13) {
+			$('.dashboard_room_name_search').trigger('click');
+		} else {
+			// socket
+			var message = {
+				'op': 'dashboardRoomNameKeyup',
+				'parameters': {
+					'room_name': $(this).val(),
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+		}
+	});
+
+	// отправить данные из формы поиска
+	$('body').on('click', '.dashboard_room_name_search', function(e){
+		var err = false;
+		var roomName = $.trim($('.dashboard_room_name_room_name').val());
+
+		if (roomName == '') {
+			$('.dashboard_room_name_room_name_error').addClass('error_text_database_car_register_active');
+			err = true;
+		} else {
+			$('.dashboard_room_name_room_name_error').removeClass('error_text_database_car_register_active');
+		}
+
+		if (!err) {
+			// socket
+			var message = {
+				'op': 'dashboardRoomNameNoEmptyFields',
+				'parameters': {
+					'room_name': roomName,
+					'lang_abbr': $('html').attr('lang'),
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+
+			roomNameSubmit(roomName, $('html').attr('lang'));
+		} else {
+			// socket
+			var message = {
+				'op': 'dashboardRoomNameEmptyFields',
+				'parameters': {
+					'room_name_error': (roomName == '') ? true : false,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+		}
+	});
+
+	// ввели верно - принять входящий звонок
+	$('body').on('click', '.popup_video_phone_outgoing_room_name .popup_video_phone_btn_answer_wrapper', function(e){
+		// socket
+		var message = {
+			'op': 'dashboardRoomNameCallAnswer',
+			'parameters': {
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+        };
+        sendMessageSocket(JSON.stringify(message));
+
+		// запускаем фоновую музыку, если была
+		// if (music_before) {
+		if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
+			playMusic();
+		}
+		// music_before = false;
+
+		// останавливаем звук звонка
+		clearInterval(incomingMusicTimer);
+		incomingMusicTimer = false;
+
+		if (incomingAudio && isPlaying(incomingAudio)) {
+			incomingAudio.pause();
+		}
+
+		// останавливаем обновление времени
+		clearInterval(incomingCallTimer);
+		incomingCallTimer = false;
+
+		// скрываем блок с телефоном
+		$('#popup_video_phone').fadeOut(200);
+
+		// очищаем данные в блоке с телефоном
+		setTimeout(function(){
+			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
+			$('#popup_video_phone .popup_video_phone_name').html('');
+			$('#popup_video_phone').attr('class','');
+		}, 210);
+
+		// открыть видео и сразу запустить его
+		playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
+		// openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_6.mp4', '', 'room_name_answer_incoming_video', 'call');
+		// playVideo('call');
+		openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_6.mp4', '', 'room_name_answer_incoming_video', 'call_jane');
+		playVideoCall();
+
+		/*// когда видео доиграло до конца, то закрываем и производим нужные действия
+		$('.room_name_answer_incoming_video video').on('ended', function() {
+			closePopupVideo();
+
+			// запускаем обновление данных
+			roomName();
+		});*/
+
+		// сохранить время просмотра видео в списке звонков команды
+		var formData = new FormData();
+    	formData.append('op', 'updateDatetimeCall');
+    	formData.append('lang_abbr', $('html').attr('lang'));
+    	formData.append('call_id', 9);
+
+    	$.ajax({
+			url: '/ajax/ajax_calls.php',
+	        type: "POST",
+	        dataType: "json",
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        data: formData,
+			success: function(json) {},
+			error: function(xhr, ajaxOptions, thrownError) {	
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+
+	/*// когда видео доиграло до конца, то закрываем и производим нужные действия
+	$('body').on('ended', '.room_name_answer_incoming_video video', function(e){
+		closePopupVideo();
+
+		// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse.success;
+
+			scoreBeforeDashboardRoomName = parseInt(teamInfo.score, 10);
+
+			// socket
+			var message = {
+				'op': 'closePopupVideoAndRoomNameSuccess',
+				'parameters': {
+					'scoreBeforeDashboardRoomName': scoreBeforeDashboardRoomName,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+
+	        // запускаем обновление данных
+			roomName();
+		});
+	});*/
+
+	// закрыть попап входящего звонка
+	$('body').on('click', '.popup_video_phone_outgoing_room_name .popup_video_phone_bg, .popup_video_phone_outgoing_room_name .popup_video_phone_btn_decline_wrapper', function(e){
+		// socket
+		var message = {
+			'op': 'dashboardRoomNameCloseIncomingCall',
+			'parameters': {
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+        };
+        sendMessageSocket(JSON.stringify(message));
+
+        roomNameCloseIncomingCall();
+	});
+
+	// закрыть попап с видео
+	$('body').on('click', '.room_name_answer_incoming_video .popup_video_phone_video_bg, .room_name_answer_incoming_video .popup_video_close', function(e){
+		// function
+		// stopVideo();
+		// closePopupVideo();
+		stopVideoCall();
+		closePopupVideoCall();
+
+		// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse.success;
+
+			scoreBeforeDashboardRoomName = parseInt(teamInfo.score, 10);
+
+			// socket
+			var message = {
+				'op': 'stopVideoAndClosePopupVideoAndRoomNameSuccess',
+				'parameters': {
+					'scoreBeforeDashboardRoomName': scoreBeforeDashboardRoomName,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+
+	        // запускаем обновление данных
+			roomName();
+		});
+	});
+});
