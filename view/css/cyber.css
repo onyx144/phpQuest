@@ -169,7 +169,7 @@
     font-weight: 700;
   }
 }
-
+ 
 @layer components {
   .cyber-panel {
     @apply bg-card border border-border rounded-lg p-6;

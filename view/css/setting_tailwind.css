@@ -54,6 +54,19 @@
   .cyber-flex {
     @apply flex items-center justify-center;
   }
+  
+  /* Dashboard Components */
+  .dashboard_item:hover {
+    @apply glow-effect border-cyber-neon-blue/30;
+    transform: translateY(-2px) scale(1.02);
+  }
+  .dashboard_item_active {
+    @apply animate-cyber-pulse;
+    border-radius: 10px; 
+  }
+ 
+  
+  
 }
 
 /* Custom Utility Styles */
@@ -71,7 +84,5 @@
     background: linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
   }
   
-  .bg-neon-gradient {
-    background: linear-gradient(90deg, #00f3ff, #00ff41, #ff0080);
-  }
+   
 } 

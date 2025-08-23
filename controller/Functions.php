@@ -577,48 +577,7 @@ class Functions
                             </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_new_mission dashboard_tab_content_item_active" data-tab="tab1">
-                                <img src="/images/dashboard_new_mission_bg.png" class="dashboard_tab_content_item_new_mission_bg" alt="">
-                                <div class="dashboard_tab_content_item_new_mission_inner">
-                                    <div class="dashboard_tab_content_item_new_mission_title">' . $translation['text36'] . '</div>
-                                    <div class="dashboard_tab_content_item_new_mission_input_wrapper">
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_left"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_right"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_left2"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_right2"></div>
-                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_left" alt="">
-                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_right" alt="">
-                                        <input type="text" placeholder="' . $translation['text38'] . '" autocomplete="off" class="dashboard_tab_content_item_new_mission_input">
-                                        <div class="dashboard_tab_content_item_new_mission_error"></div>
-                                    </div>
-                                    <div class="btn_wrapper btn_wrapper_blue dashboard_tab_content_item_new_mission_accept">
-                                        <div class="btn btn_blue">
-                                            <span>' . $translation['text37'] . '</span>
-                                        </div>
-                                        <div class="btn_border_top"></div>
-                                        <div class="btn_border_bottom"></div>
-                                        <div class="btn_border_left"></div>
-                                        <div class="btn_border_left_arcle"></div>
-                                        <div class="btn_border_right"></div>
-                                        <div class="btn_border_right_arcle"></div>
-                                        <div class="btn_bg_top_line"></div>
-                                        <div class="btn_bg_bottom_line"></div>
-                                        <div class="btn_bg_triangle_left"></div>
-                                        <div class="btn_bg_triangle_right"></div>
-                                        <div class="btn_circles_top">
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                        </div>
-                                        <div class="btn_circles_bottom">
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                            <div class="btn_circle"></div>
-                                        </div>
-                                    </div>
-                                    <div class="dashboard_tab_content_item_new_mission_text_bottom">' . $translation['text302'] . '</div>
-                                </div>
+                                 
                             </div>';
 
         return $return;
@@ -1103,19 +1062,7 @@ class Functions
                             </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_metting_place dashboard_tab_content_item_active" data-tab="tab1">
-                                <div class="dashboard_tab_content_item_company_name_top">
-                                    <div class="dashboard_tab_content_item_company_name_top_left">
-                                        <img src="/images/dashboard_company_name_top_left_bg.png" class="dashboard_company_name_top_left_bg" alt="">
-                                        <div class="dashboard_tab_content_item_company_name_top_text">
-                                            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_886_972)"><path d="M22.6137 10.2823L12.2944 0.879403C11.8414 0.466616 11.1584 0.466661 10.7056 0.879358L0.386239 10.2824C0.0234062 10.613 -0.0964451 11.1224 0.0808163 11.5801C0.258123 12.0378 0.689821 12.3336 1.18068 12.3336H2.82886V21.7546C2.82886 22.1281 3.13172 22.431 3.50525 22.431H9.16153C9.53506 22.431 9.83792 22.1282 9.83792 21.7546V16.0344H13.1622V21.7546C13.1622 22.1282 13.4651 22.431 13.8386 22.431H19.4946C19.8681 22.431 20.171 22.1282 20.171 21.7546V12.3336H21.8195C22.3103 12.3336 22.7421 12.0378 22.9194 11.5801C23.0964 11.1224 22.9766 10.613 22.6137 10.2823Z" fill="white"/><path d="M19.9956 1.91943H15.4531L20.672 6.66479V2.59578C20.672 2.22225 20.3691 1.91943 19.9956 1.91943Z" fill="white"/></g><defs><clipPath id="clip0_886_972"><rect width="23" height="23" fill="white"/></clipPath></defs></svg>
-                                            <span>' . $translation['text205'] . '</span>
-                                        </div>
-                                    </div>
-                                    <div class="dashboard_tab_content_item_company_name_top_right">
-                                        <div class="dashboard_tab_content_item_company_name_top_right_title">' . $translation['text49'] . '</div>
-                                        <div class="dashboard_tab_content_item_company_name_top_right_text">' . $translation['text206'] . '</div>
-                                    </div>
-                                </div>
+                                
                                 <div class="dashboard_tab_content_item_company_name_inner dashboard_tab_content_item_metting_place_inner">
                                     <img src="/images/dashboard_tab_content_item_company_name_inner_bg.png" class="dashboard_tab_content_item_company_name_inner_bg" alt="">
 
@@ -1518,81 +1465,100 @@ class Functions
 
     // calls - список звонков
     private function uploadCallsList($team_id, $lang_id)
-    {
-        $translation = $this->getWordsByPage('game', $lang_id);
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
+    $team_info   = $this->teamInfo($team_id);
 
-        $team_info = $this->teamInfo($team_id);
+    $return = [];
 
-        $return = [];
+    $return['titles'] = '
+             <div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="24" height="24" fill="currentColor" class="text-primary">
+                        <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.72 11.72 0 003.64.59 1 1 0 011 1V20a1 1 0 01-1 1C9.28 21 3 14.72 3 7a1 1 0 011-1h3.5a1 1 0 011 1c0 1.27.2 2.52.59 3.64a1 1 0 01-.21 1.11l-2.26 2.24z"/>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text12'] . '</h2>
+            </div>
+    ';
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.8889 13.8889C17.5056 13.8889 16.1667 13.6667 14.9222 13.2556C14.5389 13.1333 14.1 13.2222 13.7945 13.5278L11.3501 15.9778C8.20005 14.3778 5.62781 11.8056 4.02781 8.66115L6.47224 6.20557C6.77781 5.9 6.86667 5.46115 6.74448 5.07781C6.33339 3.83339 6.11115 2.49448 6.11115 1.11115C6.11109 0.494427 5.61667 0 5 0H1.11109C0.5 0 0 0.494427 0 1.11109C0 11.5444 8.45557 20 18.8889 20C19.5056 20 20 19.5056 20 18.8889V15C20 14.3833 19.5056 13.8889 18.8889 13.8889Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text12'] . '</div>
-                                </div>
-                            </div>';
+    $return['content'] = '<div class="space-y-3">';
 
-        $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_calls_list dashboard_tab_content_item_active" data-tab="tab1">
-                                <div class="dashboard_tab_content_item_calls_list_table">
-                                    <div class="dashboard_tab_content_item_calls_list_thead">
-                                        <div class="dashboard_tab_content_item_calls_list_tr">
-                                            <div class="dashboard_tab_content_item_calls_list_th dashboard_tab_content_item_calls_list_th_name">' . $translation['text53'] . '</div>
-                                            <div class="dashboard_tab_content_item_calls_list_th dashboard_tab_content_item_calls_list_th_time">' . $translation['text54'] . '</div>
-                                            <div class="dashboard_tab_content_item_calls_list_th dashboard_tab_content_item_calls_list_th_listen">' . $translation['text55'] . '</div>
-                                        </div>
-                                    </div>
-                                    <div class="dashboard_tab_content_item_calls_list_tbody">';
+    if ($team_info) {
+        $active_calls = json_decode($team_info['active_calls'], true);
 
-        if ($team_info) {
-            $active_calls = json_decode($team_info['active_calls'], true);
+        foreach ($active_calls as $call) {
+            $sql = "
+                SELECT c.type, cd.video, cd.name, cd.video_with_path
+                FROM calls c
+                JOIN calls_description cd ON c.id = cd.call_id
+                WHERE c.id = {?} AND cd.lang_id = {?}
+            ";
+            $call_info = $this->db->selectRow($sql, [$call['id'], $lang_id]);
 
-            foreach ($active_calls as $call) {
-                // иконка
-                $icon = '';
-
-                $sql = "
-                    SELECT c.type, cd.video, cd.name, cd.video_with_path
-                    FROM calls c
-                    JOIN calls_description cd ON c.id = cd.call_id
-                    WHERE c.id = {?}
-                    AND cd.lang_id = {?}
-                ";
-                $call_info = $this->db->selectRow($sql, [$call['id'], $lang_id]);
-                if ($call_info) {
-                    if ($call_info['type'] == 'incoming') {
-                        $icon = '<img src="/images/incoming_icon.png" alt="">';
-                    } elseif ($call_info['type'] == 'outgoing') {
-                        $icon = '<img src="/images/outgoing_icon.png" alt="">';
-                    }
+            // Иконка звонка
+            $icon = '';
+            if ($call_info) {
+                if ($call_info['type'] == 'incoming') {
+                    $icon = '<img src="/images/incoming_icon.png" alt="Входящий">';
+                } elseif ($call_info['type'] == 'outgoing') {
+                    $icon = '<img src="/images/outgoing_icon.png" alt="Исходящий">';
+                } else {
+                    $icon = '<img src="/images/missed_icon.png" alt="Пропущенный">';
                 }
-
-                // дата - время
-                $datetime = '';
-
-                if (!empty($call['datetime'])) {
-                    $dt_object = new DateTime($call['datetime']);
-
-                    $datetime = '<span>' . $dt_object->format('d.m.Y') . '</span><span>' . $dt_object->format('H:i:s') . '</span>';
-                }
-
-                $return['content'] .= '<div class="dashboard_tab_content_item_calls_list_tr">
-                                        <div class="dashboard_tab_content_item_calls_list_td dashboard_tab_content_item_calls_list_td_icon">' . $icon . '</div>
-                                        <div class="dashboard_tab_content_item_calls_list_td dashboard_tab_content_item_calls_list_td_name">' . $translation['text175'] . '<!-- Agent Jane Blond --></div>
-                                        <div class="dashboard_tab_content_item_calls_list_td dashboard_tab_content_item_calls_list_td_time">' . $datetime . '</div>
-                                        <div class="dashboard_tab_content_item_calls_list_td dashboard_tab_content_item_calls_list_td_again"><img src="/images/call_listen_again_bg.png" class="dashboard_tab_content_item_calls_list_td_again_btn" alt="" data-path="' . (!empty($call_info['video']) ? $call_info['video'] : '') . '" data-video-with-path="' . (!empty($call_info['video_with_path']) ? $call_info['video_with_path'] : '') . '"></div>
-                                    </div>';
             }
-        }
-                                
-        $return['content'] .= '     </div>
-                                </div>
-                            </div>';
 
-        return $return;
+            // Дата и время
+            $datetime = '';
+            if (!empty($call['datetime'])) {
+                $dt_object = new DateTime($call['datetime']);
+                $datetime  = $dt_object->format('d.m.Y H:i:s');
+            }
+
+            // Длительность
+            $duration = !empty($call['duration']) ? $call['duration'] : '00:00';
+
+            // Кнопка прослушивания
+            $listen_btn = '';
+            if (!empty($call_info['video']) || !empty($call_info['video_with_path'])) {
+                $listen_btn = '
+                    <button 
+                        class="px-3 py-1 rounded-lg border border-primary/30 text-primary hover:bg-primary/20 transition-all duration-300 flex items-center gap-2"
+                        data-path="' . (!empty($call_info['video']) ? $call_info['video'] : '') . '"
+                        data-video-with-path="' . (!empty($call_info['video_with_path']) ? $call_info['video_with_path'] : '') . '">
+                        ▶ ' . $translation['text55'] . '
+                    </button>';
+            }
+
+            $return['content'] .= '
+                <div class="bg-muted/20 border-border/50 hover:bg-muted/30 transition-all duration-300 p-4 rounded-lg flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            ' . $icon . '
+                            <div class="p-2 rounded-full bg-muted/50">
+                                <img src="/images/user_icon.png" class="h-4 w-4 opacity-70" alt="User">
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-foreground text-lg">' . (!empty($call_info['name']) ? $call_info['name'] : $translation['text175']) . '</h3>
+                            <div class="flex items-center gap-3 text-muted-foreground text-base mt-1">
+                                <span>' . $datetime . '</span>
+                                ' . ($duration !== '00:00' ? '<span>' . $translation['text176'] . ': ' . $duration . '</span>' : '') . '
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        ' . $listen_btn . '
+                    </div>
+                </div>';
+        }
     }
+
+    $return['content'] .= ' </div>';
+
+    return $return;
+}
+
 
 
 
@@ -1678,75 +1644,140 @@ class Functions
 
     // databases - первый экран после принятии миссии - список 4-ех баз данных
     private function uploadDatabasesStartFour($lang_id)
-    {
-        $translation = $this->getWordsByPage('game', $lang_id);
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
 
-        $return = [];
+    $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                                </div>
-                            </div>';
+    $return['titles'] = '
+        <div class="flex items-center gap-3 mb-8">
+    <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9z"/>
+    </svg>
+    <h2 class="text-3xl font-bold neon-text">' . $translation['text13'] . '</h2>
+  </div>';
 
-        $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four dashboard_tab_content_item_active" data-tab="tab1">
-                                <div class="dashboard_tab_content_item_start_four_inner">
-                                    <div class="dashboard_tab_content_item_start_four_inner_item" data-database="personal_files">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top">
-                                            <img src="/images/database_personal_files_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name">' . $translation['text57'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img">
-                                                <img src="/images/database_personal_files_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+    $return['content'] = '
+    <div class="flex flex-row flex-wrap gap-6">
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item" data-database="car_register">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top">
-                                            <img src="/images/database_car_register_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name">' . $translation['text58'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img">
-                                                <img src="/images/database_car_register_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+  <!-- Personal Files -->
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-cyan-500 bg-cyan-900/20">
+    <div class="text-center pb-3">
+      <div class="mx-auto mb-4 relative">
+        <div class="w-16 h-16 rounded-full bg-cyan-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <img src="/assets/img/personal_files_icon.png" class="h-8 w-8 text-cyan-400" alt="icon">
+        </div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background animate-pulse"></div>
+      </div>
+      <h3 class="text-xl mb-2">' . $translation['text57']. '</h3>
+      <p class="text-sm text-muted-foreground mb-3">Доступ к личным досье</p>
+    </div>
+    <div class="text-center space-y-3 px-4 pb-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Records:</span>
+        <span class="text-cyan-400">12,345</span>
+      </div>
+      <span class="badge w-full justify-center bg-green-400">ACTIVE</span>
+      <button data-database="personal_files" class="dashboard_tab_content_item_start_four_inner_item w-full text-cyan-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        Access Database
+      </button>
+    </div>
+  </div>
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item" data-database="mobile_calls">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top">
-                                            <img src="/images/database_mobile_calls_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name">' . $translation['text59'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img">
-                                                <img src="/images/database_mobile_calls_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+  <!-- Car Register -->
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-purple-500 bg-purple-900/20">
+    <div class="text-center pb-3">
+      <div class="mx-auto mb-4 relative">
+        <div class="w-16 h-16 rounded-full bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <img src="/assets/img/car_register_icon.png" class="h-8 w-8 text-purple-400" alt="icon">
+        </div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 border-2 border-background"></div>
+      </div>
+      <h3 class="text-xl mb-2">' . $translation['text58'] . '</h3>
+      <p class="text-sm text-muted-foreground mb-3">Реестр автомобилей</p>
+    </div>
+    <div class="text-center space-y-3 px-4 pb-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Records:</span>
+        <span class="text-purple-400">8,764</span>
+      </div>
+      <span class="badge w-full justify-center bg-yellow-400">LIMITED</span>
+      <button data-database="car_register" class="dashboard_tab_content_item_start_four_inner_item w-full text-purple-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        Access Database
+      </button>
+    </div>
+  </div>
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item" data-database="bank_transactions">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top">
-                                            <img src="/images/database_bank_transactions_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name">' . $translation['text60'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img">
-                                                <img src="/images/database_bank_transactions_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+  <!-- Mobile Calls -->
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-blue-500 bg-blue-900/20">
+    <div class="text-center pb-3">
+      <div class="mx-auto mb-4 relative">
+        <div class="w-16 h-16 rounded-full bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <img src="/assets/img/mobile_calls_icon.png" class="h-8 w-8 text-blue-400" alt="icon">
+        </div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-400 border-2 border-background"></div>
+      </div>
+      <h3 class="text-xl mb-2">' . $translation['text59'] . '</h3>
+      <p class="text-sm text-muted-foreground mb-3">История мобильных звонков</p>
+    </div>
+    <div class="text-center space-y-3 px-4 pb-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Records:</span>
+        <span class="text-blue-400">23,109</span>
+      </div>
+      <span class="badge w-full justify-center bg-red-400">RESTRICTED</span>
+      <button data-database="mobile_calls" class="dashboard_tab_content_item_start_four_inner_item w-full text-blue-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        Access Database
+      </button>
+    </div>
+  </div>
 
-        return $return;
-    }
+  <!-- Bank Transactions -->
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-green-500 bg-green-900/20">
+    <div class="text-center pb-3">
+      <div class="mx-auto mb-4 relative">
+        <div class="w-16 h-16 rounded-full bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <img src="/assets/img/bank_transactions_icon.png" class="h-8 w-8 text-green-400" alt="icon">
+        </div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background"></div>
+      </div>
+      <h3 class="text-xl mb-2">' . $translation['text60'] . '</h3>
+      <p class="text-sm text-muted-foreground mb-3">Финансовые транзакции</p>
+    </div>
+    <div class="text-center space-y-3 px-4 pb-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Records:</span>
+        <span class="text-green-400">45,876</span>
+      </div>
+      <span class="badge w-full justify-center bg-green-400">ACTIVE</span>
+      <button data-database="bank_transactions" class="dashboard_tab_content_item_start_four_inner_item w-full text-green-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        Access Database
+      </button>
+    </div>
+  </div>
+
+</div>
+
+        ';
+
+    return $return;
+}
 
     // databases - загрузить Car Register. Первый экран
     private function uploadDatabasesCarRegister($lang_id, $team_id)
@@ -4134,57 +4165,68 @@ class Functions
 
     // files - список файлов доступный для просмотра
     public function uploadFilesActualForView($team_id, $lang_id)
-    {
-        $translation = $this->getWordsByPage('game', $lang_id);
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
+    $team_info = $this->teamInfo($team_id);
 
-        $team_info = $this->teamInfo($team_id);
+    $return = [];
 
-        $return = [];
+    // Заголовок
+    $return['titles'] = '
+        <div class="flex items-center gap-3 mb-6">
+            <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30 mt-5">
+                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.25 0H7L0 8V20H18.5L20.25 18V0ZM7 7H3.75L3 8V10H6.25L7 9V7ZM9.75 7H18V9L17.25 10H9V8L9.75 7ZM18 3H9.75L9 4V6H17.25L18 5V3ZM3.75 11H7V13L6.25 14H3V12L3.75 11ZM18 11H9.75L9 12V14H17.25L18 13V11ZM3.75 15H7V17L6.25 18H3V16L3.75 15ZM18 15H9.75L9 16V18H17.25L18 17V15Z" fill="#00F0FF"/></svg>
+            </div>
+            <h2 class="text-3xl font-bold neon-text">Архив досье</h2>
+        </div>
+    ';
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.25 0H7L0 8V20H18.5L20.25 18V0ZM7 7H3.75L3 8V10H6.25L7 9V7ZM9.75 7H18V9L17.25 10H9V8L9.75 7ZM18 3H9.75L9 4V6H17.25L18 5V3ZM3.75 11H7V13L6.25 14H3V12L3.75 11ZM18 11H9.75L9 12V14H17.25L18 13V11ZM3.75 15H7V17L6.25 18H3V16L3.75 15ZM18 15H9.75L9 16V18H17.25L18 17V15Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text15'] . '</div>
-                                </div>
-                            </div>';
+    // Контент только для медиа файлов
+    $return['content'] = '
+        <div class="mt-6">
+            <div class="flex items-center gap-2 mb-4">
+                <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M4 4h16v16H4z"/>
+                </svg>
+                <span class="text-sm text-primary">Архив документов, видео и изображений</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    ';
 
-        $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_mission_briefing dashboard_tab_content_item_active" data-tab="tab1">';
+    if ($team_info) {
+        $list_files = json_decode($team_info['list_files'], true);
 
-        if ($team_info) {
-            // идентификаторы файлов, которые доступны для просмотра
-            $list_files = json_decode($team_info['list_files'], true);
+        foreach ($list_files as $file_id) {
+            $sql = "
+                SELECT f.type, fd.path, fd.name, fd.file_with_path
+                FROM files f
+                JOIN files_description fd ON f.id = fd.file_id 
+                WHERE f.id = {?}
+                AND fd.lang_id = {?}
+            ";
+            $file_info = $this->db->selectRow($sql, [(int) $file_id, $lang_id]);
 
-            foreach ($list_files as $file_id) {
-                $sql = "
-                    SELECT f.type, fd.path, fd.name, fd.file_with_path
-                    FROM files f
-                    JOIN files_description fd ON f.id = fd.file_id 
-                    WHERE f.id = {?}
-                    AND fd.lang_id = {?}
-                ";
-                $file_info = $this->db->selectRow($sql, [(int) $file_id, $lang_id]);
-                if ($file_info) {
-                    switch ($file_info['type']) {
-                        case 'video': $file_icon = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.1252 0.5H8.93717L5.18701 3.3125H7.37504L11.1252 0.5Z" fill="#00F0FF"/><path d="M14.9064 0.5H12.6872L8.93701 3.3125H11.125L14.9064 0.5Z" fill="#00F0FF"/><path d="M12.687 3.31248H15.9998V0.968728C15.9998 0.932571 15.987 0.900634 15.9792 0.866821L12.687 3.31248Z" fill="#00F0FF"/><path d="M1.40576 3.3125H3.62504L7.37523 0.5H5.18717L1.40576 3.3125Z" fill="#00F0FF"/><path d="M0 15.0312C0 15.2903 0.209656 15.5 0.46875 15.5H15.5312C15.7903 15.5 16 15.2903 16 15.0312V4.25H0V15.0312ZM5.65625 6.59375C5.65625 6.42484 5.74687 6.26919 5.89384 6.18587C6.04081 6.10256 6.22116 6.10484 6.36625 6.19181L11.0538 9.00431C11.1947 9.089 11.2812 9.24144 11.2812 9.40622C11.2812 9.571 11.1947 9.72344 11.0538 9.80812L6.36625 12.6206C6.22106 12.7076 6.04066 12.7098 5.89384 12.6266C5.74687 12.5433 5.65625 12.3877 5.65625 12.2188V6.59375Z" fill="#00F0FF"/><path d="M0.46875 0.5C0.209656 0.5 0 0.709656 0 0.96875V3.19553L3.6255 0.5H0.46875Z" fill="#00F0FF"/><path d="M6.59375 7.42188V11.3907L9.90156 9.40628L6.59375 7.42188Z" fill="#00F0FF"/></svg>'; break;
-                        case 'pdf': $file_icon = '<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 0.60083H5.18518L0 6.52676V15.4156H13.7037L15 13.9342V0.60083ZM5.18519 5.78602H2.77778L2.22222 6.52676V8.00824H4.62963L5.18519 7.2675V5.78602ZM7.22222 5.78602H13.3333V7.2675L12.7778 8.00824H6.66667V6.52676L7.22222 5.78602ZM13.3333 2.82305H7.22222L6.66667 3.56379V5.04527H12.7778L13.3333 4.30453V2.82305ZM2.77778 8.74898H5.18519V10.2305L4.62963 10.9712H2.22222V9.48972L2.77778 8.74898ZM13.3333 8.74898H7.22222L6.66667 9.48972V10.9712H12.7778L13.3333 10.2305V8.74898ZM2.77778 11.7119H5.18519V13.1934L4.62963 13.9342H2.22222V12.4527L2.77778 11.7119ZM13.3333 11.7119H7.22222L6.66667 12.4527V13.9342H12.7778L13.3333 13.1934V11.7119Z" fill="#00F0FF"/></svg>'; break;
-                        case 'link': $file_icon = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_1137_12)"><path d="M6.0366 10.3012L4.74963 11.5881C4.10513 12.2326 3.05646 12.2328 2.41164 11.5881C1.76724 10.9436 1.76746 9.89495 2.41196 9.25045L4.99604 6.66637C5.59322 6.06918 6.53765 6.02507 7.18567 6.53467C7.23694 6.57494 7.28639 6.61883 7.33371 6.66615C7.62071 6.95305 8.06569 6.95775 8.34671 6.67662L9.15655 5.86678C9.02346 5.6648 8.86966 5.47638 8.69652 5.30324C8.45245 5.05928 8.18179 4.85773 7.8934 4.69912C6.76505 4.07673 5.36956 4.10781 4.26759 4.79226C4.03869 4.93442 3.82219 5.10479 3.62352 5.30356L1.04905 7.87803C-0.349647 9.27672 -0.349647 11.5524 1.04883 12.951C2.44763 14.3497 4.72325 14.3497 6.12204 12.951L8.43803 10.635C7.62904 10.7421 6.79634 10.631 6.0366 10.3012Z" fill="#00F0FF"/><path d="M12.9513 1.04891C11.5527 -0.349673 9.27706 -0.349673 7.87826 1.04913L5.56248 3.3649C6.37147 3.25777 7.20417 3.36885 7.96392 3.69879L9.25099 2.41172C9.89549 1.76722 10.944 1.76722 11.5885 2.41172C12.2332 3.05643 12.2332 4.10489 11.5887 4.74939L9.00426 7.33379C8.4137 7.92435 7.47643 7.96515 6.82916 7.45801C6.77618 7.41689 6.72555 7.37192 6.67695 7.32332C6.39476 7.04113 5.93579 7.04134 5.65359 7.32354L4.84375 8.13338C4.97694 8.33493 5.13097 8.52356 5.30379 8.69638C5.54956 8.94215 5.82257 9.14467 6.11299 9.30414C7.24754 9.92695 8.65007 9.89053 9.75279 9.1953C9.97432 9.05569 10.184 8.88939 10.3767 8.6966L12.9513 6.12212C14.3499 4.72333 14.3499 2.44771 12.9513 1.04891Z" fill="#00F0FF"/></g><defs><clipPath id="clip0_1137_12"><rect width="14" height="14" fill="white"/></clipPath></defs></svg>'; break;
-                        
-                        default: $file_icon = ''; break;
-                    }
-
-                    $return['content'] .= '<div class="dashboard_tab_content_file_item" data-type="' . $file_info['type'] . '" data-path="' . $file_info['path'] . '" data-file-with-path="' . $file_info['file_with_path'] . '" data-file-id="' . $file_id . '">
-                                            <div class="dashboard_tab_content_file_item_img_wrapper">' . $file_icon . '</div>
-                                            <div class="dashboard_tab_content_file_item_name">' . $file_info['name'] . '</div>
-                                        </div>';
-                }
+            if ($file_info) {
+                // карточка файла
+                $return['content'] .= '
+                    <div class="dashboard_tab_content_file_item p-4 border border-border/50 rounded-lg bg-muted/10 hover:bg-muted/20 transition" 
+                         data-type="'.$file_info['type'].'" 
+                         data-path="'.$file_info['path'].'" 
+                         data-file-with-path="'.$file_info['file_with_path'].'" 
+                         data-file-id="'.$file_id.'">
+                        <div class="text-sm font-medium mb-2">'.$file_info['name'].'</div>
+                        <div class="text-xs text-muted-foreground">'.$file_info['type'].'</div>
+                    </div>';
             }
         }
-                                
-        $return['content'] .= '</div>';
-
-        return $return;
     }
+
+    $return['content'] .= '
+            </div>
+        </div>
+    ';
+
+    return $return;
+}
+
 }

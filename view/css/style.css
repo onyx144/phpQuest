@@ -1404,29 +1404,8 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     bottom: -10px;
     right: 0;
 }
-.dashboard_list {
-    position: absolute;
-    top: 60px;
-    left: 0;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 27px;
-    color: white;
-    padding: 0 3px;
-    height: 100%;
-    width: 100%;
-}
-.dashboard_item {
-    width: 100%;
-    height: 52px;
-    float: left;
-    padding: 0 0 0 20px;
-    cursor: pointer;
-    -webkit-transition: all .2s ease;
-    -moz-transition: all .2s ease;
-    -o-transition: all .2s ease;
-    transition: all .2s ease;
-}
+ 
+ 
 .dashboard_item .img_wrapper {
     float: left;
     width: 50px;
@@ -1440,18 +1419,12 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     float: left;
     line-height: 52px;
 }
-.dashboard_item_active,
-/*body:not(.body_touch) .dashboard_item:hover*/
-body:not(.body_desktop_scale) .dashboard_item:hover  {
-    background: url(/images/dashboard_item_bg.png) center center no-repeat;
-    background-size: contain;
-}
-.dashboard_item + .dashboard_item {
-    margin: 3px 0 0;
-}
+ 
+ 
 .dashboard_item_active .dashboard_item_text {
     color: #00F0FF;
 }
+
 .dashboard_bg_square_right {
     position: absolute;
     top: 10px;
@@ -1483,8 +1456,7 @@ body:not(.body_desktop_scale) .dashboard_item:hover  {
 }
 .dashboard_tab_content {
     height: 457px;
-    border-bottom: 1px solid #00F0FF;
-    border-left: 1px solid #00F0FF;
+   
     width: calc(100% - 50px);
     float: left;
     position: relative;
@@ -3424,8 +3396,16 @@ a.language_hidden_item {
 .dashboard_tab_content_item_calls_list_tbody .dashboard_tab_content_item_calls_list_tr {
     margin: 6px 0;
 }
+.justify-between {
+    justify-content: space-between;
+}
 .dashboard_tab_content_item_calls_list_td_again_btn {
     cursor: pointer;
+}
+.dashboard_tab_content_item_calls_list_td.dashboard_tab_content_item_calls_list_td_again {
+    display: flex;
+    align-items: center;
+    width: 30%;
 }
 #section_game[data-last-open-calls="call_list"] .dashboard_tabs[data-dashboard="calls"] .dashboard_tab_content_bg_right_square2 {
     top: 10px;
@@ -3437,6 +3417,11 @@ a.language_hidden_item {
     right: 20px;
     display: none;
     z-index: 2;
+}
+.icon-container {
+    margin-top: 4px;
+    padding: 5px;
+    margin-right: 5px;
 }
 .call_jane_active {
     display: block;

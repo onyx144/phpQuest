@@ -1,25 +1,6 @@
 <?php defined('GD_ACCESS') or die('You can not access the file directly!'); ?>
-<div class="dashboard_tabs" data-dashboard="databases">
-	<div class="dashboard_tab_title_bg_dots">
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-	</div>
-	<div class="dashboard_tab_content_bg_dots">
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-	</div>
+<div class="dashboard_tabs cyber-panel animate-fade-in-up" data-dashboard="databases">
+	 
 
 	<div class="dashboard_tab_titles">
 		<!-- эта часть динамическая -->
