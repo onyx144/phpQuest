@@ -1,7 +1,7 @@
 <?php
 defined('GD_ACCESS') or die('You can not access the file directly!');
 
-// timezone Kiev
+//timezone Kiev
 date_default_timezone_set('Europe/Kiev');
 
 // db const

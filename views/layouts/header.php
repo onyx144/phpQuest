@@ -13,8 +13,9 @@ if (!defined('GD_ACCESS')) {
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URI ?>/public/css/style.css">
 	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/cyber.css">
-	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/setting_tailwind.css" />
-    <link rel="stylesheet" href="<?= BASE_URI ?>/public/css/login.css">
+     <link rel="stylesheet" href="<?= BASE_URI ?>/public/css/login.css">
+	<link rel="stylesheet" href="<?= BASE_URI ?>/dist/output.css">
+
 	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/tailwind.css">
 
 	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/binance.css">

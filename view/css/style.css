@@ -1461,6 +1461,33 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     float: left;
     position: relative;
 }
+.dashboard_tab_content_item_wrapper {
+    max-height: 457px;
+    overflow-y: auto;
+   
+
+}
+::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #66a1fff7;
+    border-radius: 6px;
+  }  
+  /* Размер скроллбара */
+  ::-webkit-scrollbar {
+    width: 6px;      /* вертикальный */
+    height: 6px;     /* горизонтальный */
+  }
+  
+  /* Трек (свободная зона) — чуть темнее указанного цвета */
+  ::-webkit-scrollbar-track {
+    background: rgba(51, 51, 51, 1); /* или rgb(51 51 51) */
+  }
+  
+ 
 .dashboard_tab_titles {
     height: 56px;
     margin: 0 0 -1px;
@@ -1496,8 +1523,7 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(261.14deg, rgba(76, 158, 237, 0.31) 51.36%, rgba(76, 158, 237, 0) 83.68%);
-    display: none;
+     display: none;
 }
 .dashboard_tab_title_inner {
     transform: skewX(30deg);

@@ -1,13 +1,15 @@
 <?php
-
+require_once __DIR__ . '/../views/template/svg.php';
 class Functions
 {
-
+    public $svg;
     public $db;
     private static $functions = null;
-
+    
     function __construct()
     {
+        global $svg;
+        $this->svg = $svg;
         $this->db = DataBase::getDB();
     }
 
@@ -1645,6 +1647,7 @@ class Functions
     // databases - первый экран после принятии миссии - список 4-ех баз данных
     private function uploadDatabasesStartFour($lang_id)
 {
+    $svg = $this->svg; 
     $translation = $this->getWordsByPage('game', $lang_id);
 
     $return = [];
@@ -1658,14 +1661,14 @@ class Functions
   </div>';
 
     $return['content'] = '
-    <div class="flex flex-row flex-wrap gap-6">
+    <div class="flex justify-center items-center gap-6 w-full">
 
   <!-- Personal Files -->
   <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-cyan-500 bg-cyan-900/20">
     <div class="text-center pb-3">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-cyan-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <img src="/assets/img/personal_files_icon.png" class="h-8 w-8 text-cyan-400" alt="icon">
+         ' .  $svg['database_document'] . ' 
         </div>
         <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background animate-pulse"></div>
       </div>
@@ -1693,7 +1696,7 @@ class Functions
     <div class="text-center pb-3">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <img src="/assets/img/car_register_icon.png" class="h-8 w-8 text-purple-400" alt="icon">
+          ' .  $svg['database_car'] . '         
         </div>
         <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 border-2 border-background"></div>
       </div>
@@ -1721,7 +1724,7 @@ class Functions
     <div class="text-center pb-3">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <img src="/assets/img/mobile_calls_icon.png" class="h-8 w-8 text-blue-400" alt="icon">
+          ' .  $svg['database_call'] . '         
         </div>
         <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-400 border-2 border-background"></div>
       </div>
@@ -1749,7 +1752,7 @@ class Functions
     <div class="text-center pb-3">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <img src="/assets/img/bank_transactions_icon.png" class="h-8 w-8 text-green-400" alt="icon">
+          ' .  $svg['database_card'] . '         
         </div>
         <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background"></div>
       </div>
@@ -3614,75 +3617,131 @@ class Functions
 
     // tools - первый экран - список 4-ех tools
     private function uploadToolsStartFour($lang_id, $team_id)
-    {
-        $translation = $this->getWordsByPage('game', $lang_id);
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
 
-        $return = [];
+    $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H17.75V5L16 7H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 9H17.75V10.5L16 12.5H0V11L1.75 9Z" fill="#00F0FF"/><path d="M1.75 14H17.75V15.5L16 17.5H0V16L1.75 14Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text14'] . '</div>
-                                </div>
-                            </div>';
+    // ---------------- TAB TITLE ----------------
+    $return['titles'] = '
+    <div class="dashboard_tab_title dashboard_tab_title_active cyber-panel
+                flex items-center gap-4 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 
+                cursor-pointer hover:scale-105 transition-all"
+         data-tab="tab1">
+        <div class="dashboard_tab_title_inner flex items-center gap-3">
+            <div class="dashboard_tab_title_img_wrapper">
+                <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
+                    <path d="M1.75 0H17.75V5L16 7H0V2L1.75 0Z" fill="#00F0FF"/>
+                    <path d="M1.75 9H17.75V10.5L16 12.5H0V11L1.75 9Z" fill="#00F0FF"/>
+                    <path d="M1.75 14H17.75V15.5L16 17.5H0V16L1.75 14Z" fill="#00F0FF"/>
+                </svg>
+            </div>
+            <div class="dashboard_tab_title_text text-2xl font-bold neon-text">
+                ' . $translation['text14'] . '
+            </div>
+        </div>
+    </div>';
 
-        $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four_tools dashboard_tab_content_item_active" data-tab="tab1">
-                                <div class="dashboard_tab_content_item_start_four_inner_tools">
-                                    <div class="dashboard_tab_content_item_start_four_inner_item_tools" data-tools="advanced_search_engine">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top_tools">
-                                            <img src="/images/database_personal_files_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom_tools">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name_tools">' . $translation['text185'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img_tools">
-                                                <img src="/images/tools_advanced_search_engine_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+    // ---------------- TOOLS CONTENT ----------------
+    $return['content'] = '
+    <div class="dashboard_tab_content_item dashboard_tab_content_item_start_four_tools 
+                dashboard_tab_content_item_active p-4"
+         data-tab="tab1">
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item_tools" data-tools="gps_coordinates">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top_tools">
-                                            <img src="/images/database_car_register_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom_tools">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name_tools">' . $translation['text186'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img_tools">
-                                                <img src="/images/tools_gps_coordinates_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item_tools" data-tools="symbol_decoder">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top_tools">
-                                            <img src="/images/database_mobile_calls_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom_tools">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name_tools">' . $translation['text187'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img_tools">
-                                                <img src="/images/tools_symbol_decoder_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+            <!-- ADVANCED SEARCH ENGINE -->
+            <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
+                        border border-blue-500/30 bg-blue-500/20 rounded-xl cursor-pointer 
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                 data-tools="advanced_search_engine">
 
-                                    <div class="dashboard_tab_content_item_start_four_inner_item_tools" data-tools="3d_building_scan">
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_top_tools">
-                                            <img src="/images/database_bank_transactions_top_bg.png" alt="">
-                                        </div>
-                                        <div class="dashboard_tab_content_item_start_four_inner_item_bottom_tools">
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_name_tools">' . $translation['text188'] . '</div>
-                                            <div class="dashboard_tab_content_item_start_four_inner_item_bottom_img_tools">
-                                                <img src="/images/tools_3d_building_scan_icon.png" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+                <div class="p-4 text-center flex-1">
+                    <img src="/images/database_personal_files_top_bg.png" 
+                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
+                    <div class="text-xl font-semibold text-blue-400 mb-2 uppercase">
+                        ' . $translation['text185'] . '
+                    </div>
+                    <img src="/images/tools_advanced_search_engine_icon.png" 
+                         class="h-20 mx-auto" alt="">
+                </div>
 
-        return $return;
-    }
+                <button class="w-full border border-current text-blue-400 py-2 mt-3 hover:bg-blue-500/10 rounded-lg">
+                    Открыть
+                </button>
+            </div>
+
+            <!-- GPS COORDINATES -->
+            <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
+                        border border-green-500/30 bg-green-500/20 rounded-xl cursor-pointer 
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                 data-tools="gps_coordinates">
+
+                <div class="p-4 text-center flex-1">
+                    <img src="/images/database_car_register_top_bg.png" 
+                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
+                    <div class="text-xl font-semibold text-green-400 mb-2 uppercase">
+                        ' . $translation['text186'] . '
+                    </div>
+                    <img src="/images/tools_gps_coordinates_icon.png" 
+                         class="h-20 mx-auto" alt="">
+                </div>
+
+                <button class="w-full border border-current text-green-400 py-2 mt-3 hover:bg-green-500/10 rounded-lg">
+                    Открыть
+                </button>
+            </div>
+
+            <!-- SYMBOL DECODER -->
+            <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
+                        border border-purple-500/30 bg-purple-500/20 rounded-xl cursor-pointer 
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                 data-tools="symbol_decoder">
+
+                <div class="p-4 text-center flex-1">
+                    <img src="/images/database_mobile_calls_top_bg.png" 
+                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
+                    <div class="text-xl font-semibold text-purple-400 mb-2 uppercase">
+                        ' . $translation['text187'] . '
+                    </div>
+                    <img src="/images/tools_symbol_decoder_icon.png" 
+                         class="h-20 mx-auto" alt="">
+                </div>
+
+                <button class="w-full border border-current text-purple-400 py-2 mt-3 hover:bg-purple-500/10 rounded-lg">
+                    Запустить
+                </button>
+            </div>
+
+            <!-- 3D BUILDING SCAN -->
+            <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
+                        border border-red-500/30 bg-red-500/20 rounded-xl cursor-pointer 
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                 data-tools="3d_building_scan">
+
+                <div class="p-4 text-center flex-1">
+                    <img src="/images/database_bank_transactions_top_bg.png" 
+                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
+                    <div class="text-xl font-semibold text-red-400 mb-2 uppercase">
+                        ' . $translation['text188'] . '
+                    </div>
+                    <img src="/images/tools_3d_building_scan_icon.png" 
+                         class="h-20 mx-auto" alt="">
+                </div>
+
+                <button class="w-full border border-current text-red-400 py-2 mt-3 hover:bg-red-500/10 rounded-lg">
+                    Запустить
+                </button>
+            </div>
+
+        </div>
+    </div>';
+
+    return $return;
+}
+
+    
+
 
     // tools - Advanced Search Engine
     private function uploadToolsAdvancedSearchEngine($lang_id, $team_id)
@@ -4168,65 +4227,98 @@ class Functions
 {
     $translation = $this->getWordsByPage('game', $lang_id);
     $team_info = $this->teamInfo($team_id);
-
+    $svg = $this->svg; 
     $return = [];
 
     // Заголовок
     $return['titles'] = '
         <div class="flex items-center gap-3 mb-6">
             <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30 mt-5">
-                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.25 0H7L0 8V20H18.5L20.25 18V0ZM7 7H3.75L3 8V10H6.25L7 9V7ZM9.75 7H18V9L17.25 10H9V8L9.75 7ZM18 3H9.75L9 4V6H17.25L18 5V3ZM3.75 11H7V13L6.25 14H3V12L3.75 11ZM18 11H9.75L9 12V14H17.25L18 13V11ZM3.75 15H7V17L6.25 18H3V16L3.75 15ZM18 15H9.75L9 16V18H17.25L18 17V15Z" fill="#00F0FF"/></svg>
+                '.$svg['dashboard_files'].'
             </div>
             <h2 class="text-3xl font-bold neon-text">Архив досье</h2>
         </div>
     ';
 
-    // Контент только для медиа файлов
+    // Контент
     $return['content'] = '
-        <div class="mt-6">
-            <div class="flex items-center gap-2 mb-4">
-                <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M4 4h16v16H4z"/>
-                </svg>
-                <span class="text-sm text-primary">Архив документов, видео и изображений</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    ';
+    <div class="mt-6 ">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M4 4h16v16H4z"/>
+            </svg>
+            <span class="text-sm text-primary">Архив документов, видео и изображений</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+';
 
-    if ($team_info) {
-        $list_files = json_decode($team_info['list_files'], true);
+if ($team_info) {
+    $list_files = json_decode($team_info['list_files'], true);
 
-        foreach ($list_files as $file_id) {
-            $sql = "
-                SELECT f.type, fd.path, fd.name, fd.file_with_path
-                FROM files f
-                JOIN files_description fd ON f.id = fd.file_id 
-                WHERE f.id = {?}
-                AND fd.lang_id = {?}
-            ";
-            $file_info = $this->db->selectRow($sql, [(int) $file_id, $lang_id]);
+    foreach ($list_files as $file_id) {
+        $sql = "
+            SELECT f.type, fd.path, fd.name, fd.file_with_path
+            FROM files f
+            JOIN files_description fd ON f.id = fd.file_id 
+            WHERE f.id = {?}
+            AND fd.lang_id = {?}
+        ";
+        $file_info = $this->db->selectRow($sql, [(int) $file_id, $lang_id]);
 
-            if ($file_info) {
-                // карточка файла
-                $return['content'] .= '
-                    <div class="dashboard_tab_content_file_item p-4 border border-border/50 rounded-lg bg-muted/10 hover:bg-muted/20 transition" 
-                         data-type="'.$file_info['type'].'" 
-                         data-path="'.$file_info['path'].'" 
-                         data-file-with-path="'.$file_info['file_with_path'].'" 
-                         data-file-id="'.$file_id.'">
-                        <div class="text-sm font-medium mb-2">'.$file_info['name'].'</div>
-                        <div class="text-xs text-muted-foreground">'.$file_info['type'].'</div>
-                    </div>';
+        if ($file_info) {
+
+            // Определяем тип файла для кнопки
+            $button_icon = $svg['eye'];
+            $button_text = 'Посмотреть';
+
+            if (in_array(strtolower($file_info['type']), ['video', 'mp4', 'mov', 'avi'])) {
+                $button_icon = $svg['play'];
+                $button_text = 'Воспроизвести';
             }
+
+            // Карточка файла
+            $return['content'] .= '
+<div class="dashboard_tab_content_file_item w-full relative flex flex-col justify-between 
+            p-4 border border-cyan-500/50 rounded-lg bg-cyan-950/20 
+            transition-all duration-300 animate-pulse-glow group"
+     data-type="'.$file_info['type'].'" 
+     data-path="'.$file_info['path'].'" 
+     data-file-with-path="'.$file_info['file_with_path'].'" 
+     data-file-id="'.$file_id.'">
+
+    <div>
+        <div class="text-sm font-semibold mb-2 text-cyan-100 tracking-wide">
+            '.$file_info['name'].'
+        </div>
+        <div class="text-xs text-cyan-400/70 mb-4 uppercase">
+            '.$file_info['type'].'
+        </div>
+    </div>
+
+    <div class="mt-auto">
+        <a href="'.$file_info['path'].'" target="_blank"
+           class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-cyan-500/40 
+                  text-cyan-200 hover:text-cyan-50 hover:bg-cyan-800/40 transition-all duration-300 w-fit">
+            '.$button_icon.'
+            <span>'.$button_text.'</span>
+        </a>
+    </div>
+</div>
+';
         }
     }
+}
 
-    $return['content'] .= '
-            </div>
+$return['content'] .= '
         </div>
-    ';
+    </div>
+';
+
+
+     
 
     return $return;
 }
+
 
 }

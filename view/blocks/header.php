@@ -58,7 +58,7 @@
 		?>
 		<link rel="stylesheet" href="/view/css/style.css?v=<?php echo $random; ?>" />
 		<link rel="stylesheet" href="/view/css/cyber.css?v=<?php echo $random; ?>" />
-		<link rel="stylesheet" href="/view/css/setting_tailwind.css?v=<?php echo $random; ?>" />
+		<link rel="stylesheet" href="/dist/output.css?v=<?php echo $random; ?>" />
 
 		<link rel="stylesheet" href="/view/css/tailwind.css?v=<?php echo $random; ?>" />
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

@@ -1,11 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: 'jit',
   content: [
     "./views/**/*.php",
     "./view/**/*.php", 
     "./admin/**/*.php",
     "./*.php",
-    "./src/**/*.{html,js,php}"
+    "./src/**/*.{html,js,php}",
+    "./controller/**/*.php" 
+  ],
+  safelist: [
+    'mt-0','mt-1','mt-2','mt-3','mt-4','mt-5','mt-6',
+    'pb-0','pb-1','pb-2','pb-3','pb-4','pb-5','pb-6',
+    'gap-0','gap-1','gap-2','gap-3','gap-4','gap-5','gap-6',
   ],
   theme: {
     extend: {
