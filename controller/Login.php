@@ -16,7 +16,13 @@ class Login extends Admin
 
     	$this->styles[] = '<link rel="stylesheet" href="/view/css/login.css" />';
 
-    	$translation = $this->lang->getWordsByPage('join_game');
+    	// Load i18n translations
+    	require_once(ROOT . '/core/I18n.php');
+    	$i18n = I18n::getInstance();
+    	$t = function($key, $default = null) use ($i18n) {
+    	    return $i18n->t($key, $default);
+    	};
+    	$currentLang = $i18n->getCurrentLang();
 
     	require_once(ROOT . '/view/template/login/join_game.php');
     }
