@@ -1654,23 +1654,21 @@ class Functions
 
     $return['titles'] = '
         <div class="flex items-center gap-3 mb-8">
-    <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9z"/>
-    </svg>
+     <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">' .  $svg['database_icon'] . '</div>
     <h2 class="text-3xl font-bold neon-text">' . $translation['text13'] . '</h2>
   </div>';
 
     $return['content'] = '
-    <div class="flex justify-center items-center gap-6 w-full">
+    <div class="flex justify-center items-stretch gap-6 w-full p-2">
 
   <!-- Personal Files -->
-  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-cyan-500 bg-cyan-900/20">
-    <div class="text-center pb-3">
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-cyan-500 bg-cyan-900/20 flex-1 flex flex-col">
+    <div class="text-center pb-3 flex-1">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-cyan-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
          ' .  $svg['database_document'] . ' 
         </div>
-        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background animate-pulse"></div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-400 border-2 border-background animate-pulse"></div>
       </div>
       <h3 class="text-xl mb-2">' . $translation['text57']. '</h3>
       <p class="text-sm text-muted-foreground mb-3">Доступ к личным досье</p>
@@ -1692,13 +1690,13 @@ class Functions
   </div>
 
   <!-- Car Register -->
-  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-purple-500 bg-purple-900/20">
-    <div class="text-center pb-3">
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-purple-500 bg-purple-900/20 flex-1 flex flex-col">
+    <div class="text-center pb-3 flex-1">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
           ' .  $svg['database_car'] . '         
         </div>
-        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 border-2 border-background"></div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-purple-400 border-2 border-background"></div>
       </div>
       <h3 class="text-xl mb-2">' . $translation['text58'] . '</h3>
       <p class="text-sm text-muted-foreground mb-3">Реестр автомобилей</p>
@@ -1720,13 +1718,13 @@ class Functions
   </div>
 
   <!-- Mobile Calls -->
-  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-blue-500 bg-blue-900/20">
-    <div class="text-center pb-3">
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-blue-500 bg-blue-900/20 flex-1 flex flex-col">
+    <div class="text-center pb-3 flex-1">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
           ' .  $svg['database_call'] . '         
         </div>
-        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-400 border-2 border-background"></div>
+        <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-400 border-2 border-background"></div>
       </div>
       <h3 class="text-xl mb-2">' . $translation['text59'] . '</h3>
       <p class="text-sm text-muted-foreground mb-3">История мобильных звонков</p>
@@ -1748,8 +1746,8 @@ class Functions
   </div>
 
   <!-- Bank Transactions -->
-  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-green-500 bg-green-900/20">
-    <div class="text-center pb-3">
+  <div class="cyber-panel cursor-pointer transition-all hover:scale-105 group border-green-500 bg-green-900/20 flex-1 flex flex-col">
+    <div class="text-center pb-3 flex-1">
       <div class="mx-auto mb-4 relative">
         <div class="w-16 h-16 rounded-full bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
           ' .  $svg['database_card'] . '         
@@ -4233,7 +4231,7 @@ class Functions
     // Заголовок
     $return['titles'] = '
         <div class="flex items-center gap-3 mb-6">
-            <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30 mt-5">
+            <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">
                 '.$svg['dashboard_files'].'
             </div>
             <h2 class="text-3xl font-bold neon-text">Архив досье</h2>

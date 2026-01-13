@@ -3,9 +3,9 @@ return [
     // Hero Section
     'game_title' => 'AEGIS',
     'game_subtitle' => 'PROTOCOL',
-    'game_description' => 'Погрузитесь в мир киберпанка и тайных операций. Станьте элитным агентом и выполните миссию любой ценой.',
-    'join_mission' => 'Join the Mission',
-    'buy_game' => 'Buy the Game',
+    'game_description' => 'Пориньте у світ кіберпанку та таємних операцій. Стати елітним агентом і виконайте місію будь якою ціною.',
+    'join_mission' => 'Приєднатися до місії',
+    'buy_game' => 'Купити гру',
     
     // About Game Section
     'about_game' => 'О Ігрі',

@@ -18,7 +18,7 @@
 	<div class="dashboard_tab_content">
 		 
 
-		<div class="dashboard_tab_content_item_wrapper">
+		<div class="dashboard_tab_content_item_wrapper p-2">
 			<!-- эта часть динамическая -->
 			<div class="dashboard_tab_content_item dashboard_tab_content_item_active" data-tab="tab1">Databases</div>
 			<!-- end - эта часть динамическая -->

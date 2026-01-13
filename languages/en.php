@@ -39,7 +39,7 @@ return [
     'discord' => 'Discord',
     'discord_placeholder' => 'Username#1234',
     'whatsapp' => 'WhatsApp',
-    'whatsapp_placeholder' => '+7 900 123-45-67',
+    'whatsapp_placeholder' => '+38 050 888 88 88',
     'facebook' => 'Facebook',
     'facebook_placeholder' => 'username',
     'preferred_time' => 'Preferred game time',

@@ -360,8 +360,7 @@
 							<div class="grid grid-cols-2 gap-4">
 								<div>
 									<label class="block text-sm font-medium text-gray-300 mb-2"><?php echo $t('whatsapp'); ?></label>
-									<input type="text" id="whatsapp" class="cyber-input w-full" placeholder="<?php echo $t('whatsapp_placeholder'); ?>">
-								</div>
+									<input type="text" id="whatsapp" class="cyber-input w-full" placehder="+38 050 888 88 88">							</div>
 								<div>
 									<label class="block text-sm font-medium text-gray-300 mb-2"><?php echo $t('facebook'); ?></label>
 									<input type="text" id="facebook" class="cyber-input w-full" placeholder="<?php echo $t('facebook_placeholder'); ?>">
@@ -458,7 +457,7 @@ const samplePlayers = [
 		id: 2,
 		name: "Ghost Recon",
 		contacts: [
-			{ type: 'whatsapp', value: '+7 900 123-45-67', url: 'https://wa.me/79001234567' },
+			{ type: 'whatsapp', value: '+38 050 888 88 88', url: 'https://wa.me/79001234567' },
 			{ type: 'telegram', value: '@ghost_recon', url: 'https://t.me/ghost_recon' }
 		],
 		joinedAt: '2024-01-10',
