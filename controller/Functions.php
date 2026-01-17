@@ -3617,122 +3617,126 @@ class Functions
     private function uploadToolsStartFour($lang_id, $team_id)
 {
     $translation = $this->getWordsByPage('game', $lang_id);
-
+    $svg = $this->svg; 
     $return = [];
 
     // ---------------- TAB TITLE ----------------
     $return['titles'] = '
-    <div class="dashboard_tab_title dashboard_tab_title_active cyber-panel
-                flex items-center gap-4 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 
-                cursor-pointer hover:scale-105 transition-all"
-         data-tab="tab1">
-        <div class="dashboard_tab_title_inner flex items-center gap-3">
-            <div class="dashboard_tab_title_img_wrapper">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">
                 <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
                     <path d="M1.75 0H17.75V5L16 7H0V2L1.75 0Z" fill="#00F0FF"/>
                     <path d="M1.75 9H17.75V10.5L16 12.5H0V11L1.75 9Z" fill="#00F0FF"/>
                     <path d="M1.75 14H17.75V15.5L16 17.5H0V16L1.75 14Z" fill="#00F0FF"/>
                 </svg>
             </div>
-            <div class="dashboard_tab_title_text text-2xl font-bold neon-text">
+            <h2 class="text-3xl font-bold neon-text">
                 ' . $translation['text14'] . '
-            </div>
+            </h2>
         </div>
-    </div>';
+    ';
 
     // ---------------- TOOLS CONTENT ----------------
     $return['content'] = '
-    <div class="dashboard_tab_content_item dashboard_tab_content_item_start_four_tools 
-                dashboard_tab_content_item_active p-4"
-         data-tab="tab1">
+    <div class="flex items-stretch gap-6 w-full p-3">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
             <!-- ADVANCED SEARCH ENGINE -->
             <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
                         border border-blue-500/30 bg-blue-500/20 rounded-xl cursor-pointer 
-                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between flex-1"
                  data-tools="advanced_search_engine">
 
-                <div class="p-4 text-center flex-1">
+                <div class="p-3 text-center flex-1 flex flex-col">
                     <img src="/images/database_personal_files_top_bg.png" 
-                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
-                    <div class="text-xl font-semibold text-blue-400 mb-2 uppercase">
+                         class="w-full h-20 object-cover rounded-md mb-3" alt="">
+                    <div class="text-xl font-semibold text-blue-400 mb-3 uppercase">
                         ' . $translation['text185'] . '
                     </div>
-                    <img src="/images/tools_advanced_search_engine_icon.png" 
-                         class="h-20 mx-auto" alt="">
                 </div>
 
-                <button class="w-full border border-current text-blue-400 py-2 mt-3 hover:bg-blue-500/10 rounded-lg">
-                    Открыть
-                </button>
+                <div class="p-3 flex flex-col items-center">
+                    <div class="flex justify-center items-center mb-3">
+                        ' . $svg['loop'] . '
+                    </div>
+                    <button class="w-full border border-current text-blue-400 py-2 hover:bg-blue-500/10 rounded-lg text-center">
+                        Открыть
+                    </button>
+                </div>
             </div>
 
             <!-- GPS COORDINATES -->
             <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
                         border border-green-500/30 bg-green-500/20 rounded-xl cursor-pointer 
-                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between flex-1"
                  data-tools="gps_coordinates">
 
-                <div class="p-4 text-center flex-1">
+                <div class="p-3 text-center flex-1 flex flex-col">
                     <img src="/images/database_car_register_top_bg.png" 
-                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
-                    <div class="text-xl font-semibold text-green-400 mb-2 uppercase">
+                         class="w-full h-20 object-cover rounded-md mb-3" alt="">
+                    <div class="text-xl font-semibold text-green-400 mb-3 uppercase">
                         ' . $translation['text186'] . '
                     </div>
-                    <img src="/images/tools_gps_coordinates_icon.png" 
-                         class="h-20 mx-auto" alt="">
                 </div>
 
-                <button class="w-full border border-current text-green-400 py-2 mt-3 hover:bg-green-500/10 rounded-lg">
-                    Открыть
-                </button>
+                <div class="p-3 flex flex-col items-center">
+                    <div class="flex justify-center items-center mb-3">
+                        ' . $svg['gps'] . '
+                    </div>
+                    <button class="w-full border border-current text-green-400 py-2 hover:bg-green-500/10 rounded-lg text-center">
+                        Открыть
+                    </button>
+                </div>
             </div>
 
             <!-- SYMBOL DECODER -->
             <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
                         border border-purple-500/30 bg-purple-500/20 rounded-xl cursor-pointer 
-                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between flex-1"
                  data-tools="symbol_decoder">
 
-                <div class="p-4 text-center flex-1">
+                <div class="p-3 text-center flex-1 flex flex-col">
                     <img src="/images/database_mobile_calls_top_bg.png" 
-                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
-                    <div class="text-xl font-semibold text-purple-400 mb-2 uppercase">
+                         class="w-full h-20 object-cover rounded-md mb-3" alt="">
+                    <div class="text-xl font-semibold text-purple-400 mb-3 uppercase">
                         ' . $translation['text187'] . '
                     </div>
-                    <img src="/images/tools_symbol_decoder_icon.png" 
-                         class="h-20 mx-auto" alt="">
                 </div>
 
-                <button class="w-full border border-current text-purple-400 py-2 mt-3 hover:bg-purple-500/10 rounded-lg">
-                    Запустить
-                </button>
+                <div class="p-3 flex flex-col items-center">
+                    <div class="flex justify-center items-center mb-3">
+                        ' . $svg['decoder'] . '
+                    </div>
+                    <button class="w-full border border-current text-purple-400 py-2 hover:bg-purple-500/10 rounded-lg text-center">
+                        Запустить
+                    </button>
+                </div>
             </div>
 
             <!-- 3D BUILDING SCAN -->
             <div class="dashboard_tab_content_item_start_four_inner_item_tools cyber-panel
                         border border-red-500/30 bg-red-500/20 rounded-xl cursor-pointer 
-                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between"
+                        overflow-hidden hover:scale-105 transition-all flex flex-col justify-between flex-1"
                  data-tools="3d_building_scan">
 
-                <div class="p-4 text-center flex-1">
+                <div class="p-3 text-center flex-1 flex flex-col">
                     <img src="/images/database_bank_transactions_top_bg.png" 
-                         class="w-full h-24 object-cover rounded-md mb-4" alt="">
-                    <div class="text-xl font-semibold text-red-400 mb-2 uppercase">
+                         class="w-full h-20 object-cover rounded-md mb-3" alt="">
+                    <div class="text-xl font-semibold text-red-400 mb-3 uppercase">
                         ' . $translation['text188'] . '
                     </div>
-                    <img src="/images/tools_3d_building_scan_icon.png" 
-                         class="h-20 mx-auto" alt="">
                 </div>
 
-                <button class="w-full border border-current text-red-400 py-2 mt-3 hover:bg-red-500/10 rounded-lg">
-                    Запустить
-                </button>
+                <div class="p-3 flex flex-col items-center">
+                    <div class="flex justify-center items-center mb-3">
+                        ' . $svg['building'] . '
+                    </div>
+                    <button class="w-full border border-current text-red-400 py-2 hover:bg-red-500/10 rounded-lg text-center">
+                        Запустить
+                    </button>
+                </div>
             </div>
 
-        </div>
     </div>';
 
     return $return;

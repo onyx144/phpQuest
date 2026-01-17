@@ -2,7 +2,7 @@
 <div class="dashboard_tabs cyber-panel animate-fade-in-up" data-dashboard="tools">
 	 
 
-	<<div class="dashboard_tab_titles">
+	<div class="dashboard_tab_titles">
 		<!-- эта часть динамическая -->
 		<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
 			<div class="dashboard_tab_title_active_skew_right"></div>
