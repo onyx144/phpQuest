@@ -3,7 +3,9 @@
 	require_once(ROOT . '/view/blocks/header.php');
 	require_once(ROOT . '/view/template/bg_header.php');
 	require_once(ROOT . '/view/template/bg.php');
+	require_once(ROOT . '/view/template/error_popup.php');
 ?>
+ 
 <div class="section" id="section_game" data-user-id="<?php echo $this->userInfo['id']; ?>" data-team-id="<?php echo $this->userInfo['team_id']; ?>">
 	<div class="content">
 		<div class="container_big content_game">
