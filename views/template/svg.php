@@ -22,7 +22,203 @@ $GLOBALS['svg'] = [
 'loop' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search h-16 w-16 text-blue-400" data-lov-id="src\components\sections\Tools.tsx:119:18" data-lov-name="IconComponent" data-component-path="src\components\sections\Tools.tsx" data-component-line="119" data-component-file="Tools.tsx" data-component-name="IconComponent" data-component-content="%7B%7D"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
 'gps' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin h-16 w-16 text-green-400" data-lov-id="src\components\sections\Tools.tsx:119:18" data-lov-name="IconComponent" data-component-path="src\components\sections\Tools.tsx" data-component-line="119" data-component-file="Tools.tsx" data-component-name="IconComponent" data-component-content="%7B%7D"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>',
 'decoder' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hash h-16 w-16 text-purple-400" data-lov-id="src\components\sections\Tools.tsx:119:18" data-lov-name="IconComponent" data-component-path="src\components\sections\Tools.tsx" data-component-line="119" data-component-file="Tools.tsx" data-component-name="IconComponent" data-component-content="%7B%7D"><line x1="4" x2="20" y1="9" y2="9"></line><line x1="4" x2="20" y1="15" y2="15"></line><line x1="10" x2="8" y1="3" y2="21"></line><line x1="16" x2="14" y1="3" y2="21"></line></svg>',
-'building' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building h-16 w-16 text-red-400" data-lov-id="src\components\sections\Tools.tsx:119:18" data-lov-name="IconComponent" data-component-path="src\components\sections\Tools.tsx" data-component-line="119" data-component-file="Tools.tsx" data-component-name="IconComponent" data-component-content="%7B%7D"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>'
+'building' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building h-16 w-16 text-red-400" data-lov-id="src\components\sections\Tools.tsx:119:18" data-lov-name="IconComponent" data-component-path="src\components\sections\Tools.tsx" data-component-line="119" data-component-file="Tools.tsx" data-component-name="IconComponent" data-component-content="%7B%7D"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>',
+//Back Button
+'back_importnat' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+    <defs>
+      <linearGradient id="cyan-stroke-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#004e59;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#00b8d4;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#004e59;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="red-intense-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#ff003c;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#ff4d73;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#990024;stop-opacity:1" />
+      </linearGradient>
+  
+      <filter id="cyan-frame-glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+        <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cyan-blur" />
+        <feBlend in="SourceGraphic" in2="cyan-blur" mode="screen" />
+      </filter>
+      <filter id="red-bar-glow" x="-30%" y="-50%" width="160%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+         <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.1  0 0.2 0 0 0  0 0 0.2 0 0  0 0 0 1 0" result="red-blur" />
+        <feBlend in="SourceGraphic" in2="red-blur" mode="screen" />
+      </filter>
+    </defs>
+  
+    <g filter="url(#cyan-frame-glow)">
+        <path d="M 10,10 L 230,10 L 235,15 L 235,65 L 230,70 L 10,70 L 5,65 L 5,15 Z" 
+              fill="none" 
+              stroke="url(#cyan-stroke-grad)" 
+              stroke-width="3" />
+        
+        <rect x="20" y="20" width="200" height="40" 
+              fill="none" 
+              stroke="#00f3ff" 
+              stroke-width="1" 
+              opacity="0.5"
+              stroke-dasharray="5,2"/>
+    </g>
+  
+    <g filter="url(#red-bar-glow)">
+      <path d="M 5,12 L 120,12 L 110,16 L 5,16 Z" fill="url(#red-intense-grad)" />
+      
+      <path d="M 235,68 L 120,68 L 130,64 L 235,64 Z" fill="url(#red-intense-grad)" />
+  
+      <rect x="1" y="35" width="3" height="10" fill="#ff003c" />
+      <rect x="236" y="35" width="3" height="10" fill="#ff003c" />
+    </g>
+    
+      <path d="M 5,15 L 10,10 M 230,10 L 235,15 M 235,65 L 230,70 M 10,70 L 5,65" 
+          stroke="#00f3ff" stroke-width="1" fill="none" opacity="0.8" />
+  
+  </svg>',
+'aegis_logo' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="200" height="200" id="aegisLogoSVG_v2">
+  <defs>
+    <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a222b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0a0f14;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a222b;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="core-green-grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:#a8ffa8;stop-opacity:1" /> <stop offset="40%" style="stop-color:#32cd32;stop-opacity:1" /> <stop offset="100%" style="stop-color:#006400;stop-opacity:1" /> </radialGradient>
+
+    <linearGradient id="cyan-energy-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f3ff;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#00f3ff;stop-opacity:0.8" />
+    </linearGradient>
+
+    <filter id="cyan-glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="coloredBlur" />
+      <feBlend in="SourceGraphic" in2="coloredBlur" mode="screen" />
+    </filter>
+
+    <filter id="green-core-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  1 0 0 0 0.1  0 0 0 0 0  0 0 0 1 0" result="greenBlur" />
+      <feBlend in="SourceGraphic" in2="greenBlur" mode="screen" />
+    </filter>
+
+    <clipPath id="shield-clip">
+       <polygon points="250,40 420,100 380,350 250,460 120,350 80,100" />
+    </clipPath>
+  </defs>
+
+  <style>
+    /* CSS Animations for continuous effects */
+    @keyframes pulseCore {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+    
+    @keyframes energyFlow {
+      to { stroke-dashoffset: -200; }
+    }
+
+    @keyframes scanlineMove {
+      0% { transform: translateY(-100%); opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+
+    /* Initial States */
+    #AegisCoreCircle {
+      transform-origin: center;
+      animation: pulseCore 3s ease-in-out infinite;
+    }
+
+    .energy-conduit {
+      stroke-dasharray: 10, 20, 5, 10;
+      stroke-dashoffset: 200;
+      animation: energyFlow 5s linear infinite;
+    }
+    
+    #ScanlineRect {
+        animation: scanlineMove 4s linear infinite;
+    }
+
+    /* Text Styles */
+    .title-text {
+        font-family: \'Arial Black\', \'Helvetica Neue\', sans-serif;
+        text-anchor: middle;
+        letter-spacing: 6px;
+        filter: url(#cyan-glow-intense);
+    }
+    .subtitle-text {
+        font-family: \'Arial\', sans-serif;
+        text-anchor: middle;
+        letter-spacing: 8px;
+        font-weight: bold;
+    }
+
+    /* JS Triggered Classes for Boot Sequence */
+    .booting-up #ShieldFramePath {
+        stroke-dasharray: 1300;
+        stroke-dashoffset: 1300;
+        transition: stroke-dashoffset 2s ease-out;
+    }
+    
+    .booted #ShieldFramePath {
+         stroke-dashoffset: 0;
+    }
+
+    .booting-up #AegisCoreGroup, 
+    .booting-up #ConduitsGroup,
+    .booting-up #TextGroup {
+        opacity: 0;
+        transition: opacity 1s ease-in 1.5s;
+    }
+    
+    .booted #AegisCoreGroup, 
+    .booted #ConduitsGroup,
+    .booted #TextGroup {
+        opacity: 1;
+    }
+
+  </style>
+
+  <g id="ShieldContainer" class="booting-up">
+    
+    <polygon id="ShieldBase" points="250,40 420,100 380,350 250,460 120,350 80,100" 
+             fill="url(#metal-grad)" stroke="#004e59" stroke-width="2" />
+
+    <polygon points="250,60 390,115 355,335 250,430 145,335 110,115" 
+             fill="url(#cyan-energy-grad)" opacity="0.3" />
+
+    <g clip-path="url(#shield-clip)">
+        <rect id="ScanlineRect" x="0" y="0" width="500" height="50" fill="url(#cyan-energy-grad)" opacity="0.2" />
+    </g>
+
+    <g id="ConduitsGroup" stroke="#00f3ff" stroke-width="3" fill="none" filter="url(#cyan-glow-intense)" opacity="0.7">
+      <path class="energy-conduit" d="M 250,200 L 250,60" />
+      <path class="energy-conduit" d="M 250,280 L 250,430" />
+      <path class="energy-conduit" d="M 210,220 L 110,115" />
+      <path class="energy-conduit" d="M 290,220 L 390,115" />
+      <path class="energy-conduit" d="M 210,260 L 145,335" />
+      <path class="energy-conduit" d="M 290,260 L 355,335" />
+    </g>
+    
+    <polygon id="ShieldFramePath" points="250,40 420,100 380,350 250,460 120,350 80,100" 
+             fill="none" stroke="#00f3ff" stroke-width="6" filter="url(#cyan-glow-intense)" />
+             
+    <g id="AegisCoreGroup" filter="url(#green-core-glow)">
+      <circle cx="250" cy="240" r="55" fill="none" stroke="#32cd32" stroke-width="4" opacity="0.7"/>
+      <circle cx="250" cy="240" r="40" fill="#0a1a0a" stroke="#32cd32" stroke-width="2"/>
+      <circle id="AegisCoreCircle" cx="250" cy="240" r="25" fill="url(#core-green-grad)" />
+      <path d="M 250,215 L 250,265 M 225,240 L 275,240" stroke="#a8ffa8" stroke-width="2" opacity="0.9" />
+    </g>
+
+  </g>
+  
+  <g id="TextGroup" class="booting-up">
+      <text x="250" y="420" class="title-text" fill="#ffffff" font-size="42">AEGIS</text>
+  </g>
+</svg>'
 ];
 
 

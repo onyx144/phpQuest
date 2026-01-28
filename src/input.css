@@ -64,8 +64,94 @@
     @apply animate-cyber-pulse;
     border-radius: 10px; 
   }
- 
-  
+
+  /* Header Control Components - Language, Music, Exit */
+  .language,
+  .music_wrapper,
+  .exit {
+    @apply bg-cyber-panel-bg border border-cyber-border rounded-lg;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 10px rgba(0, 243, 255, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .language:hover,
+  .music_wrapper:hover,
+  .exit:hover {
+    @apply border-cyber-neon-blue;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6), inset 0 0 15px rgba(0, 243, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .exit_text {
+    @apply relative z-10 text-red-500;
+  }
+
+  /* Music Component - Icon and Controls in one line */
+  .music_content {
+    @apply relative z-10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .music_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .music_controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .music_on,
+  .music_off {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Language Component - Centered */
+  .language_content {
+    @apply relative z-10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .language_flag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .language_name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn_bg {
+    position: absolute;
+  }
+
+  .btn.btn_bottom {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+  }
   
 }
 

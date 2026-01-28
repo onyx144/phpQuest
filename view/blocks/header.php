@@ -102,6 +102,7 @@
 		<script src="/view/js/chatbot.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/tab.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/dashboard.js?v=<?php echo $random; ?>"></script>
+		<script src="/view/js/animation.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/calls.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/files.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/databases.js?v=<?php echo $random; ?>"></script>

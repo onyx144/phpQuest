@@ -47,6 +47,7 @@ if (!defined('GD_ACCESS')) {
 		<script src="<?= BASE_URI ?>/views/js/exit.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/tab.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/dashboard.js?v=1.1"></script>
+		<script src="<?= BASE_URI ?>/views/js/animation.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/calls.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/files.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/databases.js?v=1.1"></script>

@@ -1,21 +1,71 @@
 <?php defined('GD_ACCESS') or die('You can not access the file directly!'); ?>
 <div class="section_main_bg">
-	<img src="/images/main_center_bg.png" class="main_center_bg" alt="">
-	<!-- <img src="/images/gifs/main_bg.gif" class="main_center_bg_gif" alt=""> -->
-	<img src="/images/main_center_bg_lines.png" class="main_center_bg_lines" alt="">
-	<?php if ($this->userInfo) { ?>
-		<img src="/images/main_bg_left_fixed.png" class="main_center_bg_fixed_left" alt="">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg-vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#0a0f14;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#020305;stop-opacity:1" />
+    </radialGradient>
 
-		<div class="main_center_bg_right_triangles">
-			<svg width="49" height="91" viewBox="0 0 49 91" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 15L41.5 2.00962L41.5 27.9904L19 15Z" fill="#00F0FF"/><path d="M41 91L41 52.0377L34.3702 45.0802L25 45.0802L12.0166 32L0.875692 32" stroke="#00F0FF"/></svg>
-		</div>
+    <filter id="red-pulse-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.1  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redBlur" />
+      <feBlend in="SourceGraphic" in2="redBlur" mode="screen" />
+    </filter>
 
-		<img src="/images/times_bg.png" class="main_center_bg_times" alt="">
-	<?php } ?>
-	
-	<div class="section_main_bg_arcs">
-		<div class="section_main_bg_inner">
-			<svg width="1773" height="960" viewBox="0 0 1773 960" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.2"><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="-84" width="1773" height="1248"><rect y="-83.7264" width="1773" height="1247.45" fill="#C4C4C4"/></mask><g mask="url(#mask0)"><circle cx="886.898" cy="504.342" r="884.473" stroke="white" stroke-opacity="0.3" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M528.79 1314.41C638.284 1362.89 759.447 1389.81 886.898 1389.81C985.22 1389.81 1079.8 1373.79 1168.17 1344.21L1156.29 1332.33C1071.46 1359.91 980.921 1374.81 886.898 1374.81C764.021 1374.81 647.09 1349.35 541.093 1303.42L528.79 1314.41ZM1719.77 250.471C1744.22 330.788 1757.37 416.029 1757.37 504.342C1757.37 598.658 1742.37 689.471 1714.63 774.525L1726.5 786.399C1756.25 697.806 1772.37 602.957 1772.37 504.342C1772.37 412.077 1758.26 323.108 1732.08 239.475L1719.77 250.471ZM1244.72 -305.854L1232.42 -294.861C1126.5 -340.716 1009.67 -366.131 886.898 -366.131C792.582 -366.131 701.769 -351.131 616.715 -323.386L604.841 -335.26C693.434 -365.01 788.283 -381.131 886.898 -381.131C1014.24 -381.131 1135.3 -354.25 1244.72 -305.854ZM53.9371 757.915L41.6271 768.912C15.504 685.365 1.42576 596.498 1.42576 504.342C1.42576 406.02 17.4509 311.441 47.0316 223.074L58.9115 234.954C31.3325 319.779 16.4258 410.319 16.4258 504.342C16.4258 592.545 29.5445 677.684 53.9371 757.915Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M621.833 1328.72C705.371 1355.56 794.442 1370.05 886.898 1370.05C950.277 1370.05 1012.07 1363.24 1071.57 1350.31L1058.91 1337.65C1003.36 1349.06 945.828 1355.05 886.898 1355.05C799.144 1355.05 714.493 1341.76 634.848 1317.09L621.833 1328.72ZM1722.75 345.23C1732.5 396.774 1737.61 449.962 1737.61 504.342C1737.61 563.572 1731.55 621.389 1720.03 677.206L1732.68 689.857C1745.73 630.092 1752.61 568.02 1752.61 504.342C1752.61 445.893 1746.81 388.798 1735.77 333.598L1722.75 345.23ZM1151.66 -320.131L1138.64 -308.501C1059.09 -333.113 974.54 -346.366 886.898 -346.366C827.668 -346.366 769.851 -340.313 714.034 -328.791L701.383 -341.442C761.148 -354.491 823.22 -361.366 886.898 -361.366C979.243 -361.366 1068.21 -346.907 1151.66 -320.131ZM50.9857 663.138L37.9623 674.773C26.9612 619.67 21.1908 562.68 21.1908 504.342C21.1908 440.963 28.0015 379.174 40.9311 319.669L53.5902 332.328C42.1826 387.882 36.1908 445.412 36.1908 504.342C36.1908 558.611 41.2723 611.693 50.9857 663.138Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M91.0268 478.907L51.8899 432.824L38.7703 417.376L38.3202 417.906V448.802L38.7703 448.272L86.7701 504.791L38.7703 561.311L38.3202 560.781V591.677L38.7703 592.207L51.8899 576.759L91.0268 530.676V478.907Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1748.65 417.376L1735.98 432.294L1695.95 479.438V529.086L1735.98 576.229L1748.65 591.148V560.252L1701.1 504.262L1748.65 448.272V417.376Z" fill="white"/></g></g></svg>
-		</div>
-	</div>
+    <pattern id="hex-grid" width="100" height="173.2" patternUnits="userSpaceOnUse">
+      <path d="M50 0 L100 28.86 L100 86.6 L50 115.46 L0 86.6 L0 28.86 Z" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.15"/>
+    </pattern>
+    
+    <pattern id="scanlines-bg" patternUnits="userSpaceOnUse" width="2" height="4">
+      <rect width="2" height="1" fill="#000" opacity="0.2"/>
+    </pattern>
+  </defs>
+
+  <style>
+    /* Animations */
+
+    /* 1. Медленный дрейф сетки */
+    @keyframes gridDrift {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-173.2px); } /* Двигаем ровно на высоту одного тайла для бесшовности */
+    }
+
+    /* 2. Пульсация красных узлов */
+    @keyframes redPulse {
+        0%, 100% { opacity: 0.2; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.3); }
+    }
+
+    /* Применение анимаций */
+    .grid-layer {
+      animation: gridDrift 20s linear infinite;
+    }
+
+    .red-node {
+        transform-origin: center;
+        animation: redPulse 6s ease-in-out infinite alternate;
+    }
+    /* Небольшие задержки для рассинхрона пульсации */
+    .rn-1 { animation-delay: 0s; }
+    .rn-2 { animation-delay: 2s; }
+    .rn-3 { animation-delay: 4s; }
+
+  </style>
+
+  <rect width="100%" height="100%" fill="#05080a" />
+  <rect width="100%" height="100%" fill="url(#bg-vignette)" opacity="0.8" />
+
+  <rect x="-100" y="-200" width="2200" height="1500" fill="url(#hex-grid)" class="grid-layer" />
+
+  <g filter="url(#red-pulse-glow)">
+      <circle cx="450" cy="300" r="8" fill="#ff003c" class="red-node rn-1" />
+      <circle cx="1250" cy="750" r="12" fill="#ff003c" class="red-node rn-2" />
+      <circle cx="1650" cy="200" r="6" fill="#ff003c" class="red-node rn-3" />
+      <circle cx="250" cy="850" r="10" fill="#ff003c" class="red-node rn-2" opacity="0.6"/>
+  </g>
+
+  <rect width="100%" height="100%" fill="url(#scanlines-bg)" opacity="0.3" pointer-events="none"/>
+
+</svg>
 </div>
