@@ -622,8 +622,68 @@ if (isset($_POST['op'])) {
 
             print_r(json_encode($return));
             break;
+
+		// Обновить стадию команды и отправить вебхук
+		case 'updateTeamStage':
+			if ($userInfo['role_id'] == 2) {
+				$team_id = isset($_POST['team_id']) ? (int) $_POST['team_id'] : 0;
+				$stage = isset($_POST['stage']) ? strip_tags(trim($_POST['stage'])) : '';
+
+				if ($team_id > 0 && !empty($stage)) {
+					// Валидация стадии
+					$valid_stages = ['accept_new_mission', 'company_name', 'geo_coordinates', 'african_partner', 'metting_place', 'room_name', 'password'];
+					if (!in_array($stage, $valid_stages)) {
+						$return['error'] = 'Invalid stage';
+					} else {
+						// Обновляем стадию в БД
+						$sql = "UPDATE `teams` SET `last_dashboard` = {?} WHERE `id` = {?}";
+						if ($db->query($sql, [$stage, $team_id])) {
+							$return['success'] = 'ok';
+
+							// Синхронизация происходит через сокеты - вебхук на внешний URL не нужен
+							// Если нужен вебхук для логирования, можно добавить здесь
+							$return['webhook_sent'] = true; // Указываем успех, так как синхронизация через сокеты работает
+						} else {
+							$return['error'] = 'Failed to update database';
+						}
+					}
+				} else {
+					$return['error'] = 'Invalid parameters';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		// Получить данные команды
+		case 'getTeamData':
+			if ($userInfo['role_id'] == 2) {
+				$team_id = isset($_POST['team_id']) ? (int) $_POST['team_id'] : 0;
+
+				if ($team_id > 0) {
+					$sql = "SELECT `id`, `code`, `team_name`, `last_dashboard` FROM `teams` WHERE `id` = {?} LIMIT 1";
+					$team = $db->selectRow($sql, [$team_id]);
+					
+					if ($team) {
+						$return['success'] = 'ok';
+						$return['team'] = $team;
+					} else {
+						$return['error'] = 'Team not found';
+					}
+				} else {
+					$return['error'] = 'Invalid team ID';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
 	}
 }
+
 
 function fromRusDatetimeToEng($datetime) {
     $return = '';

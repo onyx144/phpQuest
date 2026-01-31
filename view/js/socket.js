@@ -1,16 +1,23 @@
 /* === ЛОГИКА ПО СОКЕТАМ === */
 
 /* ГЛАВНЫЕ ПЕРЕМЕННЫЕ */
-	// var socket = new WebSocket("ws://185.69.152.94:8090/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("ws://91.200.43.213:8090/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("ws://intelescape.com:8090/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://intelescape.com:8080/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://intelescape.com:8090/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://intelescape.com/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://intelescape.com:443/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://intelescape.com:44301/server_game.php"); // "слушаем" сервер
-	// var socket = new WebSocket("wss://localhost:8090/server_game.php"); // "слушаем" сервер
-	var socket = new WebSocket("wss://intelescape.com/websocket"); // "слушаем" сервер
+	// Динамическое определение WebSocket URL на основе текущего хоста
+	var wsProtocol = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+	var wsHost = location.hostname;
+	var wsPort = '8090'; // Порт для WebSocket сервера
+	var wsPath = '/server_game.php'; // Путь к WebSocket серверу
+	
+	// Для localhost используем прямой порт, для продакшена - через прокси
+	var wsUrl;
+	if (wsHost === 'localhost' || wsHost === '127.0.0.1') {
+		// Для localhost подключаемся напрямую к порту
+		wsUrl = wsProtocol + '//' + wsHost + ':' + wsPort + wsPath;
+	} else {
+		// Для продакшена используем стандартный путь через прокси
+		wsUrl = wsProtocol + '//' + wsHost + '/websocket';
+	}
+	
+	var socket = new WebSocket(wsUrl); // "слушаем" сервер
 
 	var questionEndVideo = true;
 
@@ -209,8 +216,8 @@ $(function() {
 
 				hiddenMainPreloader();
 
-				// активный тип табов
-				hiddenAllTypeTabs();
+				// НЕ синхронизируем переключение табов между игроками
+				// hiddenAllTypeTabs(); // Убрано, чтобы не сбрасывать активные табы игрока
 
 				// окно чата
 				if (teamInfo.open_chat == 'yes') {
@@ -296,32 +303,9 @@ $(function() {
 						mainTimer2 = false;
 					}
 				} else {
-					if (teamInfo.last_type_tabs == 'dashboard') {
-						$('.dashboard_tabs[data-dashboard="dashboard"]').addClass('dashboard_tabs_active');
-						$('.dashboard_item[data-dashboard="dashboard"]').addClass('dashboard_item_active');
-
-						uploadTypeTabsDashboardStep(teamInfo.last_dashboard, false);
-					} else if (teamInfo.last_type_tabs == 'calls') {
-						$('.dashboard_tabs[data-dashboard="calls"]').addClass('dashboard_tabs_active');
-						$('.dashboard_item[data-dashboard="calls"]').addClass('dashboard_item_active');
-
-						uploadTypeTabsCallsStep(teamInfo.last_calls, false, teamInfo.view_call_mobile_btn, teamInfo.open_call_mobile_btn);
-					} else if (teamInfo.last_type_tabs == 'files') {
-						$('.dashboard_tabs[data-dashboard="files"]').addClass('dashboard_tabs_active');
-						$('.dashboard_item[data-dashboard="files"]').addClass('dashboard_item_active');
-
-						uploadTypeTabsFilesStep(false);
-					} else if (teamInfo.last_type_tabs == 'databases') {
-						$('.dashboard_tabs[data-dashboard="databases"]').addClass('dashboard_tabs_active');
-						$('.dashboard_item[data-dashboard="databases"]').addClass('dashboard_item_active');
-
-						uploadTypeTabsDatabasesStep(teamInfo.last_databases, false, false);
-					} else if (teamInfo.last_type_tabs == 'tools') {
-						$('.dashboard_tabs[data-dashboard="tools"]').addClass('dashboard_tabs_active');
-						$('.dashboard_item[data-dashboard="tools"]').addClass('dashboard_item_active');
-
-						uploadTypeTabsToolsStep(teamInfo.last_tools, false, false);
-					}
+					// НЕ синхронизируем переключение табов между игроками
+					// Каждый игрок может иметь свой активный таб независимо от других
+					// Код синхронизации табов удален, чтобы игроки могли переключать табы независимо
 
 					// Обновить к-во непрочитанных файлов
 					updateDontOpenFilesQt();
@@ -611,39 +595,55 @@ $(function() {
 						$('.dashboard_tab_content_item_new_mission_error').html(parameters.error_lang[$('html').attr('lang')]).addClass('dashboard_tab_content_item_new_mission_error_active');
 					}
 				} else if (op == 'missionNumberOpenIncomingCall') { // название миссии ввели верно. Открываем попап со звонком
-					if ($('.dashboard_tab_content_item_new_mission_error').length) {
-						$('.dashboard_tab_content_item_new_mission_error').removeClass('dashboard_tab_content_item_new_mission_error_active').html('');
-					}
+					// Проверяем, что сообщение для нашей команды
+					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
+					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+					var currentUserId = $('#section_game').length ? parseInt($('#section_game').attr('data-user-id')) : 0;
+					var messageUserId = parameters.user_id ? parseInt(parameters.user_id) : 0;
+					
+					// Открываем попап только если это сообщение для нашей команды
+					// И если попап еще не открыт (чтобы не дублировать для того, кто отправил сообщение)
+					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
+						// Проверяем, не открыт ли уже попап (для того, кто отправил сообщение, он уже открыт локально)
+						var isPopupAlreadyOpen = $('#popup_start_mission').css('display') === 'block';
+						
+						// Если это не тот пользователь, который отправил сообщение, или попап еще не открыт
+						if (currentUserId !== messageUserId || !isPopupAlreadyOpen) {
+							if ($('.dashboard_tab_content_item_new_mission_error').length) {
+								$('.dashboard_tab_content_item_new_mission_error').removeClass('dashboard_tab_content_item_new_mission_error_active').html('');
+							}
 
-					$('.popup_start_mission_number').css('opacity', 1);
-					$('#popup_start_mission').css('display','block');
+							$('.popup_start_mission_number').css('opacity', 1);
+							$('#popup_start_mission').css('display','block');
 
-					if (!startAudio || !isPlaying(startAudio)) {
-						startAudio = new Audio;
-						startAudio.src = '/music/robotic_countdown.mp3';
-						// startAudio.play();
+							if (!startAudio || !isPlaying(startAudio)) {
+								startAudio = new Audio;
+								startAudio.src = '/music/robotic_countdown.mp3';
+								// startAudio.play();
 
-						// Autoplay
-						var promise = startAudio.play();
+								// Autoplay
+								var promise = startAudio.play();
 
-						if (promise !== undefined) {
-							promise.then(_ => {
-								// console.log('autoplay');
-							}).catch(error => {
-								// console.log('autoplay ERR');
-							});
+								if (promise !== undefined) {
+									promise.then(_ => {
+										// console.log('autoplay');
+									}).catch(error => {
+										// console.log('autoplay ERR');
+									});
+								}
+							}
+
+							setTimeout(function(){
+								$('.popup_start_mission_number').css('opacity', 0);
+								$('#popup_start_mission').css('display','none');
+							}, 2750);
+
+							setTimeout(function(){
+								// открываем попап входящего звонка
+								newMissionOpenIncomingCall();
+							}, 3000);
 						}
 					}
-
-					setTimeout(function(){
-						$('.popup_start_mission_number').css('opacity', 0);
-						$('#popup_start_mission').css('display','none');
-					}, 2750);
-
-					setTimeout(function(){
-						// открываем попап входящего звонка
-						newMissionOpenIncomingCall();
-					}, 3000);
 
 					/*if (!startAudio || !isPlaying(startAudio)) {
 						startAudio = new Audio;
@@ -672,71 +672,85 @@ $(function() {
 						newMissionOpenIncomingCall();
 					}, 3000);*/
 				} else if (op == 'missionNumberCloseIncomingCall') { // название миссии ввели верно. Закрыть попап со звонком
-					// останавливаем звук звонка и запускаем фоновое
-					/*if (music_before) {
-						playMusic();
-					}*/
-					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
-						playMusic();
+					// Проверяем, что сообщение для нашей команды
+					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
+					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+					
+					// Обрабатываем только если это сообщение для нашей команды
+					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
+						// останавливаем звук звонка и запускаем фоновое
+						/*if (music_before) {
+							playMusic();
+						}*/
+						if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
+							playMusic();
+						}
+						// music_before = false;
+
+						clearInterval(incomingMusicTimer);
+						incomingMusicTimer = false;
+
+						if (incomingAudio && isPlaying(incomingAudio)) {
+							incomingAudio.pause();
+						}
+
+						// останавливаем обновление времени
+						clearInterval(incomingCallTimer);
+						incomingCallTimer = false;
+
+						// скрываем блок с телефоном
+						$('#popup_video_phone').fadeOut(200);
+
+						// очищаем данные
+						setTimeout(function(){
+							$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
+							$('#popup_video_phone .popup_video_phone_name').html('');
+							$('#popup_video_phone').attr('class','');
+						}, 210);
 					}
-					// music_before = false;
-
-					clearInterval(incomingMusicTimer);
-					incomingMusicTimer = false;
-
-					if (incomingAudio && isPlaying(incomingAudio)) {
-						incomingAudio.pause();
-					}
-
-					// останавливаем обновление времени
-					clearInterval(incomingCallTimer);
-					incomingCallTimer = false;
-
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
 				} else if (op == 'acceptMissionIncomingCallAccept') { // название миссии ввели верно. Принять входящий звонок
-					// запускаем фоновую музыку, если была
-					/*if (music_before) {
-						playMusic();
-					}*/
-					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
-						playMusic();
+					// Проверяем, что сообщение для нашей команды
+					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
+					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+					
+					// Обрабатываем только если это сообщение для нашей команды
+					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
+						// запускаем фоновую музыку, если была
+						/*if (music_before) {
+							playMusic();
+						}*/
+						if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
+							playMusic();
+						}
+						// music_before = false;
+
+						// останавливаем звук звонка
+						clearInterval(incomingMusicTimer);
+						incomingMusicTimer = false;
+
+						if (incomingAudio && isPlaying(incomingAudio)) {
+							incomingAudio.pause();
+						}
+
+						// останавливаем обновление времени
+						clearInterval(incomingCallTimer);
+						incomingCallTimer = false;
+
+						// скрываем блок с телефоном
+						$('#popup_video_phone').fadeOut(200);
+
+						// очищаем данные в блоке с телефоном
+						setTimeout(function(){
+							$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
+							$('#popup_video_phone .popup_video_phone_name').html('');
+							$('#popup_video_phone').attr('class','');
+						}, 210);
+
+						// открыть видео и сразу запустить его
+						playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
+						openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call');
+						playVideo('call');
 					}
-					// music_before = false;
-
-					// останавливаем звук звонка
-					clearInterval(incomingMusicTimer);
-					incomingMusicTimer = false;
-
-					if (incomingAudio && isPlaying(incomingAudio)) {
-						incomingAudio.pause();
-					}
-
-					// останавливаем обновление времени
-					clearInterval(incomingCallTimer);
-					incomingCallTimer = false;
-
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные в блоке с телефоном
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
-
-					// открыть видео и сразу запустить его
-					playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-					openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call');
-					playVideo('call');
 					// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call_jane');
 					// playVideoCall();
 

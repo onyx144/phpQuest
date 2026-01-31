@@ -571,7 +571,7 @@ class Functions
         $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
                                 <div class="dashboard_tab_title_active_skew_right"></div>
                                 <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
+                                <div class="dashboard_tab_title_img_wrapper">
                                         <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
                                     </div>
                                     <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
@@ -579,7 +579,45 @@ class Functions
                             </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_new_mission dashboard_tab_content_item_active" data-tab="tab1">
-                                 
+                                                                    <div class="dashboard_tab_content_item_new_mission_title">ACCEPT A NEW MISSION</div>
+                                    <div class="dashboard_tab_content_item_new_mission_input_wrapper">
+                                        <div class="dashboard_tab_content_item_new_mission_input_border_left"></div>
+                                        <div class="dashboard_tab_content_item_new_mission_input_border_right"></div>
+                                        <div class="dashboard_tab_content_item_new_mission_input_border_left2"></div>
+                                        <div class="dashboard_tab_content_item_new_mission_input_border_right2"></div>
+                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_left" alt="">
+                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_right" alt="">
+                                        <input type="text" placeholder="Enter mission code name" autocomplete="off" class="dashboard_tab_content_item_new_mission_input">
+                                        <div class="dashboard_tab_content_item_new_mission_error"></div>
+                                    </div>
+                                    <div class="btn_wrapper btn_wrapper_blue dashboard_tab_content_item_new_mission_accept">
+                                        <div class="btn btn_blue">
+                                            <span>ACCEPT</span>
+                                        </div>
+                                        <div class="btn_border_top"></div>
+                                        <div class="btn_border_bottom"></div>
+                                        <div class="btn_border_left"></div>
+                                        <div class="btn_border_left_arcle"></div>
+                                        <div class="btn_border_right"></div>
+                                        <div class="btn_border_right_arcle"></div>
+                                        <div class="btn_bg_top_line"></div>
+                                        <div class="btn_bg_bottom_line"></div>
+                                        <div class="btn_bg_triangle_left"></div>
+                                        <div class="btn_bg_triangle_right"></div>
+                                        <div class="btn_circles_top">
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                        </div>
+                                        <div class="btn_circles_bottom">
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                            <div class="btn_circle"></div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard_tab_content_item_new_mission_text_bottom">Timer starts after you have accepted a new mission.</div>
                             </div>';
 
         return $return;

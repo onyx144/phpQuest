@@ -101,9 +101,9 @@ $(function() {
 			var newTypeDashboard = $(this).attr('data-dashboard');
 
 			if (newTypeDashboard == 'databases') {
-				openTypeTabsDatabasesMain(true);
+				openTypeTabsDatabasesMain(false); // Не синхронизируем переключение табов
 			} else if (newTypeDashboard == 'tools') {
-				openTypeTabsToolsMain(true);
+				openTypeTabsToolsMain(false); // Не синхронизируем переключение табов
 			} else {
 				return false;
 			}
@@ -114,17 +114,17 @@ $(function() {
 
 			var newTypeDashboard = $(this).attr('data-dashboard');
 			if (newTypeDashboard == 'dashboard') {
-				openTypeTabsDashboard(true);
+				openTypeTabsDashboard(false); // Не синхронизируем переключение табов
 			} else if (newTypeDashboard == 'calls') {
-				openTypeTabsCalls(true);
+				openTypeTabsCalls(false); // Не синхронизируем переключение табов
 			} else if (newTypeDashboard == 'files') {
-				openTypeTabsFiles(true);
+				openTypeTabsFiles(false); // Не синхронизируем переключение табов
 			} else if (newTypeDashboard == 'databases') {
 				// openTypeTabsDatabases(true);
-				openTypeTabsDatabasesMain(true);
+				openTypeTabsDatabasesMain(false); // Не синхронизируем переключение табов
 			} else if (newTypeDashboard == 'tools') {
 				// openTypeTabsTools(true);
-				openTypeTabsToolsMain(true);
+				openTypeTabsToolsMain(false); // Не синхронизируем переключение табов
 			}
 
 			hiddenMainPreloader();

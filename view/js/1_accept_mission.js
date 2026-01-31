@@ -34,39 +34,38 @@
 	        data: formData,
 			success: function(json) {
 				if (json.success) {
-					$('.popup_start_mission_number').css('opacity', 1);
-					$('#popup_start_mission').css('display','block');
-
 					$('.dashboard_tab_content_item_new_mission_error').removeClass('dashboard_tab_content_item_new_mission_error_active').html('');
 
+					// Отправляем сокет-сообщение для синхронизации всех пользователей команды
 					// socket
 					var message = {
 						'op': 'missionNumberOpenIncomingCall',
 						'parameters': {
 							'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-							'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+							'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0,
+							'mission_number': mission_number
 						}
 			        };
 			        sendMessageSocket(JSON.stringify(message));
+			        
+			        // Открываем попап локально для того, кто ввел код (для немедленной реакции)
+			        // Другие пользователи команды получат попап через сокет-сообщение
+			        $('.popup_start_mission_number').css('opacity', 1);
+					$('#popup_start_mission').css('display','block');
 
-			        // setTimeout(function(){
-						if (!startAudio || !isPlaying(startAudio)) {
-							startAudio = new Audio;
-							startAudio.src = '/music/robotic_countdown.mp3';
-							// startAudio.play();
-
-							// Autoplay
-							var promise = startAudio.play();
-
-							if (promise !== undefined) {
-								promise.then(_ => {
-									// console.log('autoplay');
-								}).catch(error => {
-									// console.log('autoplay ERR');
-								});
-							}
+					// Запускаем звук
+					if (!startAudio || !isPlaying(startAudio)) {
+						startAudio = new Audio;
+						startAudio.src = '/music/robotic_countdown.mp3';
+						var promise = startAudio.play();
+						if (promise !== undefined) {
+							promise.then(_ => {
+								// console.log('autoplay');
+							}).catch(error => {
+								// console.log('autoplay ERR');
+							});
 						}
-					// }, 100);
+					}
 
 					setTimeout(function(){
 						$('.popup_start_mission_number').css('opacity', 0);

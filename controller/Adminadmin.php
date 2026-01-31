@@ -868,4 +868,65 @@ class Adminadmin
 
 		echo json_encode($return, JSON_UNESCAPED_UNICODE);
     }
+
+    // Админ панель управления стадиями игры
+    public function manageStages()
+    {
+        // Проверка доступа (только для админов)
+        if (!$this->userInfo || $this->userInfo['role_id'] != 2) {
+            header('Location: /sales');
+            exit();
+        }
+
+        $this->pagetitle = 'Manage Game Stages';
+
+        // Получаем выбранную команду из GET
+        $selected_team_id = isset($_GET['team_id']) ? (int) $_GET['team_id'] : 0;
+
+        // Получаем список всех команд с пагинацией
+        $query_count = "SELECT COUNT(*) FROM `teams`";
+        $qt_teams = $this->db->selectCell($query_count);
+        
+        // Формируем URL для пагинации с учетом team_id
+        $urlPag = '/manage-stages';
+        $urlParams = [];
+        if ($selected_team_id > 0) {
+            $urlParams['team_id'] = $selected_team_id;
+        }
+        
+        $urlPagFull = $urlPag;
+        if (!empty($urlParams)) {
+            $urlPagFull .= '?' . http_build_query($urlParams);
+        }
+        
+        $this->pagination = new Pagination();
+        $this->pagination->total = $qt_teams;
+        $this->pagination->page = $this->page;
+        $this->pagination->limit = $this->settings['limit'];
+        $this->pagination->url = $urlPagFull . (stripos($urlPagFull, '?') !== false ? '&' : '?') . 'page={page}';
+        
+        $query = "SELECT `id`, `code`, `team_name`, `last_dashboard` FROM `teams` ORDER BY `id` DESC LIMIT " . $this->start . ", " . $this->settings['limit'];
+        $teams = $this->db->select($query);
+
+        // Получаем информацию о выбранной команде
+        $selected_team = null;
+        if ($selected_team_id > 0) {
+            $query_team = "SELECT `id`, `code`, `team_name`, `last_dashboard` FROM `teams` WHERE `id` = {?} LIMIT 1";
+            $selected_team = $this->db->selectRow($query_team, [$selected_team_id]);
+        }
+
+        // Определяем все доступные стадии
+        $stages = [
+            'accept_new_mission' => 'Accept New Mission',
+            'company_name' => 'Company Name',
+            'geo_coordinates' => 'Geo Coordinates',
+            'african_partner' => 'African Partner',
+            'metting_place' => 'Meeting Place',
+            'room_name' => 'Room Name',
+            'password' => 'Password'
+        ];
+
+        require_once(ROOT . '/admin/view/template/manage_stages.php');
+    }
+
 }

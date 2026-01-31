@@ -21,15 +21,19 @@ $socket_object = new Socketgame();
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
-socket_bind($socket, 0, PORT);
+socket_bind($socket, '127.0.0.1', PORT);
 // socket_bind($socket, 0);
 
 socket_listen($socket);
 
 $clientSocketArray = array($socket);
 
-// file_put_contents('/home/admin/web/digital-game2.example.com/public_html/tmp/socket.pid', getmypid());
-file_put_contents('/var/www/www-root/data/www/intelescape.com/tmp/socket.pid', getmypid());
+// Определяем путь к PID файлу в зависимости от окружения
+$pid_file = 'tmp/socket.pid';
+if (!is_dir('tmp')) {
+	mkdir('tmp', 0777, true);
+}
+file_put_contents($pid_file, getmypid());
 
 while(true) {
     $newSocketArray = $clientSocketArray;
@@ -41,10 +45,13 @@ while(true) {
         $clientSocketArray[] = $newSocket;
         
         $header = socket_read($newSocket, 1024);
-        // $socket_object->sendHeaders($header, $newSocket, '185.69.152.94', PORT);
-        $socket_object->sendHeaders($header, $newSocket, 'intelescape.com', PORT);
-        // $socket_object->sendHeaders($header, $newSocket, 'intelescape.com');
-        // $socket_object->sendHeaders($header, $newSocket, '91.200.43.213', PORT);
+        // Определяем хост динамически
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+        $host = preg_replace('/:\d+$/', '', $host); // Убираем порт, если есть
+        if ($host === 'localhost' || $host === '127.0.0.1') {
+            $host = 'localhost';
+        }
+        $socket_object->sendHeaders($header, $newSocket, $host, PORT);
 
         socket_getpeername($newSocket, $client_ip_address);
         $connectionACK = $socket_object->newConnectionACK($client_ip_address);

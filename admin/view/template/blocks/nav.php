@@ -38,6 +38,11 @@
             		<li class="nav-item">
               			<a class="nav-link<?php if (isset($_SERVER['REQUEST_URI']) && stripos($_SERVER['REQUEST_URI'], '/totalsales-sum') !== false) { echo ' active'; } ?>" href="/totalsales-sum?year=<?php echo date('Y'); ?>&currency=nok"><i class="fas fa-chart-pie"></i> Total Sales Sum</a>
             		</li>
+            		<?php if ($this->userInfo['role_id'] == 2) { ?>
+            		<li class="nav-item">
+              			<a class="nav-link<?php if (isset($_SERVER['REQUEST_URI']) && stripos($_SERVER['REQUEST_URI'], '/manage-stages') !== false) { echo ' active'; } ?>" href="/manage-stages"><i class="fas fa-tasks"></i> Manage Stages</a>
+            		</li>
+            		<?php } ?>
           		</ul>
 
           		<?php if ($this->userInfo['role_id'] == 2) { ?>

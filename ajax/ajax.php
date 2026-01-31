@@ -33,6 +33,7 @@ if (isset($_POST['op'])) {
 			if (in_array($mission_number, $check)) {
 				$return['success'] = 'ok';
 
+				// Синхронизация происходит через сокеты - вебхук не нужен
 				// $function->addTeamActionHistory($userInfo['team_id'], 16);
 			} else {
 				// количество совпадений трех слов
@@ -574,5 +575,42 @@ if (isset($_POST['op'])) {
 			
 			print_r(json_encode($return));
 		    break;
+
+		// Синхронизация входящего звонка для всех пользователей команды
+		case 'syncIncomingCall':
+			$call_state = isset($_POST['call_state']) ? strip_tags(trim($_POST['call_state'])) : ''; // 'open', 'accept', 'reject', 'close'
+			$call_type = isset($_POST['call_type']) ? strip_tags(trim($_POST['call_type'])) : ''; // тип звонка (например, 'new_mission', 'company_investigate', etc.)
+			
+			if (!empty($call_state) && !empty($call_type)) {
+				// Сохраняем состояние звонка в БД для команды
+				$sql = "UPDATE `teams` SET `incoming_call_state` = {?}, `incoming_call_type` = {?}, `incoming_call_datetime` = NOW() WHERE `id` = {?}";
+				$db->query($sql, [$call_state, $call_type, $userInfo['team_id']]);
+				
+				// Отправляем вебхук всем пользователям команды через сокет
+				// Сообщение будет транслироваться через server_game.php всем подключенным клиентам команды
+				$return['success'] = 'ok';
+				$return['call_state'] = $call_state;
+				$return['call_type'] = $call_type;
+			} else {
+				$return['error'] = 'Invalid parameters';
+			}
+			
+			print_r(json_encode($return));
+			break;
+
+		// Получить текущее состояние входящего звонка для команды
+		case 'getIncomingCallState':
+			$team_info = $function->teamInfo($userInfo['team_id']);
+			if ($team_info) {
+				$return['success'] = 'ok';
+				$return['call_state'] = !empty($team_info['incoming_call_state']) ? $team_info['incoming_call_state'] : 'none';
+				$return['call_type'] = !empty($team_info['incoming_call_type']) ? $team_info['incoming_call_type'] : '';
+				$return['call_datetime'] = !empty($team_info['incoming_call_datetime']) ? $team_info['incoming_call_datetime'] : '';
+			} else {
+				$return['error'] = 'Team not found';
+			}
+			
+			print_r(json_encode($return));
+			break;
 	}
 }

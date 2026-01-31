@@ -69,4 +69,5 @@ class Login extends Admin
 
     	require_once(ROOT . '/view/template/login/control_system.php');
     }
+
 }

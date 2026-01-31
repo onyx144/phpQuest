@@ -10,12 +10,8 @@
 	<div class="content">
 		<div class="container_big content_game">
 			<div class="game_left_column">
-			<?php require_once(ROOT . '/views/template/cyber_left/acgent_container.php'); ?>
-			
-
-				 
+			<?php require_once(ROOT . '/views/template/cyber_left/acgent_container.php'); ?>				 
 			</div>
-
 			<div class="game_right_column">
 				<?php require_once(ROOT . '/views/template/cyber_right/dasboard_button.php'); ?>
 				<?php require_once(ROOT . '/view/template/game/dashboard_tabs.php'); ?>

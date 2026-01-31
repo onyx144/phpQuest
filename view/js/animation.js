@@ -32,7 +32,7 @@ function triggerErrorSequence() {
   setTimeout(() => {
     alarmAudio.pause();
     alarmAudio.currentTime = 0;
-  }, 20000);
+  }, 10000);
   
   // Show error popups
   showErrorPopups();

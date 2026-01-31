@@ -1,35 +1,8 @@
 <?php defined('GD_ACCESS') or die('You can not access the file directly!'); ?>
-<div class="dashboard_tabs" data-dashboard="dashboard">
-	<div class="dashboard_tab_title_bg_dots">
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-		<div class="dashboard_tab_title_bg_dot"></div>
-	</div>
-	<div class="dashboard_tab_content_bg_dots">
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-		<div class="dashboard_tab_content_bg_dot"></div>
-	</div>
+<div class="dashboard_tabs cyber-panel animate-fade-in-up dashboard_tabs_active" data-dashboard="dashboard">
+	 
 
-	<div class="dashboard_gem_wrapper">
-		<img src="/images/dashboard_gem_bg.png" class="dashboard_gem_bg" alt="">
-		<!-- <img src="/images/globe-3.gif" class="dashboard_gem_globe" alt=""> -->
-		<img src="/images/gifs/globe.gif" class="dashboard_gem_globe" alt="">
-		<div class="dashboard_gem_wrapper_content">
-			<div class="dashboard_gem_wrapper_content_title"><?php echo $translation['text46']; ?>:</div>
-			<div class="dashboard_gem_wrapper_content_text"><?php echo $translation['text47']; ?></div>
-		</div>
-	</div>
+	 
 	<div class="dashboard_tab_titles">
 		<!-- эта часть динамическая -->
 		<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
