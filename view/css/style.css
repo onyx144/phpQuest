@@ -1210,6 +1210,18 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     font-size: 14px;
     line-height: 20px;
 }
+.popup_video_phone_btn img {
+    margin-top: 10px;
+    margin-left: 12px;
+}
+
+.popup_video_phone_btn_decline_wrapper image {
+    margin-top: -18px;
+}
+
+.popup_video_phone_btn img {
+    margin-top: 10px;
+}
 .score {
     font-family: 'Starzone';
     color: white;
@@ -2951,7 +2963,10 @@ a.language_hidden_item {
     top: 50%;
     margin: -381px 0 0 -242px;
     z-index: 14;
+    display: flex;
     padding: 39px 0 30px 0;
+    flex-direction: column;
+    align-items: center;
 }
 .popup_video_phone_top,
 .popup_video_phone_outgoing_top {
@@ -2975,7 +2990,9 @@ a.language_hidden_item {
     width: 100%;
     float: left;
     text-align: center;
+    display: flex;
     margin: 31px 0 0;
+    justify-content: center;
 }
 .popup_video_phone_photo img {
     border: 1px solid #00F0FF;
@@ -3093,17 +3110,20 @@ a.language_hidden_item {
 .popup_video_phone_outgoing_btn_decline_wrapper {
     float: left;
     cursor: pointer;
+    padding: 0px;
 }
 .popup_video_phone_btn_answer_wrapper {
     float: right;
     cursor: pointer;
+    display: flex;
+    align-items: flex-start;
 }
 .popup_video_phone_btn_text,
 .popup_video_phone_outgoing_btn_text {
     font-size: 24px;
     color: white;
     line-height: 24px;
-    margin: 15px 0 0;
+    margin: 25px -14px 0px;
 }
 .popup_video_phone_btn_answer_wrapper img {
     -webkit-animation: vibrateCallIcon 2s cubic-bezier(.36, .07, .19, .97) infinite;

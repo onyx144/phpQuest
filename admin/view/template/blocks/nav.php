@@ -5,9 +5,7 @@
           		<span class="navbar-toggler-icon"></span>
         	</button> -->
     
-        	<div class="navbar-brand">
-          		<img src="/images/login/escape_logo.png" class="navbar-brand-img mx-auto" alt="">
-        	</div>
+        	 
     
         	<div class="collapse navbar-collapse" id="sidebarCollapse">
           		<ul class="navbar-nav">
@@ -41,6 +39,9 @@
             		<?php if ($this->userInfo['role_id'] == 2) { ?>
             		<li class="nav-item">
               			<a class="nav-link<?php if (isset($_SERVER['REQUEST_URI']) && stripos($_SERVER['REQUEST_URI'], '/manage-stages') !== false) { echo ' active'; } ?>" href="/manage-stages"><i class="fas fa-tasks"></i> Manage Stages</a>
+            		</li>
+            		<li class="nav-item">
+              			<a class="nav-link<?php if (isset($_SERVER['REQUEST_URI']) && stripos($_SERVER['REQUEST_URI'], '/language') !== false) { echo ' active'; } ?>" href="/language"><i class="fas fa-language"></i> Language Dictionary</a>
             		</li>
             		<?php } ?>
           		</ul>

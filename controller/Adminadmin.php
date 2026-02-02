@@ -929,4 +929,80 @@ class Adminadmin
         require_once(ROOT . '/admin/view/template/manage_stages.php');
     }
 
+    public function manageLanguages()
+    {
+        if (!$this->userInfo || $this->userInfo['role_id'] != 2) {
+            header('Location: /sales');
+            exit();
+        }
+
+        $this->pagetitle = 'Manage Languages Dictionary';
+
+        // Получаем все активные языки
+        $query = "SELECT `id`, `lang`, `lang_name`, `lang_abbr` FROM `langs` WHERE `status` = 1 ORDER BY `id`";
+        $languages = $this->db->select($query);
+
+        // Получаем ID английского языка для получения аналогов
+        $english_lang_id = $this->db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+
+        // Выбранный язык из GET параметра
+        $selected_lang_id = isset($_GET['lang_id']) ? (int) $_GET['lang_id'] : 0;
+        $selected_lang = null;
+        $words = [];
+        $words_with_english = [];
+
+        if ($selected_lang_id > 0) {
+            // Получаем информацию о выбранном языке
+            $query_lang = "SELECT `id`, `lang`, `lang_name`, `lang_abbr` FROM `langs` WHERE `id` = {?} LIMIT 1";
+            $selected_lang = $this->db->selectRow($query_lang, [$selected_lang_id]);
+
+            if ($selected_lang) {
+                // Получаем все уникальные field (коды слов) для пагинации
+                $query_count = "SELECT COUNT(DISTINCT `field`) as total FROM `lang_words_admin`";
+                $total_words = $this->db->selectCell($query_count);
+
+                // Настройка пагинации
+                $urlPag = '/language';
+                $urlParams = ['lang_id' => $selected_lang_id];
+                $urlPagFull = $urlPag . '?' . http_build_query($urlParams);
+
+                $this->pagination = new Pagination();
+                $this->pagination->total = $total_words;
+                $this->pagination->page = $this->page;
+                $this->pagination->limit = $this->settings['limit'];
+                $this->pagination->url = $urlPagFull . '&page={page}';
+
+                // Получаем все уникальные field с пагинацией
+                $query_fields = "SELECT DISTINCT `field` FROM `lang_words_admin` ORDER BY `field` LIMIT " . $this->start . ", " . $this->settings['limit'];
+                $fields = $this->db->select($query_fields);
+
+                // Для каждого field получаем переводы
+                foreach ($fields as $field_row) {
+                    $field = $field_row['field'];
+                    
+                    // Получаем слово для выбранного языка
+                    $query_word = "SELECT `id`, `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+                    $word = $this->db->selectRow($query_word, [$field, $selected_lang_id]);
+                    
+                    // Получаем английский аналог
+                    $english_word = null;
+                    if ($english_lang_id && $selected_lang_id != $english_lang_id) {
+                        $query_english = "SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+                        $english_word = $this->db->selectCell($query_english, [$field, $english_lang_id]);
+                    }
+
+                    $words_with_english[] = [
+                        'field' => $field,
+                        'id' => $word ? $word['id'] : null,
+                        'val' => $word ? $word['val'] : '',
+                        'page' => $word ? $word['page'] : '',
+                        'english_val' => $english_word ? $english_word : ''
+                    ];
+                }
+            }
+        }
+
+        require_once(ROOT . '/admin/view/template/manage_languages.php');
+    }
+
 }

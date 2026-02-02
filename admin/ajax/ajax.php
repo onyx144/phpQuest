@@ -681,6 +681,201 @@ if (isset($_POST['op'])) {
 
 			print_r(json_encode($return));
 			break;
+
+		// Добавить новый язык
+		case 'addLanguage':
+			if ($userInfo['role_id'] == 2) {
+				$lang_code = isset($_POST['lang_code']) ? strip_tags(trim($_POST['lang_code'])) : '';
+				$lang_name = isset($_POST['lang_name']) ? strip_tags(trim($_POST['lang_name'])) : '';
+				$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+
+				if (empty($lang_code) || empty($lang_name) || empty($lang_abbr)) {
+					$return['error'] = 'All fields are required';
+				} else {
+					// Проверяем, не существует ли уже такой язык
+					$sql = "SELECT `id` FROM `langs` WHERE `lang` = {?} OR `lang_abbr` = {?} LIMIT 1";
+					$existing = $db->selectCell($sql, [$lang_code, $lang_abbr]);
+					if ($existing) {
+						$return['error'] = 'Language with this code or abbreviation already exists';
+					} else {
+						$sql = "INSERT INTO `langs` SET `lang` = {?}, `lang_name` = {?}, `lang_abbr` = {?}, `status` = {?}";
+						$lang_id = $db->query($sql, [$lang_code, $lang_name, $lang_abbr, 1]);
+						if ($lang_id) {
+							$return['success'] = 'ok';
+							$return['lang_id'] = $lang_id;
+						} else {
+							$return['error'] = 'Failed to save language';
+						}
+					}
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		// Добавить новое слово
+		case 'addWord':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$field = isset($_POST['field']) ? strip_tags(trim($_POST['field'])) : '';
+				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
+				$english_val = isset($_POST['english_val']) ? trim($_POST['english_val']) : '';
+				$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
+
+				if (empty($lang_id) || empty($field)) {
+					$return['error'] = 'Language ID and Field are required';
+				} else {
+					// Получаем ID английского языка
+					$english_lang_id = $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+
+					// Если выбран не английский язык, добавляем слово для выбранного языка
+					if ($lang_id != $english_lang_id && !empty($val)) {
+						// Проверяем, существует ли уже слово с таким field для этого языка
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+						$existing = $db->selectCell($sql, [$field, $lang_id]);
+						if ($existing) {
+							// Обновляем существующее слово
+							$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+							$db->query($sql, [$val, $page, $existing]);
+						} else {
+							// Добавляем новое слово
+							$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
+							$db->query($sql, [$field, $val, $lang_id, $page]);
+						}
+					}
+
+					// Добавляем английский аналог, если он указан и английский язык существует
+					if ($english_lang_id && !empty($english_val)) {
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+						$existing_english = $db->selectCell($sql, [$field, $english_lang_id]);
+						if ($existing_english) {
+							// Обновляем существующее английское слово
+							$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+							$db->query($sql, [$english_val, $page, $existing_english]);
+						} else {
+							// Добавляем новое английское слово
+							$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
+							$db->query($sql, [$field, $english_val, $english_lang_id, $page]);
+						}
+					}
+
+					$return['success'] = 'ok';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		// Обновить слово
+		case 'updateWord':
+			if ($userInfo['role_id'] == 2) {
+				$word_id = isset($_POST['word_id']) ? (int) $_POST['word_id'] : 0;
+				$field = isset($_POST['field']) ? strip_tags(trim($_POST['field'])) : '';
+				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+
+				if (empty($word_id) || empty($field) || empty($lang_id)) {
+					$return['error'] = 'Word ID, Field and Language ID are required';
+				} else {
+					// Если word_id существует, обновляем существующее слово
+					if ($word_id > 0) {
+						$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?} AND `language_id` = {?}";
+						$db->query($sql, [$val, $word_id, $lang_id]);
+					} else {
+						// Если word_id = 0, создаем новое слово
+						$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
+						$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
+						$db->query($sql, [$field, $val, $lang_id, $page]);
+					}
+
+					$return['success'] = 'ok';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		// Импортировать слова из JSON
+		case 'importWordsJson':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$json_data = isset($_POST['json_data']) ? $_POST['json_data'] : '';
+
+				if (empty($lang_id) || empty($json_data)) {
+					$return['error'] = 'Language ID and JSON data are required';
+				} else {
+					$data = json_decode($json_data, true);
+					if (json_last_error() !== JSON_ERROR_NONE) {
+						$return['error'] = 'Invalid JSON format: ' . json_last_error_msg();
+					} else {
+						// Получаем ID английского языка
+						$english_lang_id = $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+						
+						$imported_count = 0;
+						$updated_count = 0;
+
+						foreach ($data as $field => $value) {
+							if (is_array($value)) {
+								// Формат: {"field1": {"val": "value1", "english": "english_value1"}}
+								$val = isset($value['val']) ? trim($value['val']) : '';
+								$english_val = isset($value['english']) ? trim($value['english']) : '';
+								$page = isset($value['page']) ? strip_tags(trim($value['page'])) : '';
+							} else {
+								// Формат: {"field1": "value1"}
+								$val = trim($value);
+								$english_val = '';
+								$page = '';
+							}
+
+							if (empty($field)) {
+								continue;
+							}
+
+							// Если выбран не английский язык и есть значение для этого языка
+							if ($lang_id != $english_lang_id && !empty($val)) {
+								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+								$existing = $db->selectCell($sql, [$field, $lang_id]);
+								if ($existing) {
+									$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+									$db->query($sql, [$val, $page, $existing]);
+									$updated_count++;
+								} else {
+									$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
+									$db->query($sql, [$field, $val, $lang_id, $page]);
+									$imported_count++;
+								}
+							}
+
+							// Добавляем английский аналог, если он указан
+							if ($english_lang_id && !empty($english_val)) {
+								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+								$existing_english = $db->selectCell($sql, [$field, $english_lang_id]);
+								if ($existing_english) {
+									$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+									$db->query($sql, [$english_val, $page, $existing_english]);
+								} else {
+									$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
+									$db->query($sql, [$field, $english_val, $english_lang_id, $page]);
+								}
+							}
+						}
+
+						$return['success'] = 'ok';
+						$return['message'] = "Imported: {$imported_count} words, Updated: {$updated_count} words";
+					}
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
 	}
 }
 

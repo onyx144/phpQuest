@@ -568,27 +568,18 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '
+                             <div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_new_mission dashboard_tab_content_item_active" data-tab="tab1">
                                                                     <div class="dashboard_tab_content_item_new_mission_title">ACCEPT A NEW MISSION</div>
                                     <div class="dashboard_tab_content_item_new_mission_input_wrapper">
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_left"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_right"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_left2"></div>
-                                        <div class="dashboard_tab_content_item_new_mission_input_border_right2"></div>
-                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_left" alt="">
-                                        <img src="/images/dashboard_new_mission_line.png" class="dashboard_tab_content_item_new_mission_input_line_right" alt="">
                                         <input type="text" placeholder="Enter mission code name" autocomplete="off" class="dashboard_tab_content_item_new_mission_input">
-                                        <div class="dashboard_tab_content_item_new_mission_error"></div>
                                     </div>
                                     <div class="btn_wrapper btn_wrapper_blue dashboard_tab_content_item_new_mission_accept">
                                         <div class="btn btn_blue">
@@ -630,22 +621,18 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_company_name dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_company_name_top">
                                     <div class="dashboard_tab_content_item_company_name_top_left">
                                         <img src="/images/dashboard_company_name_top_left_bg.png" class="dashboard_company_name_top_left_bg" alt="">
                                         <div class="dashboard_tab_content_item_company_name_top_text">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.67969 8.60889H13.3203V11.7339H6.67969V8.60889Z" fill="white"/><path d="M17.9039 5.04333H13.5156V3.1192H18.4402C19.3004 3.1192 20 2.41959 20 1.55975C20 0.699615 19.3004 0 18.4402 0H1.55975C0.699615 0 0 0.699615 0 1.55975C0 2.41959 0.699615 3.1192 1.55975 3.1192H6.48438V5.04333H2.0961C0.940247 5.04333 0 5.98358 0 7.13943V17.9039C0 19.0598 0.940247 20 2.0961 20H17.9039C19.0598 20 20 19.0598 20 17.9039V7.13943C20 5.98358 19.0598 5.04333 17.9039 5.04333ZM7.65625 3.1192H12.3438V5.04333H7.65625V3.1192ZM5.50781 8.09341C5.50781 7.73163 5.80231 7.43713 6.1644 7.43713H13.8356C14.1977 7.43713 14.4922 7.73163 14.4922 8.09341V12.2491C14.4922 12.6114 14.1977 12.9059 13.8356 12.9059H6.1644C5.80231 12.9059 5.50781 12.6114 5.50781 12.2491V8.09341ZM13.9062 17.6062H5.99915C5.67581 17.6062 5.41321 17.3442 5.41321 17.0203C5.41321 16.6969 5.67581 16.4343 5.99915 16.4343H13.9062C14.2297 16.4343 14.4922 16.6969 14.4922 17.0203C14.4922 17.3442 14.2297 17.6062 13.9062 17.6062ZM16.3446 15.6531H3.6554C3.33206 15.6531 3.06946 15.3911 3.06946 15.0671C3.06946 14.7438 3.33206 14.4812 3.6554 14.4812H16.3446C16.6679 14.4812 16.9305 14.7438 16.9305 15.0671C16.9305 15.3911 16.6679 15.6531 16.3446 15.6531Z" fill="white"/></svg>
                                             <span>' . $translation['text48'] . '</span>
                                         </div>
                                     </div>
@@ -707,15 +694,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_geo_coordinates dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_company_name_top">
@@ -834,15 +818,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_african_partner dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_company_name_top">
@@ -1091,15 +1072,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_metting_place dashboard_tab_content_item_active" data-tab="tab1">
                                 
@@ -1276,15 +1254,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_room_name dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_company_name_top">
@@ -1365,15 +1340,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"/><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"/><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"/><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text11'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_room_name dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_company_name_top">
@@ -1470,15 +1442,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.8889 13.8889C17.5056 13.8889 16.1667 13.6667 14.9222 13.2556C14.5389 13.1333 14.1 13.2222 13.7945 13.5278L11.3501 15.9778C8.20005 14.3778 5.62781 11.8056 4.02781 8.66115L6.47224 6.20557C6.77781 5.9 6.86667 5.46115 6.74448 5.07781C6.33339 3.83339 6.11115 2.49448 6.11115 1.11115C6.11109 0.494427 5.61667 0 5 0H1.11109C0.5 0 0 0.494427 0 1.11109C0 11.5444 8.45557 20 18.8889 20C19.5056 20 20 19.5056 20 18.8889V15C20 14.3833 19.5056 13.8889 18.8889 13.8889Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text12'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_no_access dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_no_access_inner">
@@ -1636,15 +1605,12 @@ class Functions
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+                <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+            </div>';
 
         if (!$no_access_text) {
             $no_access_text = $translation['text40'];
