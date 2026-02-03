@@ -1,5 +1,13 @@
 /* === ГЛАВНОЕ ОКНО ИГРЫ - ЦЕНТРАЛЬНЫЙ БЛОК ИНФОРМАЦИИ - DATABASES === */
 
+/* КЭШИРОВАНИЕ ДАННЫХ */
+	var databasesCache = {
+		step: null,
+		database: null,
+		titles: null,
+		content: null
+	};
+
 /* ОБЩИЕ ФУНКЦИИ */
 	// Открыть тип табов: databases
 	function openTypeTabsDatabases(isSocketSend) {
@@ -39,6 +47,22 @@
 			database = false;
 		}
 
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="databases"]');
+		
+		// Проверяем, есть ли уже загруженные данные для этой стадии
+		if (databasesCache.step === step && databasesCache.database === database && databasesCache.titles && databasesCache.content) {
+			// Данные уже загружены - показываем их сразу без лоадинга
+			$('.dashboard_tabs[data-dashboard="databases"] .dashboard_tab_titles').html(databasesCache.titles);
+			$('.dashboard_tabs[data-dashboard="databases"] .dashboard_tab_content_item_wrapper').html(databasesCache.content);
+			$dashboardTabs.find('.dashboard_tabs_loading').hide();
+			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			return;
+		}
+
+		// Показываем лоадинг и скрываем контент
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsDatabasesStep');
     	formData.append('lang_abbr', $('html').attr('lang'));
@@ -56,10 +80,19 @@
 			success: function(json) {
 				if (json.titles) {
 					$('.dashboard_tabs[data-dashboard="databases"] .dashboard_tab_titles').html(json.titles);
+					databasesCache.titles = json.titles;
 				}
 				if (json.content) {
 					$('.dashboard_tabs[data-dashboard="databases"] .dashboard_tab_content_item_wrapper').html(json.content);
+					databasesCache.content = json.content;
 				}
+				databasesCache.step = step;
+				databasesCache.database = database;
+
+				// Скрываем лоадинг и показываем контент
+				var $dashboardTabs = $('.dashboard_tabs[data-dashboard="databases"]');
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				$('.dashboard_back_btn').remove();
 				if (json.back_btn) {
 					$('.dashboard_tabs[data-dashboard="databases"]').append(json.back_btn);
@@ -381,7 +414,11 @@
 			        sendMessageSocket(JSON.stringify(message));
 			    }
 			},
-			error: function(xhr, ajaxOptions, thrownError) {	
+			error: function(xhr, ajaxOptions, thrownError) {
+				// Скрываем лоадинг даже при ошибке
+				var $dashboardTabs = $('.dashboard_tabs[data-dashboard="databases"]');
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});

@@ -1,5 +1,12 @@
 /* === ГЛАВНОЕ ОКНО ИГРЫ - ЦЕНТРАЛЬНЫЙ БЛОК ИНФОРМАЦИИ - DASHBOARD === */
 
+/* КЭШИРОВАНИЕ ДАННЫХ */
+	var dashboardCache = {
+		step: null,
+		titles: null,
+		content: null
+	};
+
 /* ОБЩИЕ ФУНКЦИИ */
 	// Открыть тип табов: dashboard
 	function openTypeTabsDashboard(isSocketSend) {
@@ -17,6 +24,22 @@
 
 	// загрузить конкретный экран (с переключателем табов) для dashboard
 	function uploadTypeTabsDashboardStep(step, isSocketSend) {
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="dashboard"]');
+		
+		// Проверяем, есть ли уже загруженные данные для этой стадии
+		if (dashboardCache.step === step && dashboardCache.titles && dashboardCache.content) {
+			// Данные уже загружены - показываем их сразу без лоадинга
+			$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_titles').html(dashboardCache.titles);
+			$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_content_item_wrapper').html(dashboardCache.content);
+			$dashboardTabs.find('.dashboard_tabs_loading').hide();
+			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			return;
+		}
+		
+		// Показываем лоадинг и скрываем контент
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+		
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsDashboardStep');
     	formData.append('lang_abbr', $('html').attr('lang'));
@@ -33,10 +56,17 @@
 			success: function(json) {
 				if (json.titles) {
 					$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_titles').html(json.titles);
+					dashboardCache.titles = json.titles;
 				}
 				if (json.content) {
 					$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_content_item_wrapper').html(json.content);
+					dashboardCache.content = json.content;
 				}
+				dashboardCache.step = step;
+
+				// Скрываем лоадинг и показываем контент
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 
 				// socket
 				if (isSocketSend) {
@@ -50,7 +80,10 @@
 			        sendMessageSocket(JSON.stringify(message));
 			    }
 			},
-			error: function(xhr, ajaxOptions, thrownError) {	
+			error: function(xhr, ajaxOptions, thrownError) {
+				// Скрываем лоадинг даже при ошибке
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});
@@ -63,6 +96,16 @@
 	}
 
 $(function() {
+	// При загрузке страницы, если dashboard_tabs_active уже есть, загружаем контент
+	if ($('.dashboard_tabs[data-dashboard="dashboard"]').hasClass('dashboard_tabs_active')) {
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse.success;
+			if (teamInfo) {
+				uploadTypeTabsDashboardStep(teamInfo.last_dashboard || 'accept_new_mission', false);
+			}
+		});
+	}
+	
 	// при нажатии на лого открываем dashboard
 	$('.main_logo_title, .section_main_bg_header .main_logo').click(function(){
 		// если результаты

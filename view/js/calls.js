@@ -1,5 +1,12 @@
 /* === ГЛАВНОЕ ОКНО ИГРЫ - ЦЕНТРАЛЬНЫЙ БЛОК ИНФОРМАЦИИ - CALLS === */
 
+/* КЭШИРОВАНИЕ ДАННЫХ */
+	var callsCache = {
+		step: null,
+		titles: null,
+		content: null
+	};
+
 /* ОБЩИЕ ФУНКЦИИ */
 	// Открыть тип табов: calls
 	function openTypeTabsCalls(isSocketSend) {
@@ -17,6 +24,39 @@
 
 	// загрузить конкретный экран (с переключателем табов) для calls
 	function uploadTypeTabsCallsStep(step, isSocketSend, teamInfoViewCallMobileBtn, teamInfoOpenCallMobileBtn) {
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="calls"]');
+		
+		// Проверяем, есть ли уже загруженные данные для этой стадии
+		if (callsCache.step === step && callsCache.titles && callsCache.content) {
+			// Данные уже загружены - показываем их сразу без лоадинга
+			$('.dashboard_tabs[data-dashboard="calls"] .dashboard_tab_titles').html(callsCache.titles);
+			$('.dashboard_tabs[data-dashboard="calls"] .dashboard_tab_content_item_wrapper').html(callsCache.content);
+			$dashboardTabs.find('.dashboard_tabs_loading').hide();
+			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			
+			// Восстанавливаем состояние кнопок
+			if (parseInt(teamInfoViewCallMobileBtn, 10) == 1) {
+				if ($('.call_mobile').length > 0) {
+					$('.call_mobile').css('display', 'block');
+					if (parseInt(teamInfoOpenCallMobileBtn, 10) == 1) {
+						$('.call_mobile').removeClass('btn_wrapper_blue_light').addClass('btn_wrapper_blue');
+					}
+				}
+			}
+			
+			if (step == 'call_list') {
+				$('.dashboard_tab_content_item_calls_list_tbody').mCustomScrollbar({
+					scrollInertia: 700,
+					scrollbarPosition: "inside"
+				});
+			}
+			return;
+		}
+		
+		// Показываем лоадинг и скрываем контент
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+		
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsCallsStep');
     	formData.append('lang_abbr', $('html').attr('lang'));
@@ -37,10 +77,17 @@
 
 				if (json.titles) {
 					$('.dashboard_tabs[data-dashboard="calls"] .dashboard_tab_titles').html(json.titles);
+					callsCache.titles = json.titles;
 				}
 				if (json.content) {
 					$('.dashboard_tabs[data-dashboard="calls"] .dashboard_tab_content_item_wrapper').html(json.content);
+					callsCache.content = json.content;
 				}
+				callsCache.step = step;
+
+				// Скрываем лоадинг и показываем контент
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 
 				if (parseInt(teamInfoViewCallMobileBtn, 10) == 1) {
 					if ($('.call_mobile').length > 0) {
@@ -71,7 +118,10 @@
 			        sendMessageSocket(JSON.stringify(message));
 			    }
 			},
-			error: function(xhr, ajaxOptions, thrownError) {	
+			error: function(xhr, ajaxOptions, thrownError) {
+				// Скрываем лоадинг даже при ошибке
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});

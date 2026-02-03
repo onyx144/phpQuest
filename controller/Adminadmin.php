@@ -986,11 +986,17 @@ class Adminadmin
                     
                     // Получаем английский аналог
                     $english_word = null;
-                    if ($english_lang_id && $selected_lang_id != $english_lang_id) {
-                        $query_english = "SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-                        $english_word = $this->db->selectCell($query_english, [$field, $english_lang_id]);
+                    if ($english_lang_id) {
+                        if ($selected_lang_id == $english_lang_id) {
+                            // Если выбран английский язык, то val и english_val одинаковые
+                            $english_word = $word ? $word['val'] : '';
+                        } else {
+                            // Если выбран другой язык, получаем английский аналог
+                            $query_english = "SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+                            $english_word = $this->db->selectCell($query_english, [$field, $english_lang_id]);
+                        }
                     }
-
+                    
                     $words_with_english[] = [
                         'field' => $field,
                         'id' => $word ? $word['id'] : null,

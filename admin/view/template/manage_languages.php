@@ -75,6 +75,9 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                         <button type="button" class="btn btn-sm btn-info" id="btn-import-json">
                                             <i class="fas fa-file-import"></i> Import JSON
                                         </button>
+                                        <button type="button" class="btn btn-sm btn-warning" id="btn-export-json">
+                                            <i class="fas fa-file-export"></i> Export JSON
+                                        </button>
                                     </div>
                                     <?php endif; ?>
                                 </div>
@@ -98,7 +101,10 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                                     </td>
                                                     <td>
                                                         <?php if ($selected_lang['lang_abbr'] == 'en'): ?>
-                                                            <span class="text-muted">N/A (English selected)</span>
+                                                            <span class="word-val-display"><?php echo htmlspecialchars($word['val'] ?: '(empty)'); ?></span>
+                                                            <input type="text" class="form-control form-control-sm word-val-input d-none" 
+                                                                   value="<?php echo htmlspecialchars($word['val']); ?>" 
+                                                                   data-field="<?php echo htmlspecialchars($word['field']); ?>">
                                                         <?php else: ?>
                                                             <span class="word-val-display"><?php echo htmlspecialchars($word['val'] ?: '(empty)'); ?></span>
                                                             <input type="text" class="form-control form-control-sm word-val-input d-none" 
@@ -110,22 +116,20 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                                         <span class="english-val-display"><?php echo htmlspecialchars($word['english_val'] ?: '(empty)'); ?></span>
                                                     </td>
                                                     <td>
-                                                        <?php if ($selected_lang['lang_abbr'] != 'en'): ?>
-                                                            <button type="button" class="btn btn-sm btn-primary edit-word-btn" 
-                                                                    data-word-id="<?php echo $word['id']; ?>" 
-                                                                    data-field="<?php echo htmlspecialchars($word['field']); ?>"
-                                                                    data-val="<?php echo htmlspecialchars($word['val']); ?>">
-                                                                <i class="fas fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-success save-word-btn d-none" 
-                                                                    data-word-id="<?php echo $word['id']; ?>" 
-                                                                    data-field="<?php echo htmlspecialchars($word['field']); ?>">
-                                                                <i class="fas fa-save"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn d-none">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        <?php endif; ?>
+                                                        <button type="button" class="btn btn-sm btn-primary edit-word-btn" 
+                                                                data-word-id="<?php echo $word['id']; ?>" 
+                                                                data-field="<?php echo htmlspecialchars($word['field']); ?>"
+                                                                data-val="<?php echo htmlspecialchars($word['val']); ?>">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-success save-word-btn d-none" 
+                                                                data-word-id="<?php echo $word['id']; ?>" 
+                                                                data-field="<?php echo htmlspecialchars($word['field']); ?>">
+                                                            <i class="fas fa-save"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn d-none">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -308,6 +312,80 @@ $(document).ready(function() {
             // Bootstrap 4
             modal.modal('show');
         }
+    });
+
+    // Export JSON
+    $('#btn-export-json').on('click', function() {
+        var langId = <?php echo $selected_lang_id ? $selected_lang_id : 0; ?>;
+        
+        if (!langId || langId <= 0) {
+            alert('Please select a language first');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('op', 'exportWordsJson');
+        formData.append('lang_id', langId);
+
+        $.ajax({
+            url: '/admin/ajax/ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(json) {
+                if (json.success && json.data) {
+                    // Создаем JSON строку с красивым форматированием
+                    var jsonString = JSON.stringify(json.data, null, 2);
+                    
+                    // Создаем blob и скачиваем файл
+                    var blob = new Blob([jsonString], { type: 'application/json' });
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'language_' + langId + '_export.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Dictionary exported successfully',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                } else {
+                    var errorMsg = json.error || 'Failed to export dictionary';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert('Error: ' + errorMsg);
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var errorMsg = thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX Error',
+                        text: errorMsg
+                    });
+                } else {
+                    alert('AJAX Error: ' + errorMsg);
+                }
+            }
+        });
     });
 
     // Add new language

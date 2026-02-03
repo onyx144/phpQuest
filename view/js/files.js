@@ -1,5 +1,11 @@
 /* === ГЛАВНОЕ ОКНО ИГРЫ - ЦЕНТРАЛЬНЫЙ БЛОК ИНФОРМАЦИИ - FILES === */
 
+/* КЭШИРОВАНИЕ ДАННЫХ */
+	var filesCache = {
+		titles: null,
+		content: null
+	};
+
 /* ОБЩИЕ ФУНКЦИИ */
 	// Открыть тип табов: files
 	function openTypeTabsFiles(isSocketSend) {
@@ -11,6 +17,22 @@
 
 	// загрузить конкретный экран (с переключателем табов) для files
 	function uploadTypeTabsFilesStep(isSocketSend) {
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="files"]');
+		
+		// Проверяем, есть ли уже загруженные данные
+		if (filesCache.titles && filesCache.content) {
+			// Данные уже загружены - показываем их сразу без лоадинга
+			$('.dashboard_tabs[data-dashboard="files"] .dashboard_tab_titles').html(filesCache.titles);
+			$('.dashboard_tabs[data-dashboard="files"] .dashboard_tab_content_item_wrapper').html(filesCache.content);
+			$dashboardTabs.find('.dashboard_tabs_loading').hide();
+			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			return;
+		}
+		
+		// Показываем лоадинг и скрываем контент
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+		
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsFilesStep');
     	formData.append('lang_abbr', $('html').attr('lang'));
@@ -26,10 +48,16 @@
 			success: function(json) {
 				if (json.titles) {
 					$('.dashboard_tabs[data-dashboard="files"] .dashboard_tab_titles').html(json.titles);
+					filesCache.titles = json.titles;
 				}
 				if (json.content) {
 					$('.dashboard_tabs[data-dashboard="files"] .dashboard_tab_content_item_wrapper').html(json.content);
+					filesCache.content = json.content;
 				}
+
+				// Скрываем лоадинг и показываем контент
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 
 				// socket
 				if (isSocketSend) {

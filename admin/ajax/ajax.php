@@ -876,6 +876,71 @@ if (isset($_POST['op'])) {
 
 			print_r(json_encode($return));
 			break;
+
+		// Экспортировать словари в JSON
+		case 'exportWordsJson':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+
+				if (empty($lang_id)) {
+					$return['error'] = 'Language ID is required';
+				} else {
+					// Получаем информацию о языке
+					$lang_info = $db->selectRow("SELECT `id`, `lang_name`, `lang_abbr` FROM `langs` WHERE `id` = {?} LIMIT 1", [$lang_id]);
+					
+					if (!$lang_info) {
+						$return['error'] = 'Language not found';
+					} else {
+						// Получаем ID английского языка
+						$english_lang_id = $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+						
+						// Получаем все уникальные field
+						$fields = $db->select("SELECT DISTINCT `field` FROM `lang_words_admin` ORDER BY `field`");
+						
+						$export_data = [];
+						
+						foreach ($fields as $field_row) {
+							$field = $field_row['field'];
+							
+							// Получаем слово для выбранного языка
+							$word = $db->selectRow("SELECT `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1", [$field, $lang_id]);
+							
+							// Получаем английский аналог
+							$english_word = '';
+							if ($english_lang_id) {
+								if ($lang_id == $english_lang_id) {
+									// Если выбран английский, то английский аналог = val
+									$english_word = $word ? $word['val'] : '';
+								} else {
+									// Получаем английский аналог
+									$english_word = $db->selectCell("SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1", [$field, $english_lang_id]);
+								}
+							}
+							
+							$val = $word ? $word['val'] : '';
+							$page = $word ? $word['page'] : '';
+							
+							// Формируем данные в формате: {"field": {"val": "value", "english": "english_value", "page": "page"}}
+							if (!empty($val) || !empty($english_word)) {
+								$export_data[$field] = [
+									'val' => $val,
+									'english' => $english_word,
+									'page' => $page
+								];
+							}
+						}
+						
+						$return['success'] = 'ok';
+						$return['data'] = $export_data;
+						$return['language'] = $lang_info['lang_name'] . ' (' . $lang_info['lang_abbr'] . ')';
+					}
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
 	}
 }
 

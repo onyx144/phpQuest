@@ -578,7 +578,7 @@ class Functions
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_new_mission dashboard_tab_content_item_active" data-tab="tab1">
                                                                     <div class="dashboard_tab_content_item_new_mission_title">ACCEPT A NEW MISSION</div>
-                                    <div class="dashboard_tab_content_item_new_mission_input_wrapper">
+                                    <div class="dashboard_tab_content_item_new_mission_input_wrapper mission_input">
                                         <input type="text" placeholder="Enter mission code name" autocomplete="off" class="dashboard_tab_content_item_new_mission_input">
                                     </div>
                                     <div class="btn_wrapper btn_wrapper_blue dashboard_tab_content_item_new_mission_accept">
@@ -2444,105 +2444,62 @@ class Functions
                                     <div class="back_btn_text">' . $translation['text22'] . '</div>
                                 </div>';
 
-        $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four" data-tab="tab1"></div>
-
-                            <div class="dashboard_tab_content_item dashboard_tab_content_item_start_four" data-tab="personal_files1"></div>
-        
-                            <div class="dashboard_tab_content_item dashboard_tab_content_item_start_four dashboard_tab_content_item_active" data-tab="personal_files2">
-                                <div class="dashboard_personal_files2_private_individuals_huilov_inner' . (empty($user_info['private_individuals_print_text_huilov']) ? ' dashboard_personal_files2_private_individuals_huilov_inner_bubble' : '') . (empty($team_info['private_individuals_print_text_huilov']) ? ' dashboard_personal_files2_private_individuals_huilov_inner_bubble_team' : '') . '"">
-                                    <div class="dashboard_personal_files2_private_individuals_huilov_right_bg_line">
-                                        <svg width="868" height="418" viewBox="0 0 868 418" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 1H790L809.5 20.5V405L822 417.5H867.5" stroke="#FF004E"/></svg>
-                                    </div>
-                                    <div class="dashboard_personal_files2_private_individuals_huilov_left">
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_images">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_images_inner">
-                                                <img src="/images/icons/icon_huilov_hand.png" alt="">
-                                                <img src="/images/icons/icon_huilov_img2.png" alt="">
-                                                <img src="/images/icons/icon_huilov_diagram.png" alt="">
-                                                <div class="dashboard_personal_files2_private_individuals_huilov_images_text">
-                                                    <span>' . $translation['text113'] . '</span>
-                                                    <span>' . $translation['text114'] . '</span>
+                                $rows = [
+                                    ['label' => 'text115', 'text' => 'text116', 'id' => 0],
+                                    ['label' => 'text117', 'text' => 'text118', 'id' => 1, 'class' => 'dashboard_personal_files2_private_individuals_huilov_data_row_lastname'],
+                                    ['label' => 'text119', 'text' => 'text120', 'id' => 2],
+                                    ['label' => 'text121', 'text' => 'text122', 'id' => 3],
+                                    ['label' => 'text123', 'text' => 'text124', 'id' => 4],
+                                    ['label' => 'text125', 'text' => 'text126', 'id' => 5],
+                                    ['label' => 'text127', 'text' => 'text128', 'id' => 6],
+                                ];
+                                
+                                $rowsHtml = '';
+                                
+                                foreach ($rows as $row) {
+                                    $rowsHtml .= '
+                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row ' . ($row['class'] ?? '') . '">
+                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">
+                                                ' . $translation[$row['label']] . '
+                                            </div>
+                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
+                                                <span class="dots_top"></span>
+                                                <span class="dots_bottom_left"></span>
+                                                <span class="dots_bottom_right"></span>
+                                                <span class="private_individuals_huilov_text" data-bubble="' . $row['id'] . '">
+                                                    <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation[$row['text']]) . '</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ';
+                                }
+                                
+                                $return['content'] = '
+                                <div class="dashboard_tab_content_item dashboard_tab_content_item_start_four dashboard_tab_content_item_active" data-tab="personal_files2">
+                                    <div class="dashboard_personal_files2_private_individuals_huilov_inner' 
+                                        . (empty($user_info['private_individuals_print_text_huilov']) ? ' dashboard_personal_files2_private_individuals_huilov_inner_bubble' : '') 
+                                        . (empty($team_info['private_individuals_print_text_huilov']) ? ' dashboard_personal_files2_private_individuals_huilov_inner_bubble_team' : '') . '">
+                                
+                                        <!-- левая часть без изменений -->
+                                
+                                        <div class="dashboard_personal_files2_private_individuals_huilov_right">
+                                            ' . $rowsHtml . '
+                                
+                                            <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
+                                                <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text129'] . '</div>
+                                                <div class="dashboard_personal_files2_private_individuals_huilov_input" style="font-size:18px;line-height:22px;padding:18px 0 0;">
+                                                    <span class="dots_top"></span>
+                                                    <span class="dots_bottom_left"></span>
+                                                    <span class="dots_bottom_right"></span>
+                                                    <span class="private_individuals_huilov_text" data-bubble="7">
+                                                        <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text130']) . '</span>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_images_bg_right"><svg width="9" height="396" viewBox="0 0 9 396" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H8.5V395.5H3H0" stroke="#FF004E"/></svg></div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_images_bg_bottom"></div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_main_image">
-                                            <img src="/images/huilov_photo.jpg" class="huilov_main_image" alt="">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_main_image_diagram">
-                                                <img src="/images/icons/icon_huilov_main_image_diagram.png" alt="">
-                                            </div>
-                                            <img src="/images/gifs/face_anim.gif" class="huilov_face_anim" alt="">
                                         </div>
                                     </div>
-                                    <div class="dashboard_personal_files2_private_individuals_huilov_right">
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text115'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="0"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text116']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row dashboard_personal_files2_private_individuals_huilov_data_row_lastname">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text117'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="1"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text118']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text119'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="2"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text120']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text121'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="3"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text122']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text123'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="4"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text124']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text125'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="5"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text126']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text127'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="6"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text128']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text129'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input" style="font-size: 18px; line-height: 22px; padding: 18px 0 0;">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="7"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text130']) . '</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_label" style="opacity: 0; visibility: hidden;">' . $translation['text129'] . '</div>
-                                            <div class="dashboard_personal_files2_private_individuals_huilov_input" style="font-size: 18px; line-height: 22px; padding: 8px 0 0;">
-                                                <span class="dots_top"></span><span class="dots_bottom_left"></span><span class="dots_bottom_right"></span>
-                                                <span class="private_individuals_huilov_text" data-bubble="8"><span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text131']) . '</span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
-
+                                </div>';
+                                
         // при первом запуске
         if (empty($team_info['private_individuals_print_text_huilov'])) {
             // обновляем значение, что текст напечатан. Повторно скрипт НЕ закускается
@@ -3584,15 +3541,20 @@ class Functions
             $tools_no_access_text = $translation['text40'];
         }
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="tab1">
-                                <div class="dashboard_tab_title_active_skew_right"></div>
-                                <div class="dashboard_tab_title_inner">
-                                    <div class="dashboard_tab_title_img_wrapper">
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H17.75V5L16 7H0V2L1.75 0Z" fill="#00F0FF"/><path d="M1.75 9H17.75V10.5L16 12.5H0V11L1.75 9Z" fill="#00F0FF"/><path d="M1.75 14H17.75V15.5L16 17.5H0V16L1.75 14Z" fill="#00F0FF"/></svg>
-                                    </div>
-                                    <div class="dashboard_tab_title_text">' . $translation['text14'] . '</div>
-                                </div>
-                            </div>';
+        $return['titles'] = '
+        <div class="flex items-center gap-3 mb-8">
+            <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">
+                <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
+                    <path d="M1.75 0H17.75V5L16 7H0V2L1.75 0Z" fill="#00F0FF"/>
+                    <path d="M1.75 9H17.75V10.5L16 12.5H0V11L1.75 9Z" fill="#00F0FF"/>
+                    <path d="M1.75 14H17.75V15.5L16 17.5H0V16L1.75 14Z" fill="#00F0FF"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold neon-text">
+                ' . $translation['text14'] . '
+            </h2>
+        </div>
+        ';
 
         $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_no_access dashboard_tab_content_item_active" data-tab="tab1">
                                 <div class="dashboard_tab_content_item_no_access_inner">

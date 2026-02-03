@@ -1,5 +1,13 @@
 /* === ГЛАВНОЕ ОКНО ИГРЫ - ЦЕНТРАЛЬНЫЙ БЛОК ИНФОРМАЦИИ - TOOLS === */
 
+/* КЭШИРОВАНИЕ ДАННЫХ */
+	var toolsCache = {
+		step: null,
+		tool: null,
+		titles: null,
+		content: null
+	};
+
 /* ОБЩИЕ ФУНКЦИИ */
 	// Открыть тип табов: tools
 	function openTypeTabsTools(isSocketSend) {
@@ -38,6 +46,22 @@
 			tool = false;
 		}
 
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="tools"]');
+		
+		// Проверяем, есть ли уже загруженные данные для этой стадии
+		if (toolsCache.step === step && toolsCache.tool === tool && toolsCache.titles && toolsCache.content) {
+			// Данные уже загружены - показываем их сразу без лоадинга
+			$('.dashboard_tabs[data-dashboard="tools"] .dashboard_tab_titles').html(toolsCache.titles);
+			$('.dashboard_tabs[data-dashboard="tools"] .dashboard_tab_content_item_wrapper').html(toolsCache.content);
+			$dashboardTabs.find('.dashboard_tabs_loading').hide();
+			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			return;
+		}
+
+		// Показываем лоадинг и скрываем контент
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsToolsStep');
     	formData.append('lang_abbr', $('html').attr('lang'));
@@ -55,10 +79,19 @@
 			success: function(json) {
 				if (json.titles) {
 					$('.dashboard_tabs[data-dashboard="tools"] .dashboard_tab_titles').html(json.titles);
+					toolsCache.titles = json.titles;
 				}
 				if (json.content) {
 					$('.dashboard_tabs[data-dashboard="tools"] .dashboard_tab_content_item_wrapper').html(json.content);
+					toolsCache.content = json.content;
 				}
+				toolsCache.step = step;
+				toolsCache.tool = tool;
+
+				// Скрываем лоадинг и показываем контент
+				var $dashboardTabs = $('.dashboard_tabs[data-dashboard="tools"]');
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				$('.tools_back_btn').remove();
 				if (json.back_btn) {
 					$('.dashboard_tabs[data-dashboard="tools"]').append(json.back_btn);
@@ -130,7 +163,11 @@
 			        sendMessageSocket(JSON.stringify(message));
 			    }
 			},
-			error: function(xhr, ajaxOptions, thrownError) {	
+			error: function(xhr, ajaxOptions, thrownError) {
+				// Скрываем лоадинг даже при ошибке
+				var $dashboardTabs = $('.dashboard_tabs[data-dashboard="tools"]');
+				$dashboardTabs.find('.dashboard_tabs_loading').hide();
+				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
 				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});
