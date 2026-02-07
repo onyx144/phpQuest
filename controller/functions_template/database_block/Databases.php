@@ -1,12 +1,12 @@
 <?php
 
 // Подключаем все блоки
-require_once __DIR__ . '/database_block/NoAccessBlock.php';
-require_once __DIR__ . '/database_block/StartFourBlock.php';
-require_once __DIR__ . '/database_block/car_register/CarRegisterBlock.php';
-require_once __DIR__ . '/database_block/personal_files/PersonalFilesBlock.php';
-require_once __DIR__ . '/database_block/mobile_calls/MobileCallsBlock.php';
-require_once __DIR__ . '/database_block/bank_transactions/BankTransactionsBlock.php';
+require_once __DIR__ . '/NoAccessBlock.php';
+require_once __DIR__ . '/StartFourBlock.php';
+require_once __DIR__ . '/car_register/CarRegisterBlock.php';
+require_once __DIR__ . '/personal_files/PersonalFilesBlock.php';
+require_once __DIR__ . '/mobile_calls/MobileCallsBlock.php';
+require_once __DIR__ . '/bank_transactions/BankTransactionsBlock.php';
 
 /**
  * Главный trait для работы с базами данных

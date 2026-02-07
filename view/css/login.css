@@ -4,6 +4,9 @@
     margin: 0;
     padding: 0;
 }
+textarea#json_data {
+    height: 500px !important;
+}
 #section_join_game .bg_hand {
     /*width: 49%;*/
     width: 46%;

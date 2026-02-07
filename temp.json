@@ -1,0 +1,16 @@
+{
+    "last_node_id": 10,
+    "last_link_id": 12,
+    "nodes": [
+      {"id":1,"type":"CheckpointLoaderSimple","widgets_values":["sd_xl_base_1.0.safetensors"]},
+      {"id":2,"type":"CLIPTextEncode","widgets_values":["360 View, seamless panoramic equirectangular panorama from input photo, high detail, photorealistic"]},
+      {"id":3,"type":"CLIPTextEncode","widgets_values":["blurry, distorted seams, lowres, ugly"]},
+      {"id":4,"type":"LoadImage","widgets_values":["panorama.jpg"]},
+      {"id":5,"type":"VAEEncode","inputs":{"pixels":4,"vae":1}},
+      {"id":6,"type":"KSampler","widgets_values":[123456,"fixed",20,7,"euler","normal",0.7],"inputs":{"model":7,"positive":2,"negative":3,"latent_image":5}},
+      {"id":7,"type":"LoraLoader","widgets_values":["360RedmondResized.safetensors",0.8,1.0],"inputs":{"model":1,"clip":1}},
+      {"id":8,"type":"VAEDecode","inputs":{"samples":6,"vae":1}},
+      {"id":9,"type":"SaveImage","widgets_values":["360Panorama"]}
+    ]
+  }
+  
