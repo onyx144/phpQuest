@@ -83,6 +83,25 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                 </div>
                             </div>
                             <div class="card-body">
+                                <form method="get" action="/language" class="mb-4">
+                                    <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
+                                    <div class="row g-2 align-items-end">
+                                        <div class="col-md-6 col-lg-4">
+                                            <label for="search-field" class="form-label mb-0">Search by Field (Code) or Word:</label>
+                                            <input type="text" class="form-control" id="search-field" name="search" 
+                                                   value="<?php echo htmlspecialchars($search); ?>" 
+                                                   placeholder="Enter field code or word...">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                            <?php if ($search !== ''): ?>
+                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>" class="btn btn-outline-secondary">Clear</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </form>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-hover card-table">
                                         <thead>
@@ -149,8 +168,33 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                 <?php elseif ($selected_lang && empty($words_with_english)): ?>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <div class="alert alert-info">
-                            No words found for this language. Click "Add Word" to start adding words.
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="get" action="/language" class="mb-3">
+                                    <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
+                                    <div class="row g-2 align-items-end">
+                                        <div class="col-md-6 col-lg-4">
+                                            <label for="search-field-empty" class="form-label mb-0">Search by Field (Code) or Word:</label>
+                                            <input type="text" class="form-control" id="search-field-empty" name="search" 
+                                                   value="<?php echo htmlspecialchars($search); ?>" 
+                                                   placeholder="Enter field code or word...">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                                            <?php if ($search !== ''): ?>
+                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>" class="btn btn-outline-secondary">Clear</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="alert alert-info mb-0">
+                                    <?php if ($search !== ''): ?>
+                                    No words match your search. <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>">Clear search</a> to see all words.
+                                    <?php else: ?>
+                                    No words found for this language. Click "Add Word" to start adding words.
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

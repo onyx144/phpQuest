@@ -947,6 +947,7 @@ class Adminadmin
 
         // Выбранный язык из GET параметра
         $selected_lang_id = isset($_GET['lang_id']) ? (int) $_GET['lang_id'] : 0;
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
         $selected_lang = null;
         $words = [];
         $words_with_english = [];
@@ -957,13 +958,30 @@ class Adminadmin
             $selected_lang = $this->db->selectRow($query_lang, [$selected_lang_id]);
 
             if ($selected_lang) {
-                // Получаем все уникальные field (коды слов) для пагинации
-                $query_count = "SELECT COUNT(DISTINCT `field`) as total FROM `lang_words_admin`";
-                $total_words = $this->db->selectCell($query_count);
+                // Условие поиска: по field (коду) или по val (переводу)
+                $search_where = '';
+                $search_params = [];
+                if ($search !== '') {
+                    $search_like = '%' . $search . '%';
+                    $lang_ids = [$selected_lang_id];
+                    if ($english_lang_id && !in_array($english_lang_id, $lang_ids)) {
+                        $lang_ids[] = $english_lang_id;
+                    }
+                    $placeholders = implode(',', array_fill(0, count($lang_ids), '{?}'));
+                    $search_where = " WHERE (`field` LIKE {?} OR (`language_id` IN (" . $placeholders . ") AND `val` LIKE {?}))";
+                    $search_params = array_merge([$search_like], $lang_ids, [$search_like]);
+                }
+
+                // Получаем количество уникальных field (с учётом поиска)
+                $query_count = "SELECT COUNT(*) as total FROM (SELECT DISTINCT `field` FROM `lang_words_admin`" . $search_where . ") AS sub";
+                $total_words = $this->db->selectCell($query_count, $search_params);
 
                 // Настройка пагинации
                 $urlPag = '/language';
                 $urlParams = ['lang_id' => $selected_lang_id];
+                if ($search !== '') {
+                    $urlParams['search'] = $search;
+                }
                 $urlPagFull = $urlPag . '?' . http_build_query($urlParams);
 
                 $this->pagination = new Pagination();
@@ -972,9 +990,9 @@ class Adminadmin
                 $this->pagination->limit = $this->settings['limit'];
                 $this->pagination->url = $urlPagFull . '&page={page}';
 
-                // Получаем все уникальные field с пагинацией
-                $query_fields = "SELECT DISTINCT `field` FROM `lang_words_admin` ORDER BY `field` LIMIT " . $this->start . ", " . $this->settings['limit'];
-                $fields = $this->db->select($query_fields);
+                // Получаем уникальные field с пагинацией (с учётом поиска)
+                $query_fields = "SELECT DISTINCT `field` FROM `lang_words_admin`" . $search_where . " ORDER BY `field` LIMIT " . $this->start . ", " . $this->settings['limit'];
+                $fields = $this->db->select($query_fields, $search_params);
 
                 // Для каждого field получаем переводы
                 foreach ($fields as $field_row) {
