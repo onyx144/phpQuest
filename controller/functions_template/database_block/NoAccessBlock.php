@@ -11,7 +11,7 @@ trait NoAccessBlock
      */
     private function uploadDatabasesNoAccess($lang_id, $no_access_text = false, $back_btn = false)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
 
         $return = [];
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../Tabs.php';
+
 // Подключаем все блоки
 require_once __DIR__ . '/NoAccessBlock.php';
 require_once __DIR__ . '/StartFourBlock.php';

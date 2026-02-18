@@ -13,7 +13,7 @@ trait MobileCallsBlock
      */
     private function uploadDatabasesMobileCalls($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -33,7 +33,7 @@ trait MobileCallsBlock
      */
     private function uploadDatabasesMobileCallsMessages($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getUserMobileCallsInfo($team_id);
 

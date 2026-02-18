@@ -2,7 +2,7 @@
 
 /* ОБЩИЕ ФУНКЦИИ */
 	// анимация поиска и результаты
-	function databaseCarRegisterNoEmptyFields(licensePlate, country, date, lang_abbr2) {
+	function databaseCarRegisterNoEmptyFields(answer, lang_abbr2) {
 		// на всякий случай скрываем окно с ошибкой
 		$('#popup_search_error').css('display','none');
 
@@ -53,9 +53,7 @@
 				// правильные ли данные введены и действие дальше
 				var formData = new FormData();
 		    	formData.append('op', 'validateCarRegisterSearch');
-		    	formData.append('license_plate', licensePlate);
-		    	formData.append('country', country);
-		    	formData.append('date', date);
+		    	formData.append('answer', answer);
 		    	formData.append('lang_abbr', lang_abbr2);
 
 				$.ajax({
@@ -129,37 +127,17 @@
 	}
 
 $(function() {
-	// ввод данных в поле License Plate
-	$('.dashboard_tabs[data-dashboard="databases"]').on('keyup', '.dashboard_car_register1_license_plate', function(e){
+	// ввод данных в поле ответа
+	$('.dashboard_tabs[data-dashboard="databases"]').on('keyup', '.dashboard_car_register1_answer', function(e){
 		if ($('.dashboard_car_register1_search').length) {
 			if (e.which == 13) {
 				$('.dashboard_car_register1_search').trigger('click');
 			} else {
 				// socket
 				var message = {
-					'op': 'databaseCarregisterSearchLicensePlateKeyup',
+					'op': 'databaseCarregisterSearchAnswerKeyup',
 					'parameters': {
-						'license_plate': $(this).val(),
-						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-						'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-					}
-		        };
-		        sendMessageSocket(JSON.stringify(message));
-			}
-		}
-	});
-
-	// ввод данных в поле даты (не выбор через выпадающий список)
-	$('.dashboard_tabs[data-dashboard="databases"]').on('keyup', '.dashboard_car_register1_date', function(e){
-		if ($('.dashboard_car_register1_search').length) {
-			if (e.which == 13) {
-				$('.dashboard_car_register1_search').trigger('click');
-			} else {
-				// socket
-				var message = {
-					'op': 'databaseCarregisterSearchDateKeyup',
-					'parameters': {
-						'date': $(this).val(),
+						'answer': $(this).val(),
 						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
 						'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
 					}
@@ -172,29 +150,13 @@ $(function() {
 	// отправить данные из формы поиска
 	$('body').on('click', '.dashboard_car_register1_search', function(e){
 		var err = false;
-		var licensePlate = $.trim($('.dashboard_car_register1_license_plate').val());
-		var country = $.trim($('.dashboard_car_register1_country').val());
-		var date = $.trim($('.dashboard_car_register1_date').val());
+		var answer = $.trim($('.dashboard_car_register1_answer').val());
 
-		if (licensePlate == '') {
-			$('.dashboard_car_register1_license_plate_error').addClass('error_text_database_car_register_active');
+		if (answer == '') {
+			$('.dashboard_car_register1_answer_error').addClass('error_text_database_car_register_active');
 			err = true;
 		} else {
-			$('.dashboard_car_register1_license_plate_error').removeClass('error_text_database_car_register_active');
-		}
-
-		if (country == '' || $.type(country) === "null") {
-			$('.dashboard_car_register1_country_error').addClass('error_text_database_car_register_active');
-			err = true;
-		} else {
-			$('.dashboard_car_register1_country_error').removeClass('error_text_database_car_register_active');
-		}
-
-		if (date == '') {
-			$('.dashboard_car_register1_date_error').addClass('error_text_database_car_register_active');
-			err = true;
-		} else {
-			$('.dashboard_car_register1_date_error').removeClass('error_text_database_car_register_active');
+			$('.dashboard_car_register1_answer_error').removeClass('error_text_database_car_register_active');
 		}
 
 		if (!err) {
@@ -208,9 +170,7 @@ $(function() {
 				var message = {
 					'op': 'databaseCarRegisterNoEmptyFields',
 					'parameters': {
-						'license_plate': licensePlate,
-						'country': country,
-						'date': date,
+						'answer': answer,
 						'lang_abbr': $('html').attr('lang'),
 						'scoreBeforeDatabaseCarRegister': scoreBeforeDatabaseCarRegister,
 						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
@@ -219,16 +179,14 @@ $(function() {
 		        };
 		        sendMessageSocket(JSON.stringify(message));
 
-				databaseCarRegisterNoEmptyFields(licensePlate, country, date, $('html').attr('lang'));
+				databaseCarRegisterNoEmptyFields(answer, $('html').attr('lang'));
 			});
 		} else {
 			// socket
 			var message = {
 				'op': 'databaseCarRegisterEmptyFields',
 				'parameters': {
-					'license_plate_error': (licensePlate == '') ? true : false,
-					'country_error': (country == '' || $.type(country) === "null") ? true : false,
-					'date_error': (date == '') ? true : false,
+					'answer_error': true,
 					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
 					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
 				}

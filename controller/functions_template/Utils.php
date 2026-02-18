@@ -114,8 +114,14 @@ trait Utils
     {
         $return = [];
 
-        $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
-        $words = $this->db->select($sql, [$page, $lang_id]);
+        // Без привязки к странице (как в manage_languages) — подтягиваем все слова по языку
+        if ($page === null || $page === '' || $page === false) {
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `language_id` = {?} ORDER BY `id`";
+            $words = $this->db->select($sql, [$lang_id]);
+        } else {
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
+            $words = $this->db->select($sql, [$page, $lang_id]);
+        }
         if ($words) {
             foreach ($words as $word) {
                 $return[$word['field']] = $word['val'];

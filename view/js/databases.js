@@ -572,4 +572,14 @@ $(function() {
 
 		uploadTypeTabsDatabasesStep($(this).attr('data-step'), $(this).attr('data-database'), true);
 	});
+	$('body').on('click', '.cyber-breadcrumbs .breadcrumb-node:not(.active)', function(e){
+		console.log('test2');
+		e.preventDefault();
+		e.stopPropagation();
+		var step = $(this).attr('data-step');
+		var database = $(this).attr('data-database');
+		if (step) {
+			uploadTypeTabsDatabasesStep(step, database || false, true);
+		}
+	});
 });

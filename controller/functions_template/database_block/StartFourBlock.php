@@ -10,7 +10,7 @@ trait StartFourBlock
     private function uploadDatabasesStartFour($lang_id)
     {
         $svg = $this->svg; 
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
 
         $return = [];
 

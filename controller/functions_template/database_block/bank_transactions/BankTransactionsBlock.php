@@ -13,7 +13,7 @@ trait BankTransactionsBlock
      */
     private function uploadDatabasesBankTransactions($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         // Проверяем доступ к базе данных
@@ -39,7 +39,7 @@ trait BankTransactionsBlock
      */
     private function uploadDatabasesBankTransactionsSuccess($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];

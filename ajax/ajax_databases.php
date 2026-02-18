@@ -72,25 +72,16 @@ if (isset($_POST['op'])) {
 			print_r(json_encode($return));
 		    break;
 
-		// databases - car register. search1. Проверка правильности ввода данных
+		// databases - car register. search1. Проверка правильности ввода данных (правильный ответ: Dudick)
 		case 'validateCarRegisterSearch':
-			$license_plate = !empty($_POST['license_plate']) ? strip_tags(trim($_POST['license_plate'])) : false;
-			$country = !empty($_POST['country']) ? strip_tags(trim($_POST['country'])) : false;
-			$date = !empty($_POST['date']) ? strip_tags(trim($_POST['date'])) : false;
+			$answer = !empty($_POST['answer']) ? strip_tags(trim($_POST['answer'])) : false;
 			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : 'en';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
 			$translation = $lang->getWordsByPage('game', $lang_id);
 
-			if (!empty($license_plate) && !empty($country) && !empty($date)) {
-				if (
-					mb_strtolower($license_plate) == 'stalin' && 
-					(
-						($lang_abbr == 'en' && $country == 'Russia') || 
-						($lang_abbr == 'no' && $country == 'Russland')
-					) &&
-					($date == '30.08.2022' || $date == '30.8.2022' || $date == '30.08.22' || $date == '30.8.22')
-				) {
+			if (!empty($answer)) {
+				if (mb_strtolower($answer, 'UTF-8') === 'dudick') {
 					$return['success'] = 'ok';
 				} else {
 					// переводы для всех языков. Для синхронизации

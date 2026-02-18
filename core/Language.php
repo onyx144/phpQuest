@@ -174,8 +174,14 @@ class Language
             $check_lang_id = $this->getParam('id');
         }
 
-        $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
-        $words = $this->db->select($sql, [$page, $check_lang_id]);
+        // Без привязки к странице (как в manage_languages) — подтягиваем все слова по языку
+        if ($page === null || $page === '' || $page === false) {
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `language_id` = {?} ORDER BY `id`";
+            $words = $this->db->select($sql, [$check_lang_id]);
+        } else {
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
+            $words = $this->db->select($sql, [$page, $check_lang_id]);
+        }
         if ($words) {
             foreach ($words as $word) {
                 $return[$word['field']] = $word['val'];

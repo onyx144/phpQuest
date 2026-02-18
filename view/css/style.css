@@ -447,6 +447,101 @@ a {
     left: 21px;
     border-radius: 50%;
 }
+/* Cyber Breadcrumbs */
+.cyber-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Соединяем блоки вплотную через разделители */
+  }
+  
+  .breadcrumb-node {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  
+  .breadcrumb-link {
+    position: relative;
+    padding: 8px 20px;
+    color: var(--cyber-blue);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  svg.breadcrumb-bg-start {
+    width: 113%;
+}
+  
+  .breadcrumb-link-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .breadcrumb-text {
+    white-space: nowrap;
+  }
+  
+  /* SVG задний фон — растягивается под длину текста (размер задаёт .breadcrumb-link-inner) */
+  .breadcrumb-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    filter: drop-shadow(0 0 2px var(--cyber-glow));
+    display: block;
+    pointer-events: none;
+    overflow: visible;
+  }
+  
+  
+  /* Эффект при наведении */
+  .breadcrumb-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px var(--cyber-blue);
+  }
+  
+  .breadcrumb-link:hover .breadcrumb-bg path {
+    fill: rgba(0, 240, 255, 0.2);
+    stroke-width: 2;
+  }
+  
+  /* Разделитель */
+  .breadcrumb-separator {
+    margin: 0 -5px;
+    display: flex;
+    margin-right: 8px;
+    align-items: center;
+    opacity: 0.8;
+  }
+  svg.breadcrumb-bg-middle {
+    width: 135%;
+}
+  /* Активное состояние (последний элемент) */
+  .breadcrumb-node.active .breadcrumb-link {
+    color: #fff;
+    pointer-events: none;
+  }
+  
+  .breadcrumb-node.active .breadcrumb-bg path {
+    fill: var(--cyber-blue);
+    fill-opacity: 0.15;
+    stroke-dasharray: none;
+  }
 @-webkit-keyframes blinker {
     0% { opacity: 1.0; }
     10% { opacity: 1.0; }
@@ -3767,6 +3862,16 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 .dashboard_metting_place_fields_top .dashboard_metting_place_input_wrapper:last-child,
 .dashboard_metting_place_fields_bottom .dashboard_metting_place_input_wrapper:last-child {
     float: right;
+}
+.dashboard_car_register1_fields_center {
+    width: 100%;
+    float: left;
+    text-align: center;
+    margin: 26px 0 0;
+}
+.dashboard_car_register1_fields_center .dashboard_car_register1_input_wrapper {
+    display: inline-block;
+    float: none;
 }
 .dashboard_car_register1_fields_bottom,
 .dashboard_african_partner_fields_bottom {

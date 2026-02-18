@@ -1,41 +1,33 @@
 <?php
 
-/**
- * Trait для работы с базой данных Personal Files
- */
 trait PersonalFilesBlock
 {
-    /**
-     * Personal Files - первый экран (выбор категории)
-     * @param int $lang_id
-     * @param int $team_id
-     * @return array
-     */
     private function uploadDatabasesPersonalFiles($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
 
-        $return['titles'] = '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-                            <div class="dashboard_tab_title_active_skew_right"></div>
-                            <div class="dashboard_tab_title_inner">
-                                <div class="dashboard_tab_title_img_wrapper">
-                                    <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                                </div>
-                                <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                            </div>
-                        </div>
-                        <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="personal_files1">
-                            <div class="dashboard_tab_title_active_skew_right"></div>
-                            <div class="dashboard_tab_title_inner">
-                                <div class="dashboard_tab_title_img_wrapper" style="margin: -3px 0 0;">
-                                    <img src="/images/icons/icon_tab_personal_files.png" alt="">
-                                </div>
-                                <div class="dashboard_tab_title_text">' . $translation['text170'] . '</div>
-                            </div>
-                        </div>';
+        $return['titles'] = renderCyberBreadcrumbs([
+            [
+                'text' => $translation['text13'],
+                'url'  => '#',
+                'data' => [
+                    'tab' => 'tab1',
+                    'step' => 'databases_start_four',
+                    'action-id' => 28,
+                    'database' => 'false'
+                ]
+            ],
+            [
+                'text' => $translation['text170'],
+                'data' => [
+                    'tab' => 'personal_files1'
+                ]
+            ]
+        ]);
+        
 
         $return['back_btn'] = '<div class="dashboard_back_btn" data-back="databases_start_four" data-action-id-back="28" data-database="false">
                                     <img src="/images/back_bg.png" class="back_btn_bg" alt="">
@@ -73,15 +65,9 @@ trait PersonalFilesBlock
         return $return;
     }
 
-    /**
-     * Personal Files - Private Individual - форма поиска
-     * @param int $lang_id
-     * @param int $team_id
-     * @return array
-     */
     private function uploadDatabasesPersonalFilesPrivateIndividual($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -93,15 +79,9 @@ trait PersonalFilesBlock
         return $return;
     }
 
-    /**
-     * Personal Files - Private Individual - результаты Huilov
-     * @param int $lang_id
-     * @param int $team_id
-     * @return array
-     */
     private function uploadDatabasesPersonalFilesPrivateIndividualHuilov($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getUserPersonalFilesInfo($team_id, 'private_individuals_print_text_huilov');
 
@@ -111,27 +91,16 @@ trait PersonalFilesBlock
         $return['back_btn'] = $this->getPersonalFilesBackButton($translation);
         $return['content'] = $this->getPrivateIndividualHuilovContent($translation, $user_info, $team_info);
 
-        // Обработка первого запуска
         $this->processPersonalFilesFirstRun($team_info, $team_id, $lang_id, 'private_individuals_print_text_huilov', 'private_individuals_huilov');
-        
-        // Обновление для текущего пользователя
         $this->updateUserPersonalFilesStatus($team_id, 'private_individuals_print_text_huilov');
-        
-        // Подготовка языковых данных
         $return['error_lang'] = $this->getPrivateIndividualLanguageData();
 
         return $return;
     }
 
-    /**
-     * Personal Files - CEO Database - форма поиска
-     * @param int $lang_id
-     * @param int $team_id
-     * @return array
-     */
     private function uploadDatabasesPersonalFilesCeoDatabase($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -143,15 +112,9 @@ trait PersonalFilesBlock
         return $return;
     }
 
-    /**
-     * Personal Files - CEO Database - результаты Rod
-     * @param int $lang_id
-     * @param int $team_id
-     * @return array
-     */
     private function uploadDatabasesPersonalFilesCeoDatabaseRod($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getUserPersonalFilesInfo($team_id, 'ceo_database_print_text_rod');
 
@@ -161,59 +124,71 @@ trait PersonalFilesBlock
         $return['back_btn'] = $this->getPersonalFilesBackButton($translation);
         $return['content'] = $this->getCeoDatabaseRodContent($translation, $user_info, $team_info);
 
-        // Обработка первого запуска
         $this->processPersonalFilesFirstRun($team_info, $team_id, $lang_id, 'ceo_database_print_text_rod', 'ceo_database_rod');
-        
-        // Обновление для текущего пользователя
         $this->updateUserPersonalFilesStatus($team_id, 'ceo_database_print_text_rod');
-        
-        // Подготовка языковых данных
         $return['error_lang'] = $this->getCeoDatabaseLanguageData();
 
         return $return;
     }
-
-    // ==================== HELPER METHODS ====================
-
-    /**
-     * Получение заголовков для Personal Files
-     */
+ 
     private function getPersonalFilesTitles($translation, $type)
-    {
-        $baseTitle = '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-                            <div class="dashboard_tab_title_active_skew_right"></div>
-                            <div class="dashboard_tab_title_inner">
-                                <div class="dashboard_tab_title_img_wrapper">
-                                    <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                                </div>
-                                <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                            </div>
-                        </div>';
+{
+    $items = [];
 
-        $menuTitle = '<div class="dashboard_tab_title ' . (in_array($type, ['private_individual', 'ceo_database']) ? 'dashboard_tab_title_can_click' : '') . '" data-tab="personal_files1" data-step="databases_start_four_inner_first_personal_files" data-action-id="32" data-database="personal_files">
-                            <div class="dashboard_tab_title_active_skew_right"></div>
-                            <div class="dashboard_tab_title_inner">
-                                <div class="dashboard_tab_title_img_wrapper" style="margin: -3px 0 0;">
-                                    <img src="/images/icons/icon_tab_personal_files.png" alt="">
-                                </div>
-                                <div class="dashboard_tab_title_text">' . $translation['text170'] . '</div>
-                            </div>
-                        </div>';
+    // BASE
+    $items[] = [
+        'text' => $translation['text13'],
+        'url'  => '#',
+        'data' => [
+            'tab' => 'tab1',
+            'step' => 'databases_start_four',
+            'action-id' => 28,
+            'database' => 'false'
+        ]
+    ];
 
-        $specificTitle = match($type) {
-            'private_individual' => $this->getPrivateIndividualTitle($translation),
-            'private_individual_huilov' => $this->getPrivateIndividualHuilovTitle($translation),
-            'ceo_database' => $this->getCeoDatabaseTitle($translation),
-            'ceo_database_rod' => $this->getCeoDatabaseRodTitle($translation),
-            default => ''
-        };
+    // MENU
+    $items[] = [
+        'text' => $translation['text170'],
+        'url'  => in_array($type, ['private_individual', 'ceo_database']) ? '#' : null,
+        'data' => [
+            'tab' => 'personal_files1',
+            'step' => 'databases_start_four_inner_first_personal_files',
+            'action-id' => 32,
+            'database' => 'personal_files'
+        ]
+    ];
 
-        return $baseTitle . $menuTitle . $specificTitle;
+    $tabMap = [
+        'private_individual' => 'personal_files_private_individual',
+        'private_individual_huilov' => 'personal_files_private_individual_huilov',
+        'ceo_database' => 'personal_files_ceo_database',
+        'ceo_database_rod' => 'personal_files_ceo_database_rod',
+    ];
+
+    
+    $specific = null;
+
+    $type = trim((string)$type);
+    
+    if (isset($tabMap[$type])) {
+        $specific = [
+            'text' => $translation['text171'], 
+            'data' => [
+                'tab' => $tabMap[$type]
+            ]
+        ];
     }
+    
 
-    /**
-     * Получение кнопки "Назад" для Personal Files
-     */
+    if ($specific !== null) {
+        $items[] = $specific;
+    }
+    
+    return renderCyberBreadcrumbs($items);
+}
+
+
     private function getPersonalFilesBackButton($translation)
     {
         return '<div class="dashboard_back_btn" data-back="databases_start_four_inner_first_personal_files" data-action-id-back="32" data-database="personal_files">
@@ -222,9 +197,6 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Форма поиска Private Individual
-     */
     private function getPrivateIndividualSearchForm($translation)
     {
         return '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four" data-tab="tab1"></div>
@@ -277,9 +249,7 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Контент с результатами Huilov для Private Individual
-     */
+     
     private function getPrivateIndividualHuilovContent($translation, $user_info, $team_info)
     {
         $bubbleClass = empty($user_info['private_individuals_print_text_huilov']) ? ' dashboard_personal_files2_private_individuals_huilov_inner_bubble' : '';
@@ -331,7 +301,7 @@ trait PersonalFilesBlock
                         <div class="dashboard_personal_files2_private_individuals_huilov_images_bg_bottom"></div>
                     </div>
                     <div class="dashboard_personal_files2_private_individuals_huilov_main_image">
-                        <img src="/images/huilov_photo.jpg" class="huilov_main_image" alt="">
+                        <img src="/images/huilov_photo.png" class="huilov_main_image" alt="">
                         <div class="dashboard_personal_files2_private_individuals_huilov_main_image_diagram">
                             <img src="/images/icons/icon_huilov_main_image_diagram.png" alt="">
                         </div>
@@ -356,9 +326,6 @@ trait PersonalFilesBlock
         </div>';
     }
 
-    /**
-     * Форма поиска CEO Database
-     */
     private function getCeoDatabaseSearchForm($translation)
     {
         return '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four" data-tab="tab1"></div>
@@ -411,9 +378,6 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Контент с результатами Rod для CEO Database
-     */
     private function getCeoDatabaseRodContent($translation, $user_info, $team_info)
     {
         $bubbleClass = empty($user_info['ceo_database_print_text_rod']) ? ' dashboard_personal_files2_ceo_database_rod_inner_bubble' : '';
@@ -482,9 +446,6 @@ trait PersonalFilesBlock
         </div>';
     }
 
-    /**
-     * Получение информации пользователя для Personal Files
-     */
     private function getUserPersonalFilesInfo($team_id, $field)
     {
         if (isset($_COOKIE['hash'])) {
@@ -496,24 +457,15 @@ trait PersonalFilesBlock
         }
     }
 
-    /**
-     * Обработка первого запуска Personal Files
-     */
     private function processPersonalFilesFirstRun($team_info, $team_id, $lang_id, $field, $hint_step)
     {
         if (empty($team_info[$field])) {
-            // Обновляем значение, что текст напечатан
             $sql = "UPDATE `teams` SET `{$field}` = {?} WHERE `id` = {?}";
             $this->db->query($sql, [1, $team_id]);
-
-            // Обновляем подсказки
             $this->updatePersonalFilesHints($team_id, $lang_id, $hint_step);
         }
     }
 
-    /**
-     * Обновление подсказок для Personal Files
-     */
     private function updatePersonalFilesHints($team_id, $lang_id, $hint_step)
     {
         $active_hints = [];
@@ -536,9 +488,6 @@ trait PersonalFilesBlock
         ]);
     }
 
-    /**
-     * Обновление статуса пользователя для Personal Files
-     */
     private function updateUserPersonalFilesStatus($team_id, $field)
     {
         if (isset($_COOKIE['hash'])) {
@@ -550,9 +499,6 @@ trait PersonalFilesBlock
         }
     }
 
-    /**
-     * Получение языковых данных для Private Individual
-     */
     private function getPrivateIndividualLanguageData()
     {
         $error_lang = [];
@@ -561,7 +507,7 @@ trait PersonalFilesBlock
 
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage('game', $lang_item['id']);
+                $translation = $this->getWordsByPage(null, $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
                     'text116' => $translation['text116'],
                     'text118' => $translation['text118'],
@@ -579,9 +525,6 @@ trait PersonalFilesBlock
         return $error_lang;
     }
 
-    /**
-     * Получение языковых данных для CEO Database
-     */
     private function getCeoDatabaseLanguageData()
     {
         $error_lang = [];
@@ -590,7 +533,7 @@ trait PersonalFilesBlock
 
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage('game', $lang_item['id']);
+                $translation = $this->getWordsByPage(null, $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
                     'text133' => $translation['text133'],
                     'text134' => $translation['text134'],
@@ -604,9 +547,6 @@ trait PersonalFilesBlock
         return $error_lang;
     }
 
-    /**
-     * Заголовок для Private Individual
-     */
     private function getPrivateIndividualTitle($translation)
     {
         return '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="personal_files2">
@@ -620,9 +560,6 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Заголовок для Private Individual Huilov
-     */
     private function getPrivateIndividualHuilovTitle($translation)
     {
         return '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="personal_files2">
@@ -636,9 +573,6 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Заголовок для CEO Database
-     */
     private function getCeoDatabaseTitle($translation)
     {
         return '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="personal_files2">
@@ -652,9 +586,6 @@ trait PersonalFilesBlock
                 </div>';
     }
 
-    /**
-     * Заголовок для CEO Database Rod
-     */
     private function getCeoDatabaseRodTitle($translation)
     {
         return '<div class="dashboard_tab_title dashboard_tab_title_active" data-tab="personal_files2">

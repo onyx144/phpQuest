@@ -3,151 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
         :root {
-            --cyber-blue: #00f0ff;
-            --cyber-blue-dark: #00414a;
-            --cyber-glow: rgba(0, 240, 255, 0.4);
-            --bg-color: #050a0f;
+            --neon-blue: #00f0ff;
+            --dark-blue: #06121a;
+            --panel-bg: rgba(0, 240, 255, 0.03);
+            --glow: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
         }
 
         body {
-            background-color: var(--bg-color);
-            padding: 50px;
-            font-family: 'Segoe UI', Orbitron, monospace;
+            background-color: #05080a;
+            color: var(--neon-blue);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 80px;
         }
 
-        .cyber-breadcrumbs {
+        .cyber-list-container {
             display: flex;
-            align-items: center;
-            gap: 0; /* Соединяем блоки вплотную через разделители */
-        }
-
-        .breadcrumb-node {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 320px;
             position: relative;
         }
 
-        .breadcrumb-link {
+        /* Кнопка-элемент */
+        .user-item {
             position: relative;
-            padding: 8px 20px;
-            color: var(--cyber-blue);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 2px;
+            height: 54px;
+            cursor: pointer;
             display: flex;
             align-items: center;
+            padding: 0 25px;
             transition: all 0.3s ease;
         }
 
-        /* SVG задний фон для каждого элемента */
-        .breadcrumb-bg {
+        /* SVG Фон с честными границами */
+        .item-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            filter: drop-shadow(0 0 2px var(--cyber-glow));
         }
 
-        /* Эффект при наведении */
-        .breadcrumb-link:hover {
-            color: #fff;
-            text-shadow: 0 0 10px var(--cyber-blue);
+        .item-bg path {
+            fill: var(--panel-bg);
+            stroke: var(--neon-blue);
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+            vector-effect: non-scaling-stroke;
         }
 
-        .breadcrumb-link:hover .breadcrumb-bg path {
-            fill: rgba(0, 240, 255, 0.2);
-            stroke-width: 2;
+        .user-item:hover, .user-item.is-active {
+            transform: translateX(10px);
         }
 
-        /* Разделитель */
-        .breadcrumb-separator {
-            margin: 0 -5px;
-            display: flex;
-            align-items: center;
-            opacity: 0.8;
+        .user-item:hover .item-bg path, .user-item.is-active .item-bg path {
+            fill: rgba(0, 240, 255, 0.1);
+            stroke-width: 2.5;
+            filter: var(--glow);
         }
 
-        /* Активное состояние (последний элемент) */
-        .breadcrumb-node.active .breadcrumb-link {
-            color: #fff;
+        .user-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: bold;
             pointer-events: none;
         }
 
-        .breadcrumb-node.active .breadcrumb-bg path {
-            fill: var(--cyber-blue);
-            fill-opacity: 0.15;
-            stroke-dasharray: none;
+        /* ПОПАП */
+        .info-popup {
+            position: absolute;
+            left: 115%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-20px);
+            width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            pointer-events: none;
+            z-index: 100;
         }
 
-        /* Декоративный мигающий узел */
-        .status-dot {
-            width: 4px;
-            height: 4px;
-            background: var(--cyber-blue);
-            margin-right: 10px;
-            box-shadow: 0 0 8px var(--cyber-blue);
-            animation: blink 1.5s infinite;
+        /* Триггеры: ховер или активный класс */
+        .user-item:hover .info-popup, 
+        .user-item.is-active .info-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        .popup-content {
+            background: var(--dark-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 20px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+        }
+
+        /* Декоративная линия-коннектор */
+        .popup-connector {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: var(--neon-blue);
+            box-shadow: var(--glow);
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px var(--neon-blue);
+            display: block;
+        }
+
+        .popup-desc {
+            font-size: 12px;
+            line-height: 1.5;
+            color: rgba(0, 240, 255, 0.8);
+            border-left: 2px solid var(--neon-blue);
+            padding-left: 10px;
+        }
+
+        /* Сетчатый фон для попапа */
+        .popup-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+            background-size: 10px 10px;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
 
-<nav class="cyber-breadcrumbs">
+<div class="cyber-list-container">
     
-    <div class="breadcrumb-node">
-        <a href="#" class="breadcrumb-link">
-            <div class="status-dot"></div>
-            SYSTEM
-            <svg class="breadcrumb-bg" viewBox="0 0 120 40" preserveAspectRatio="none">
-                <path d="M0 10 L10 0 H110 L120 10 V30 L110 40 H10 L0 30 Z" fill="none" stroke="#00f0ff" stroke-width="1"/>
-            </svg>
-        </a>
-    </div>
-
-    <div class="breadcrumb-separator">
-        <svg width="30" height="40" viewBox="0 0 30 40" fill="none">
-            <path d="M10 10L20 20L10 30" stroke="#00f0ff" stroke-width="2" stroke-linecap="square"/>
-            <path d="M18 10L28 20L18 30" stroke="#00f0ff" stroke-width="1" opacity="0.4"/>
+    <div class="user-item" onclick="togglePopup(this)">
+        <svg class="item-bg" viewBox="0 0 320 54" preserveAspectRatio="none">
+            <path d="M0 15 L15 0 H320 V39 L305 54 H0 Z" />
         </svg>
-    </div>
-
-    <div class="breadcrumb-node">
-        <a href="#" class="breadcrumb-link">
-            FILES
-            <svg class="breadcrumb-bg" viewBox="0 0 100 40" preserveAspectRatio="none">
-                <path d="M0 0 H90 L100 10 V40 H10 L0 30 Z" fill="none" stroke="#00f0ff" stroke-width="1" stroke-dasharray="5 3"/>
-            </svg>
-        </a>
-    </div>
-
-    <div class="breadcrumb-separator">
-        <svg width="30" height="40" viewBox="0 0 30 40" fill="none">
-            <path d="M10 10L20 20L10 30" stroke="#00f0ff" stroke-width="2" stroke-linecap="square"/>
-            <path d="M18 10L28 20L18 30" stroke="#00f0ff" stroke-width="1" opacity="0.4"/>
-        </svg>
-    </div>
-
-    <div class="breadcrumb-node active">
-        <div class="breadcrumb-link">
-            DATA_CORE
-            <svg class="breadcrumb-bg" viewBox="0 0 140 40" preserveAspectRatio="none">
-                <path d="M0 0 H140 V30 L130 40 H0 Z" fill="none" stroke="#00f0ff" stroke-width="1.5"/>
-                <line x1="10" y1="36" x2="40" y2="36" stroke="#00f0ff" stroke-width="3" />
-            </svg>
+        <span class="user-name">KAI_PROMETHEUS</span>
+        
+        <div class="info-popup">
+            <div class="popup-connector"></div>
+            <div class="popup-content">
+                <div class="popup-grid"></div>
+                <span class="popup-title">KAI_PROMETHEUS</span>
+                <div class="popup-desc">
+                    Статус: В сети.<br>
+                    Доступ: Уровень 4.<br>
+                    Специализация: Квантовая криптография и обход фаерволов корпорации "Militech".
+                </div>
+            </div>
         </div>
     </div>
 
-</nav>
+    <div class="user-item" onclick="togglePopup(this)">
+        <svg class="item-bg" viewBox="0 0 320 54" preserveAspectRatio="none">
+            <path d="M0 0 H305 L320 15 V54 H15 L0 39 Z" />
+        </svg>
+        <span class="user-name">NEURAL_GHOST</span>
+        
+        <div class="info-popup">
+            <div class="popup-connector"></div>
+            <div class="popup-content">
+                <div class="popup-grid"></div>
+                <span class="popup-title">NEURAL_GHOST</span>
+                <div class="popup-desc">
+                    Статус: Скрыт.<br>
+                    Доступ: Неизвестно.<br>
+                    Описание: Легендарный нетраннер. Последний раз был замечен в узлах старого интернета.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function togglePopup(element) {
+        // Убираем активность у всех, кроме текущего
+        document.querySelectorAll('.user-item').forEach(item => {
+            if (item !== element) item.classList.remove('is-active');
+        });
+        // Переключаем текущий
+        element.classList.toggle('is-active');
+    }
+</script>
 
 </body>
 </html>

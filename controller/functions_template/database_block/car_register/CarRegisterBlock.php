@@ -13,7 +13,7 @@ trait CarRegisterBlock
      */
     private function uploadDatabasesCarRegister($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -32,7 +32,7 @@ trait CarRegisterBlock
      */
     private function uploadDatabasesCarRegisterHuilov($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage('game', $lang_id);
+        $translation = $this->getWordsByPage(null, $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getCurrentUserInfo($team_id);
 
@@ -109,9 +109,6 @@ trait CarRegisterBlock
      */
     private function getCarRegisterFormContent($translation, $team_info, $lang_id, $team_id)
     {
-        $countrySelect = $this->generateCountrySelect($lang_id, $team_info, $translation);
-        $datePickerScript = $this->generateDatePickerScript($translation, $team_info);
-        
         return '<div class="dashboard_tab_content_item dashboard_tab_content_item_start_four" data-tab="tab1"></div>
         <div class="dashboard_tab_content_item dashboard_tab_content_item_car_register dashboard_tab_content_item_active" data-tab="car_register1">
             <div class="dashboard_car_register1_inner">
@@ -120,30 +117,17 @@ trait CarRegisterBlock
                 </div>
                 <div class="dashboard_car_register1_inner_title">' . $translation['text171'] . '</div>
                 <div class="dashboard_car_register1_inner_text">' . $translation['text62'] . '</div>
-                <div class="dashboard_car_register1_fields_top">
-                    <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_license_plate">
-                        <div class="dashboard_car_register1_input_border_left"></div>
-                        <input type="text" placeholder="' . $translation['text63'] . '" autocomplete="off" class="dashboard_car_register1_license_plate">
-                        <div class="dashboard_car_register1_license_plate_error error_text_database_car_register">' . $translation['text86'] . '</div>
-                    </div>
-                    <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_country">
-                        <div class="dashboard_car_register1_input_border_right"></div>
-                        ' . $countrySelect . '
-                        <div class="dashboard_car_register1_country_error error_text_database_car_register">' . $translation['text86'] . '</div>
-                    </div>
-                </div>
-                <div class="dashboard_car_register1_fields_bottom">
-                    <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_date">
+                <div class="dashboard_car_register1_fields_center">
+                    <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_answer">
                         <div class="dashboard_car_register1_input_border_left"></div>
                         <div class="dashboard_car_register1_input_border_right"></div>
-                        <input type="text" placeholder="' . $translation['text65'] . '" autocomplete="off" class="dashboard_car_register1_date" value="' . $this->formatDate($team_info['car_register_date']) . '">
-                        <div class="dashboard_car_register1_date_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                        <input type="text" placeholder="' . $translation['text63'] . '" autocomplete="off" class="dashboard_car_register1_answer">
+                        <div class="dashboard_car_register1_answer_error error_text_database_car_register">' . $translation['text86'] . '</div>
                     </div>
                 </div>
                 ' . $this->getSearchButton($translation) . '
             </div>
-        </div>
-        ' . $datePickerScript;
+        </div>';
     }
 
     /**
@@ -465,7 +449,7 @@ trait CarRegisterBlock
         
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage('game', $lang_item['id']);
+                $translation = $this->getWordsByPage(null, $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
                     'text92' => $translation['text92'],
                     'text93' => $translation['text93'],

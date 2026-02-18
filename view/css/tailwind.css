@@ -1935,7 +1935,92 @@ body {
 
 /* Custom Base Styles */
 
-/* Custom Component Styles */
+/* Cyber Breadcrumbs */
+
+.cyber-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* Соединяем блоки вплотную через разделители */
+}
+
+.breadcrumb-node {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.breadcrumb-link {
+  position: relative;
+  padding: 8px 20px;
+  color: var(--cyber-blue);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* SVG задний фон для каждого элемента */
+
+.breadcrumb-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: drop-shadow(0 0 2px var(--cyber-glow));
+}
+
+/* Эффект при наведении */
+
+.breadcrumb-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px var(--cyber-blue);
+}
+
+.breadcrumb-link:hover .breadcrumb-bg path {
+  fill: rgba(0, 240, 255, 0.2);
+  stroke-width: 2;
+}
+
+/* Активное состояние (последний элемент) */
+
+.breadcrumb-node.active .breadcrumb-link {
+  color: #fff;
+  pointer-events: none;
+}
+
+.breadcrumb-node.active .breadcrumb-bg path {
+  fill: var(--cyber-blue);
+  fill-opacity: 0.15;
+  stroke-dasharray: none;
+}
+
+/* Декоративный мигающий узел */
+
+.status-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--cyber-blue);
+  margin-right: 10px;
+  box-shadow: 0 0 8px var(--cyber-blue);
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
 
 /* Custom Utility Styles */
 
