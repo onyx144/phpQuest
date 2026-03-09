@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Video Slide Test</title>
+
+<style>
+body {
+    font-family: Arial;
+    background:#111;
+    padding:40px;
+}
+
+/* контейнер */
+.video-replace-container {
+    position: relative;
+    width: 800px;
+    overflow: hidden;
+    padding: 15px;
+    display: flex;
+    background:#000;
+}
+
+/* обязательное условие */
+.video-replace-container iframe {
+    height: 550px;
+    width: 100%;
+}
+
+/* видео */
+.video-wrapper {
+    flex: 0 0 100%;
+    transition: all 0.6s ease;
+    position: relative;
+    z-index: 2;
+}
+
+/* видео уезжает */
+.video-wrapper.slide-left {
+    flex: 0 0 70%;
+    transform: translateX(-10%);
+}
+
+/* картинка */
+.image-replace {
+    flex: 0 0 30%;
+    height: 550px;
+    transform: translateX(100%);
+    transition: all 0.6s ease;
+    text-decoration: none;
+    display: block;
+}
+
+/* картинка */
+.image-replace img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* выезд */
+.image-replace.slide-in {
+    transform: translateX(0);
+}
+
+/* возврат */
+.video-wrapper.slide-back {
+    flex: 0 0 100%;
+    transform: translateX(0);
+}
+
+.image-replace.slide-out {
+    transform: translateX(100%);
+}
+</style>
+</head>
+
+<body>
+
+<div class="video-replace-container" data-video="VWvFCdDpWqE">
+    <div class="video-wrapper"></div>
+
+    <a href="https://digishares.io/digishares-wins-nextgen-innovation-award-at-the-2026-global-proptech-contech-awards/"
+       class="image-replace"
+       target="_blank">
+        <img src="https://digishares.io/wp-content/uploads/2026/02/DigiShares-Award.jpg">
+    </a>
+</div>
+
+<script>
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+
+function onYouTubeIframeAPIReady() {
+  var containers = document.querySelectorAll('.video-replace-container');
+
+  containers.forEach(function(container, index) {
+
+    var videoId = container.getAttribute('data-video');
+    var playerId = 'yt-player-' + index;
+
+    var videoWrapper = container.querySelector('.video-wrapper');
+    var imageLink = container.querySelector('.image-replace');
+
+    videoWrapper.id = playerId;
+
+    var player = new YT.Player(playerId, {
+      videoId: videoId,
+      playerVars: { enablejsapi: 1 },
+      events: {
+        onStateChange: function(event) {
+          if (event.data == YT.PlayerState.ENDED) {
+
+            videoWrapper.classList.remove('slide-back');
+            imageLink.classList.remove('slide-out');
+
+            videoWrapper.classList.add('slide-left');
+            imageLink.classList.add('slide-in');
+          }
+        }
+      }
+    });
+
+    // клик по картинке
+    imageLink.addEventListener('click', function() {
+
+      videoWrapper.classList.remove('slide-left');
+      imageLink.classList.remove('slide-in');
+
+      videoWrapper.classList.add('slide-back');
+      imageLink.classList.add('slide-out');
+
+    });
+
+  });
+}
+</script>
+
+</body>
+</html>

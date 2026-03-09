@@ -6,200 +6,222 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
-            --neon-blue: #00f0ff;
-            --dark-blue: #06121a;
-            --panel-bg: rgba(0, 240, 255, 0.03);
-            --glow: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+            --cyber-blue: #00f0ff;
+            --cyber-red: #ff004e;
+            --bg-dark: #05080a;
+            --panel-bg: rgba(0, 240, 255, 0.02);
         }
 
         body {
-            background-color: #05080a;
-            color: var(--neon-blue);
+            background-color: var(--bg-dark);
+            color: var(--cyber-blue);
             font-family: 'JetBrains Mono', monospace;
-            padding: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
 
-        .cyber-list-container {
+        .main-interface {
+            display: flex;
+            width: 900px;
+            height: 500px;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* ЛЕВАЯ ПАНЕЛЬ: КНОПКИ */
+        .sidebar {
+            flex: 0 0 300px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            max-width: 320px;
-            position: relative;
+            gap: 15px;
         }
 
-        /* Кнопка-элемент */
-        .user-item {
+        .sidebar-btn {
             position: relative;
-            height: 54px;
-            cursor: pointer;
+            height: 50px;
             display: flex;
             align-items: center;
-            padding: 0 25px;
+            padding: 0 20px;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        /* SVG Фон с честными границами */
-        .item-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .item-bg path {
-            fill: var(--panel-bg);
-            stroke: var(--neon-blue);
-            stroke-width: 1.5;
-            transition: all 0.3s ease;
-            vector-effect: non-scaling-stroke;
-        }
-
-        .user-item:hover, .user-item.is-active {
-            transform: translateX(10px);
-        }
-
-        .user-item:hover .item-bg path, .user-item.is-active .item-bg path {
-            fill: rgba(0, 240, 255, 0.1);
-            stroke-width: 2.5;
-            filter: var(--glow);
-        }
-
-        .user-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            font-weight: bold;
-            pointer-events: none;
-        }
-
-        /* ПОПАП */
-        .info-popup {
-            position: absolute;
-            left: 115%;
-            top: 50%;
-            transform: translateY(-50%) translateX(-20px);
-            width: 280px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        /* Триггеры: ховер или активный класс */
-        .user-item:hover .info-popup, 
-        .user-item.is-active .info-popup {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(-50%) translateX(0);
-        }
-
-        .popup-content {
-            background: var(--dark-blue);
-            border: 1px solid var(--neon-blue);
-            padding: 20px;
-            position: relative;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-        }
-
-        /* Декоративная линия-коннектор */
-        .popup-connector {
-            position: absolute;
-            left: -40px;
-            top: 50%;
-            width: 40px;
-            height: 2px;
-            background: var(--neon-blue);
-            box-shadow: var(--glow);
-        }
-
-        .popup-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px var(--neon-blue);
-            display: block;
-        }
-
-        .popup-desc {
-            font-size: 12px;
-            line-height: 1.5;
-            color: rgba(0, 240, 255, 0.8);
-            border-left: 2px solid var(--neon-blue);
-            padding-left: 10px;
-        }
-
-        /* Сетчатый фон для попапа */
-        .popup-grid {
+        .btn-frame {
             position: absolute;
             inset: 0;
-            background-image: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-            background-size: 10px 10px;
             z-index: -1;
+        }
+
+        .btn-frame path {
+            fill: var(--panel-bg);
+            stroke: var(--cyber-blue);
+            stroke-width: 1;
+            transition: 0.3s;
+        }
+
+        .sidebar-btn:hover {
+            transform: translateX(10px);
+            color: #fff;
+        }
+
+        .sidebar-btn:hover .btn-frame path {
+            fill: rgba(0, 240, 255, 0.1);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 5px var(--cyber-blue));
+        }
+
+        /* РАЗДЕЛИТЕЛЬ */
+        .divider {
+            width: 2px;
+            background: linear-gradient(transparent, var(--cyber-blue), transparent);
+            position: relative;
+            opacity: 0.3;
+        }
+
+        .divider::after {
+            content: "SEC_04";
+            position: absolute;
+            top: 20px;
+            left: -15px;
+            font-size: 8px;
+            background: var(--bg-dark);
+            padding: 5px 0;
+        }
+
+        /* ПРАВАЯ ПАНЕЛЬ: КОНТЕНТ */
+        .content-display {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            background: radial-gradient(circle at center, rgba(0, 240, 255, 0.03) 0%, transparent 70%);
+        }
+
+        /* "Сломанная" красная рамка */
+        .red-armor-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .armor-part {
+            fill: none;
+            stroke: var(--cyber-red);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 4px var(--cyber-red));
+        }
+
+        /* Задний фон когда пусто */
+        .empty-state-bg {
+            position: absolute;
+            inset: 40px;
+            border: 1px dashed rgba(0, 240, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: -1;
+        }
+
+        .empty-state-bg::before {
+            content: "STANDBY_MODE";
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            opacity: 0.1;
+            letter-spacing: 10px;
+        }
+
+        /* Стили текста в консоли */
+        .display-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px var(--cyber-blue);
+        }
+
+        .display-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--cyber-blue);
+            opacity: 0.9;
+        }
+
+        /* Декоративная сетка */
+        .hud-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-<div class="cyber-list-container">
+<div class="main-interface">
     
-    <div class="user-item" onclick="togglePopup(this)">
-        <svg class="item-bg" viewBox="0 0 320 54" preserveAspectRatio="none">
-            <path d="M0 15 L15 0 H320 V39 L305 54 H0 Z" />
-        </svg>
-        <span class="user-name">KAI_PROMETHEUS</span>
-        
-        <div class="info-popup">
-            <div class="popup-connector"></div>
-            <div class="popup-content">
-                <div class="popup-grid"></div>
-                <span class="popup-title">KAI_PROMETHEUS</span>
-                <div class="popup-desc">
-                    Статус: В сети.<br>
-                    Доступ: Уровень 4.<br>
-                    Специализация: Квантовая криптография и обход фаерволов корпорации "Militech".
-                </div>
-            </div>
+    <div class="sidebar">
+        <div class="sidebar-btn">
+            <svg class="btn-frame" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <path d="M0 0 H280 L300 20 V50 H20 L0 30 Z" />
+            </svg>
+            USER_DATABASE
+        </div>
+        <div class="sidebar-btn">
+            <svg class="btn-frame" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <path d="M0 10 L10 0 H300 V40 L290 50 H0 Z" />
+            </svg>
+            NETWORK_STATUS
+        </div>
+        <div class="sidebar-btn">
+            <svg class="btn-frame" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <path d="M0 0 H300 V35 L285 50 H15 L0 35 Z" />
+            </svg>
+            SECURITY_LOGS
         </div>
     </div>
 
-    <div class="user-item" onclick="togglePopup(this)">
-        <svg class="item-bg" viewBox="0 0 320 54" preserveAspectRatio="none">
-            <path d="M0 0 H305 L320 15 V54 H15 L0 39 Z" />
+    <div class="divider"></div>
+
+    <div class="content-display">
+        <div class="hud-grid"></div>
+        <div class="empty-state-bg"></div>
+
+        <svg class="red-armor-svg" viewBox="0 0 500 500" preserveAspectRatio="none">
+            <path class="armor-part" d="M0 40 V0 H60" />
+            <line class="armor-part" x1="80" y1="0" x2="150" y2="0" stroke-dasharray="5 5" />
+            
+            <path class="armor-part" d="M440 0 H500 V100 L480 120" />
+            
+            <path class="armor-part" d="M500 400 V500 H400" />
+            <path class="armor-part" d="M380 500 H300" stroke-width="1" opacity="0.5"/>
+            
+            <path class="armor-part" d="M100 500 H0 V440 L20 420 V380" />
+            
+            <line class="armor-part" x1="0" y1="200" x2="0" y2="250" />
+            <rect fill="var(--cyber-red)" x="495" y="240" width="5" height="20" />
         </svg>
-        <span class="user-name">NEURAL_GHOST</span>
-        
-        <div class="info-popup">
-            <div class="popup-connector"></div>
-            <div class="popup-content">
-                <div class="popup-grid"></div>
-                <span class="popup-title">NEURAL_GHOST</span>
-                <div class="popup-desc">
-                    Статус: Скрыт.<br>
-                    Доступ: Неизвестно.<br>
-                    Описание: Легендарный нетраннер. Последний раз был замечен в узлах старого интернета.
-                </div>
-            </div>
+
+        <div class="display-header">S_NODE: 0x774A</div>
+        <div class="display-text">
+            > Инициализация протокола...<br>
+            > Поиск активных узлов в секторе 7...<br>
+            > [OK] Соединение установлено.<br>
+            > Внимание: Обнаружена попытка несанкционированного доступа к архивам "Arasaka".
         </div>
     </div>
 
 </div>
-
-<script>
-    function togglePopup(element) {
-        // Убираем активность у всех, кроме текущего
-        document.querySelectorAll('.user-item').forEach(item => {
-            if (item !== element) item.classList.remove('is-active');
-        });
-        // Переключаем текущий
-        element.classList.toggle('is-active');
-    }
-</script>
 
 </body>
 </html>

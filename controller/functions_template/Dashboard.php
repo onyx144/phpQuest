@@ -35,8 +35,8 @@ private function uploadDashboardNewMission($lang_id)
         </div>';
 
     $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_new_mission dashboard_tab_content_item_active" data-tab="tab1">
-                                                                <div class="dashboard_tab_content_item_new_mission_title">ACCEPT A NEW MISSION</div>
-                                <div class="dashboard_tab_content_item_new_mission_input_wrapper mission_input">
+                                                                <div class="  dashboard_tab_content_item_new_mission_title">ACCEPT A NEW MISSION</div>
+                                <div class="input_blue_container dashboard_tab_content_item_new_mission_input_wrapper mission_input input_blue">
                                     <input type="text" placeholder="Enter mission code name" autocomplete="off" class="dashboard_tab_content_item_new_mission_input">
                                 </div>
                                 <div class="btn_wrapper btn_wrapper_blue dashboard_tab_content_item_new_mission_accept">

@@ -2606,13 +2606,14 @@ a.language_hidden_item {
 .dashboard_tab_content_item_new_mission_input {
     width: 100%;
     border: none;
-    height: 60px;
-    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+    height: 35px;
+    padding: 24px 0;
+    background: transparent;
     text-align: center;
     font-weight: bold;
     font-size: 24px;
     color: #00F0FF;
-    margin: 3px 0 0;
+    margin: -8px 0 0;
 }
 .dashboard_tab_content_item input[type="text"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #00F0FF;
