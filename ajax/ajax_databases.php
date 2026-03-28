@@ -75,6 +75,8 @@ if (isset($_POST['op'])) {
 		// databases - car register. search1. Проверка правильности ввода данных (правильный ответ: Dudick)
 		case 'validateCarRegisterSearch':
 			$answer = !empty($_POST['answer']) ? strip_tags(trim($_POST['answer'])) : false;
+			$country = !empty($_POST['country']) ? strip_tags(trim($_POST['country'])) : false;
+			$date = !empty($_POST['date']) ? strip_tags(trim($_POST['date'])) : false;
 			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : 'en';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);

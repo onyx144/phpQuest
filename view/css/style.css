@@ -4450,11 +4450,14 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 }
 .dashboard_car_register2_left {
     width: 541px;
-    float: left;
+    float: none;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 .dashboard_car_register2_right {
     width: 444px;
-    float: right;
+    float: none;
+    flex: 0 0 444px;
 }
 .dashboard_car_register2_title {
     width: 100%;
@@ -4510,9 +4513,16 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 .dashboard_bank_transactions2_inner,
 .dashboard_tools_symbol_decoder_inner {
     width: 100%;
-    float: left;
+    float: none;
     margin: 13px 0 0 20px;
     padding: 0 0 0 13px;
+}
+.dashboard_car_register2_inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    overflow-y: auto;
+    padding-right: 16px; /* чтобы скролл не наезжал на контент */
 }
 .dashboard_tools_symbol_decoder_inner {
     margin: 26px 0 0 20px;
@@ -4521,7 +4531,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 .dashboard_car_register2_slider_wrapper {
     width: 444px;
     height: 386px;
-    float: left;
+    float: none;
     background: url(/images/huilov_slider_bg.png) center center no-repeat;
     position: relative;
 }
@@ -4952,6 +4962,78 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 }
 .dashboard_personal_files2_private_individuals_huilov_data_row_lastname .dots_top {
     background: url(/images/huilov_input_bg_inner1_blue.png) center center no-repeat;
+}
+.dashboard_personal_files2_private_individuals_huilov_data_row_vehicle {
+    width: 100%;
+    float: left;
+    position: relative;
+}
+.dashboard_personal_files2_private_individuals_huilov_vehicle_row_inner {
+    width: 100%;
+    float: left;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+.dashboard_personal_files2_private_individuals_huilov_vehicle_text_part {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    min-height: 63px;
+}
+.dashboard_personal_files2_private_individuals_huilov_data_row_vehicle .dashboard_personal_files2_private_individuals_huilov_label {
+    float: left;
+}
+.dashboard_personal_files2_private_individuals_huilov_data_row_vehicle .dashboard_personal_files2_private_individuals_huilov_input {
+    position: absolute;
+    left: 205px;
+    top: 0;
+    right: 0;
+    float: none;
+    width: auto;
+    max-width: 256px;
+}
+.dashboard_personal_files2_private_individuals_huilov_input_vehicle {
+    height: auto;
+    min-height: 63px;
+    line-height: 22px;
+    padding: 12px 10px 16px;
+    text-align: left;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+}
+.dashboard_personal_files2_private_individuals_huilov_input_vehicle .private_individuals_huilov_text {
+    display: block;
+    line-height: 22px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    padding: 0 4px;
+}
+.dashboard_personal_files2_private_individuals_huilov_input_vehicle .private_individuals_huilov_text span {
+    display: block;
+}
+.dashboard_personal_files2_private_individuals_huilov_vehicle_photo_frame {
+    flex: 0 0 168px;
+    width: 168px;
+}
+.dashboard_personal_files2_private_individuals_huilov_vehicle_photo_inner {
+    width: 168px;
+    height: 148px;
+    background: url(/images/huilov_slider_bg.png) center center no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    padding: 10px 12px 22px;
+    box-sizing: border-box;
+}
+.dashboard_personal_files2_private_individuals_huilov_vehicle_photo_inner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 .dashboard_personal_files2_private_individuals_huilov_right_bg_line {
     position: absolute;

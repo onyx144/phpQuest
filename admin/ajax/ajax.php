@@ -778,15 +778,30 @@ if (isset($_POST['op'])) {
 				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
 				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
 
-				if (empty($word_id) || empty($field) || empty($lang_id)) {
-					$return['error'] = 'Word ID, Field and Language ID are required';
+				if (empty($field) || empty($lang_id)) {
+					$return['error'] = 'Field and Language ID are required';
 				} else {
-					// Если word_id существует, обновляем существующее слово
+					// Если word_id существует, сначала пробуем обновить по нему
+					$updated = false;
 					if ($word_id > 0) {
 						$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?} AND `language_id` = {?}";
 						$db->query($sql, [$val, $word_id, $lang_id]);
-					} else {
-						// Если word_id = 0, создаем новое слово
+						$updated = true;
+					}
+
+					// Для слов без word_id (или если id не подошел) обновляем по field + language_id
+					if (!$updated || $word_id <= 0) {
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
+						$existing_word_id = $db->selectCell($sql, [$field, $lang_id]);
+						if ($existing_word_id) {
+							$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?}";
+							$db->query($sql, [$val, $existing_word_id]);
+							$updated = true;
+						}
+					}
+
+					// Если записи нет - создаем новую
+					if (!$updated) {
 						$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
 						$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
 						$db->query($sql, [$field, $val, $lang_id, $page]);

@@ -917,7 +917,7 @@ $(function() {
 					$('#popup_search_processing').css('display','none');
 
 					// проверяем правильная ли комбинация введена
-					if (parameters.license_plate.toLowerCase() == 'stalin' && (parameters.country == 'Russia' || parameters.country == 'Russland') && parameters.date == '30.08.2021') {
+					if (parameters.license_plate.toLowerCase() == 'dudick' && (parameters.country == 'Iran' || parameters.country == 'Russland') && parameters.date == '30.08.2021') {
 						// звук успешного выполнения
 						if (searchAudio && isPlaying(searchAudio)) {
 							searchAudio.pause();
@@ -4152,7 +4152,8 @@ $(function() {
 	});
 
 	$('body').on('click', '.dashboard_car_register1_search', function(e){
-		var err = false;
+		var err = false;	
+		console.log('test2');					
 		var licensePlate = $.trim($('.dashboard_car_register1_license_plate').val());
 		var country = $.trim($('.dashboard_car_register1_country').val());
 		var date = $.trim($('.dashboard_car_register1_date').val());

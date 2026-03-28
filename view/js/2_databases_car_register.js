@@ -2,7 +2,7 @@
 
 /* ОБЩИЕ ФУНКЦИИ */
 	// анимация поиска и результаты
-	function databaseCarRegisterNoEmptyFields(answer, lang_abbr2) {
+	function databaseCarRegisterNoEmptyFields(answer, country, date, lang_abbr2) {
 		// на всякий случай скрываем окно с ошибкой
 		$('#popup_search_error').css('display','none');
 
@@ -54,6 +54,8 @@
 				var formData = new FormData();
 		    	formData.append('op', 'validateCarRegisterSearch');
 		    	formData.append('answer', answer);
+		    	formData.append('country', country);
+		    	formData.append('date', date);
 		    	formData.append('lang_abbr', lang_abbr2);
 
 				$.ajax({
@@ -150,13 +152,33 @@ $(function() {
 	// отправить данные из формы поиска
 	$('body').on('click', '.dashboard_car_register1_search', function(e){
 		var err = false;
-		var answer = $.trim($('.dashboard_car_register1_answer').val());
+		var answer = $.trim($('.dashboard_car_register1_answer').val() || $('.dashboard_car_register1_license_plate').val());
+		var country = $.trim($('.dashboard_car_register1_country').val());
+		var date = $.trim($('.dashboard_car_register1_date').val());
 
 		if (answer == '') {
 			$('.dashboard_car_register1_answer_error').addClass('error_text_database_car_register_active');
 			err = true;
 		} else {
 			$('.dashboard_car_register1_answer_error').removeClass('error_text_database_car_register_active');
+		}
+
+		if ($('.dashboard_car_register1_country').length) {
+			if (country == '') {
+				$('.dashboard_car_register1_country_error').addClass('error_text_database_car_register_active');
+				err = true;
+			} else {
+				$('.dashboard_car_register1_country_error').removeClass('error_text_database_car_register_active');
+			}
+		}
+
+		if ($('.dashboard_car_register1_date').length) {
+			if (date == '') {
+				$('.dashboard_car_register1_date_error').addClass('error_text_database_car_register_active');
+				err = true;
+			} else {
+				$('.dashboard_car_register1_date_error').removeClass('error_text_database_car_register_active');
+			}
 		}
 
 		if (!err) {
@@ -171,6 +193,8 @@ $(function() {
 					'op': 'databaseCarRegisterNoEmptyFields',
 					'parameters': {
 						'answer': answer,
+						'country': country,
+						'date': date,
 						'lang_abbr': $('html').attr('lang'),
 						'scoreBeforeDatabaseCarRegister': scoreBeforeDatabaseCarRegister,
 						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
@@ -179,7 +203,7 @@ $(function() {
 		        };
 		        sendMessageSocket(JSON.stringify(message));
 
-				databaseCarRegisterNoEmptyFields(answer, $('html').attr('lang'));
+				databaseCarRegisterNoEmptyFields(answer, country, date, $('html').attr('lang'));
 			});
 		} else {
 			// socket

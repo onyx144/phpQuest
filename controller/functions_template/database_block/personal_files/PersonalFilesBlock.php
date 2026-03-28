@@ -310,15 +310,24 @@ trait PersonalFilesBlock
                 </div>
                 <div class="dashboard_personal_files2_private_individuals_huilov_right">
                     ' . $rowsHtml . '
-                    <div class="dashboard_personal_files2_private_individuals_huilov_data_row">
-                        <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text129'] . '</div>
-                        <div class="dashboard_personal_files2_private_individuals_huilov_input" style="font-size:18px;line-height:22px;padding:18px 0 0;">
-                            <span class="dots_top"></span>
-                            <span class="dots_bottom_left"></span>
-                            <span class="dots_bottom_right"></span>
-                            <span class="private_individuals_huilov_text" data-bubble="7">
-                                <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text130']) . '</span>
-                            </span>
+                    <div class="dashboard_personal_files2_private_individuals_huilov_data_row dashboard_personal_files2_private_individuals_huilov_data_row_vehicle">
+                        <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_row_inner">
+                            <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_text_part">
+                                <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation['text129'] . '</div>
+                                <div class="dashboard_personal_files2_private_individuals_huilov_input dashboard_personal_files2_private_individuals_huilov_input_vehicle">
+                                    <span class="dots_top"></span>
+                                    <span class="dots_bottom_left"></span>
+                                    <span class="dots_bottom_right"></span>
+                                    <span class="private_individuals_huilov_text" data-bubble="7">
+                                        <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation['text130']) . '</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_photo_frame">
+                                <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_photo_inner">
+                                    <img src="/images/slider_stalin_car/1.png" alt="">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
