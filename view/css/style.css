@@ -4452,7 +4452,27 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     width: 541px;
     float: none;
     flex: 1 1 auto;
+    height: 430px;
     min-width: 0;
+    overflow-y: scroll;
+}
+
+.dashboard_car_register2_left .dashboard_personal_files2_private_individuals_huilov_label {
+    font-size: 16px;
+    line-height: 25px;
+    text-align: match-parent;
+    display: flex;
+    margin-top: 18px;
+}
+
+.dashboard_car_register2_left .dashboard_personal_files2_private_individuals_huilov_data_row {
+    margin-bottom: 28px;
+    display: flex;
+}
+
+.dashboard_car_register2_left span.private_individuals_huilov_text {
+    font-size: 16px;
+    line-height: 15px;
 }
 .dashboard_car_register2_right {
     width: 444px;

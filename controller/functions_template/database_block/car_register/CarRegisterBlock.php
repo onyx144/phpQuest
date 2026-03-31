@@ -491,30 +491,35 @@ trait CarRegisterBlock
      */
     private function getCarRegisterHuilovTitles($translation)
     {
-        return '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-            <div class="dashboard_tab_title_active_skew_right"></div>
-            <div class="dashboard_tab_title_inner">
-                <div class="dashboard_tab_title_img_wrapper">
-                    <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/>
-                        <rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/>
-                        <rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/>
-                    </svg>
-                </div>
-                <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-            </div>
-        </div>
-        <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="car_register2">
-            <div class="dashboard_tab_title_active_skew_right"></div>
-            <div class="dashboard_tab_title_inner">
-                <div class="dashboard_tab_title_img_wrapper" style="margin: -10px 0 0;">
-                    ' . $this->getCarIcon() . '
-                </div>
-                <div class="dashboard_tab_title_text">' . $translation['text90'] . '</div>
-            </div>
-        </div>';
+        $items = [];
+
+        $items[] = [
+            'text' => $translation['text13'],
+            'url' => '#',
+            'data' => [
+                'tab' => 'tab1',
+                'step' => 'databases_start_four',
+                'action-id' => 28,
+                'database' => 'false',
+            ],
+        ];
+
+        $items[] = [
+            'text' => $translation['text171'],
+            'url' => '#',
+            'data' => [
+                'tab' => 'car_register1',
+            ],
+        ];
+
+        $items[] = [
+            'text' => $translation['text90'],
+            'data' => [
+                'tab' => 'car_register2',
+            ],
+        ];
+
+        return renderCyberBreadcrumbs($items);
     }
 
     /**
@@ -549,66 +554,38 @@ trait CarRegisterBlock
         foreach ($bubbleTexts as $idx => $key) {
             $bubbleHtml[$idx] = '<span class="dashboard_car_register2_bubble" data-bubble="' . $idx . '">' . ($printed ? $translation[$key] : '') . '</span>';
         }
-        
+        $rows = [
+            ['label' => 'text92', 'text' => 'text93', 'id' => 0],
+            ['label' => 'text94', 'text' => 'text95', 'id' => 1, ],
+            ['label' => 'text97', 'text' => 'text98', 'id' => 3],
+            ['label' => 'text99', 'text' => 'text100', 'id' => 4],
+            ['label' => 'text101', 'text' => 'text102', 'id' => 5],
+            ['label' => 'text103', 'text' => 'text104', 'id' => 7],
+        ];
+
+        $rowsHtml = '';
+        foreach ($rows as $row) {
+            $rowsHtml .= '<div class="dashboard_personal_files2_private_individuals_huilov_data_row ' . ($row['class'] ?? '') . '">
+                <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation[$row['label']] . '</div>
+                <div class="dashboard_personal_files2_private_individuals_huilov_input">
+                    <span class="dots_top"></span>
+                    <span class="dots_bottom_left"></span>
+                    <span class="dots_bottom_right"></span>
+                    <span class="private_individuals_huilov_text" data-bubble="' . $row['id'] . '">
+                        <span>' .$translation[$row['text']]. '</span>
+                    </span>
+                </div>
+            </div>';
+        }
         return '<div class="dashboard_tab_content_item dashboard_tab_content_item_car_register_huilov dashboard_tab_content_item_active" data-tab="car_register2">
             <div class="dashboard_car_register2_inner' . $bubbleClass . $bubbleTeamClass . '">
                 <div class="dashboard_car_register2_left">
                     <div class="dashboard_car_register2_title">' . $translation['text90'] . '</div>
-                    <div class="dashboard_car_register2_text_wrapper dashboard_car_register2_text_wrapper1">
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[0] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[1] . '</div>
-                        </div>
-                    </div>
-                    <div class="dashboard_car_register2_text_wrapper dashboard_car_register2_text_wrapper2">
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[2] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[3] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[4] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[5] . '</div>
-                        </div>
-                    </div>
-                    <div class="dashboard_car_register2_text_wrapper dashboard_car_register2_text_wrapper3">
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[6] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[7] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[8] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[9] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[10] . '</div>
-                        </div>
-                        <div class="dashboard_car_register2_text_row">
-                            <div class="dashboard_car_register2_text_title">&nbsp;</div>
-                            <div class="dashboard_car_register2_text">' . $bubbleHtml[11] . '</div>
-                        </div>
-                    </div>
+                   ' . $rowsHtml . '
                 </div>
+                
+                     
+                 
 
                 <div class="dashboard_car_register2_right">
                     <div class="dashboard_car_register2_slider_wrapper">
