@@ -4,8 +4,8 @@ class I18n
 {
     private static $instance = null;
     private $translations = [];
-    private $currentLang = 'uk'; // Ukrainian by default
-    private $availableLangs = ['uk', 'en'];
+    private $currentLang = 'ua'; // Ukrainian by default
+    private $availableLangs = ['ua', 'uk', 'en'];
 
     private function __construct()
     {
@@ -13,16 +13,16 @@ class I18n
             session_start();
         }
         
-        // Get language from session, cookie, or default to Ukrainian
+        // GET → cookie lang (см. view/js/app_lang.js + setAppLang) → session
         if (isset($_GET['lang']) && in_array($_GET['lang'], $this->availableLangs)) {
-            $this->currentLang = $_GET['lang'];
+            $this->currentLang = $this->normalizeLang($_GET['lang']);
             $_SESSION['lang'] = $this->currentLang;
             setcookie('lang', $this->currentLang, time() + (86400 * 30), '/'); // 30 days
-        } elseif (isset($_SESSION['lang']) && in_array($_SESSION['lang'], $this->availableLangs)) {
-            $this->currentLang = $_SESSION['lang'];
         } elseif (isset($_COOKIE['lang']) && in_array($_COOKIE['lang'], $this->availableLangs)) {
-            $this->currentLang = $_COOKIE['lang'];
+            $this->currentLang = $this->normalizeLang($_COOKIE['lang']);
             $_SESSION['lang'] = $this->currentLang;
+        } elseif (isset($_SESSION['lang']) && in_array($_SESSION['lang'], $this->availableLangs)) {
+            $this->currentLang = $this->normalizeLang($_SESSION['lang']);
         }
 
         $this->loadLanguage();
@@ -43,9 +43,14 @@ class I18n
             $this->translations = require $langFile;
         } else {
             // Fallback to Ukrainian if file doesn't exist
-            $langFile = ROOT . '/languages/uk.php';
+            $langFile = ROOT . '/languages/ua.php';
             if (file_exists($langFile)) {
                 $this->translations = require $langFile;
+            } else {
+                $langFile = ROOT . '/languages/uk.php';
+                if (file_exists($langFile)) {
+                    $this->translations = require $langFile;
+                }
             }
         }
     }
@@ -53,13 +58,19 @@ class I18n
     public function setLanguage($lang)
     {
         if (in_array($lang, $this->availableLangs)) {
-            $this->currentLang = $lang;
-            $_SESSION['lang'] = $lang;
-            setcookie('lang', $lang, time() + (86400 * 30), '/');
+            $normalizedLang = $this->normalizeLang($lang);
+            $this->currentLang = $normalizedLang;
+            $_SESSION['lang'] = $normalizedLang;
+            setcookie('lang', $normalizedLang, time() + (86400 * 30), '/');
             $this->loadLanguage();
             return true;
         }
         return false;
+    }
+
+    private function normalizeLang($lang)
+    {
+        return $lang === 'uk' ? 'ua' : $lang;
     }
 
     public function t($key, $default = null)

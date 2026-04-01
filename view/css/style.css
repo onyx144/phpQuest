@@ -1854,7 +1854,7 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
     color: white;
 }
 a.language_hidden_item {
-    display: none;
+    display: block;
 }
 
 .language_hidden_item_active {

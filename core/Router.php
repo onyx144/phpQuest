@@ -33,34 +33,98 @@ class Router
         return $url;
     }
     
+    /**
+     * Код языка из БД (langs.lang), нормализация латиницы.
+     */
+    private function normalizeLangCode($code)
+    {
+        $code = strtolower(trim((string) $code));
+        $code = strtr($code, ['а' => 'a', 'А' => 'a']);
+
+        return $code;
+    }
+
+    /**
+     * Сопоставить ввод (GET/cookie/URL) с кодом langs.lang.
+     */
+    private function resolveLangCode($raw, array $langByCode)
+    {
+        $code = $this->normalizeLangCode($raw);
+        if ($code === '') {
+            return null;
+        }
+        if (isset($langByCode[$code])) {
+            return $code;
+        }
+        if ($code === 'uk' && isset($langByCode['ua'])) {
+            return 'ua';
+        }
+
+        return null;
+    }
+
     public function run()
     {
         $uri = $this->getURI();
 
-        /* LANG */
-        // check lang
+        /* LANG + маршрут без префикса языка (язык: localStorage → cookie site_lang, см. view/js/app_lang.js) */
         $langList = $this->lang->getAllActiveLangs('id');
+        $langByCode = [];
         if ($langList && count($langList) > 0) {
             foreach ($langList as $langListItem) {
-                $checklangPart = $langListItem['lang'];
-
-                if (strripos($uri, '/' . $checklangPart . '/') !== false || substr($uri, 0, 3) == $checklangPart . '/' || (strlen($uri) == 2 && substr($uri, 0, 2) == $checklangPart)) {
-                    $admin_lang_id = $langListItem['id'];
-
-                    break;
-                }
-            }
-
-            if (empty($admin_lang_id)) {
-                $admin_lang_id = $this->lang->getDefaultLanguageId();
+                $code = $this->normalizeLangCode($langListItem['lang']);
+                $langByCode[$code] = (int) $langListItem['id'];
             }
         }
 
+        $segments = ($uri === '') ? [] : explode('/', $uri);
+        $urlLangCode = null;
+        $routeSegments = $segments;
+
+        if (count($segments) > 0) {
+            $firstCode = $this->normalizeLangCode($segments[0]);
+            if ($firstCode !== '' && isset($langByCode[$firstCode])) {
+                $urlLangCode = $firstCode;
+                array_shift($routeSegments);
+            } elseif ($firstCode === 'uk' && isset($langByCode['ua'])) {
+                $urlLangCode = 'ua';
+                array_shift($routeSegments);
+            }
+        }
+
+        $routeUri = count($routeSegments) ? implode('/', $routeSegments) : '';
+
+        $resolvedCode = null;
+        if (isset($_GET['lang']) && $_GET['lang'] !== '') {
+            $resolvedCode = $this->resolveLangCode($_GET['lang'], $langByCode);
+        }
+        if ($resolvedCode === null && $urlLangCode !== null) {
+            $resolvedCode = $urlLangCode;
+        }
+        if ($resolvedCode === null && !empty($_COOKIE['site_lang'])) {
+            $resolvedCode = $this->resolveLangCode($_COOKIE['site_lang'], $langByCode);
+        }
+
+        if ($resolvedCode !== null && isset($langByCode[$resolvedCode])) {
+            $admin_lang_id = $langByCode[$resolvedCode];
+            if (!headers_sent()) {
+                setcookie('site_lang', $resolvedCode, time() + 86400 * 365, '/', '', false, false);
+            }
+        } else {
+            $admin_lang_id = $this->lang->getDefaultLanguageId();
+        }
+
         $langArray = $this->lang->getLanguageById($admin_lang_id);
+        if (!$langArray) {
+            $admin_lang_id = $this->lang->getDefaultLanguageId();
+            $langArray = $this->lang->getLanguageById($admin_lang_id);
+        }
 
         // set active lang param
-        foreach ($langArray as $key => $value) {
-            $this->lang->setParam($key, $value);
+        if (is_array($langArray)) {
+            foreach ($langArray as $key => $value) {
+                $this->lang->setParam($key, $value);
+            }
         }
 
         /*// translation
@@ -72,11 +136,11 @@ class Router
         }*/
         /* LANG - end */
 
-        if (array_key_exists($uri, $this->routes)) {
-            $segments = explode('/', $this->routes[$uri]);
+        if (array_key_exists($routeUri, $this->routes)) {
+            $segments = explode('/', $this->routes[$routeUri]);
             
             // if not concrete item
-            if (strripos($this->routes[$uri], '_id=') === false) {
+            if (strripos($this->routes[$routeUri], '_id=') === false) {
                 $controllerName = ucfirst(array_shift($segments));
                 $actionName = array_shift($segments);
                 $idItem = 0;

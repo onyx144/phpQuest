@@ -218,10 +218,10 @@
 <div class="join-game-content min-h-screen relative" style="background-color: transparent;">
 	<!-- Language Switcher -->
 	<div class="fixed top-4 right-4 z-50 flex gap-2">
-				<a href="?lang=uk" class="cyber-button px-4 py-2 text-sm <?php echo $currentLang === 'uk' ? 'active' : ''; ?>">
+				<a href="#" onclick="if (typeof setAppLang === 'function') { setAppLang('ua'); } return false;" class="cyber-button px-4 py-2 text-sm <?php echo in_array($currentLang, ['ua', 'uk']) ? 'active' : ''; ?>">
 					🇺🇦 UK
 				</a>
-				<a href="?lang=en" class="cyber-button px-4 py-2 text-sm <?php echo $currentLang === 'en' ? 'active' : ''; ?>">
+				<a href="#" onclick="if (typeof setAppLang === 'function') { setAppLang('en'); } return false;" class="cyber-button px-4 py-2 text-sm <?php echo $currentLang === 'en' ? 'active' : ''; ?>">
 					🇬🇧 EN
 				</a>
 	</div>

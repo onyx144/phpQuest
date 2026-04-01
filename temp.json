@@ -1,16 +1,1552 @@
 {
-    "last_node_id": 10,
-    "last_link_id": 12,
-    "nodes": [
-      {"id":1,"type":"CheckpointLoaderSimple","widgets_values":["sd_xl_base_1.0.safetensors"]},
-      {"id":2,"type":"CLIPTextEncode","widgets_values":["360 View, seamless panoramic equirectangular panorama from input photo, high detail, photorealistic"]},
-      {"id":3,"type":"CLIPTextEncode","widgets_values":["blurry, distorted seams, lowres, ugly"]},
-      {"id":4,"type":"LoadImage","widgets_values":["panorama.jpg"]},
-      {"id":5,"type":"VAEEncode","inputs":{"pixels":4,"vae":1}},
-      {"id":6,"type":"KSampler","widgets_values":[123456,"fixed",20,7,"euler","normal",0.7],"inputs":{"model":7,"positive":2,"negative":3,"latent_image":5}},
-      {"id":7,"type":"LoraLoader","widgets_values":["360RedmondResized.safetensors",0.8,1.0],"inputs":{"model":1,"clip":1}},
-      {"id":8,"type":"VAEDecode","inputs":{"samples":6,"vae":1}},
-      {"id":9,"type":"SaveImage","widgets_values":["360Panorama"]}
-    ]
+  "text1": {
+    "val": "Перший онлайн квест в Украіні",
+    "english": "Norway’s best escape room presents:",
+    "page": ""
+  },
+  "text10": {
+    "val": "за рейтингом TripAdvisor",
+    "english": "as ranked by TripAdvisor",
+    "page": ""
+  },
+  "text100": {
+    "val": "СТАЛІН",
+    "english": "STALIN",
+    "page": ""
+  },
+  "text101": {
+    "val": "Дата останньої реєстрації:",
+    "english": "Date of last registration:",
+    "page": ""
+  },
+  "text102": {
+    "val": "20.12.2016",
+    "english": "20.12.2016",
+    "page": ""
+  },
+  "text103": {
+    "val": "Власник:",
+    "english": "Owner:",
+    "page": ""
+  },
+  "text104": {
+    "val": "Володимир Пупкін",
+    "english": "Nathan O'Dudik",
+    "page": ""
+  },
+  "text105": {
+    "val": "Фото транспортного засобу",
+    "english": "Vehicle picture",
+    "page": ""
+  },
+  "text106": {
+    "val": "Зображення",
+    "english": "Picture",
+    "page": ""
+  },
+  "text107": {
+    "val": "Оберіть категорію",
+    "english": "Choose category",
+    "page": ""
+  },
+  "text108": {
+    "val": "Приватні особи",
+    "english": "Private individuals",
+    "page": ""
+  },
+  "text109": {
+    "val": "База даних CEO",
+    "english": "CEO database",
+    "page": ""
+  },
+  "text11": {
+    "val": "ПЕРШИЙ ОНЛАЙН КВЕСТ В УКРАІНІ",
+    "english": "WINNER OF INNOVATION PRIZE 2021",
+    "page": ""
+  },
+  "text110": {
+    "val": "Пошук досьє:",
+    "english": "Search for the dossiers:",
+    "page": ""
+  },
+  "text111": {
+    "val": "Введіть ім’я",
+    "english": "Enter first name",
+    "page": ""
+  },
+  "text112": {
+    "val": "Введіть прізвище",
+    "english": "Enter last name",
+    "page": ""
+  },
+  "text113": {
+    "val": "Об’єкт: A-270/3",
+    "english": "Object: A-270/3",
+    "page": ""
+  },
+  "text114": {
+    "val": "Прогрес: 45%",
+    "english": "Progress: 45%",
+    "page": ""
+  },
+  "text115": {
+    "val": "Ім’я:",
+    "english": "First name:",
+    "page": ""
+  },
+  "text116": {
+    "val": "Володимир",
+    "english": "Nathan",
+    "page": ""
+  },
+  "text117": {
+    "val": "Прізвище",
+    "english": "Last name:",
+    "page": ""
+  },
+  "text118": {
+    "val": "Пупкін",
+    "english": "Pupkin",
+    "page": ""
+  },
+  "text119": {
+    "val": "Дата народження:",
+    "english": "Date of birth:",
+    "page": ""
+  },
+  "text12": {
+    "val": "Розробка від questalize",
+    "english": "by Innovation Norway",
+    "page": ""
+  },
+  "text120": {
+    "val": "20.04.1972 р",
+    "english": "20.04.1972",
+    "page": ""
+  },
+  "text121": {
+    "val": "Місце народження:",
+    "english": "Place of birth:",
+    "page": ""
+  },
+  "text122": {
+    "val": "Москва, Росія",
+    "english": "Moscow, Russia",
+    "page": ""
+  },
+  "text123": {
+    "val": "Мобільний номер:",
+    "english": "Mobile number:",
+    "page": ""
+  },
+  "text124": {
+    "val": "+7 940 544 21 337",
+    "english": "+7 940 544 21 337",
+    "page": ""
+  },
+  "text125": {
+    "val": "Номер паспорта:",
+    "english": "Passport No.:",
+    "page": ""
+  },
+  "text126": {
+    "val": "3467831",
+    "english": "3467831",
+    "page": ""
+  },
+  "text127": {
+    "val": "Місце роботи:",
+    "english": "Work place:",
+    "page": ""
+  },
+  "text128": {
+    "val": "Безробітний",
+    "english": "Unemployed",
+    "page": ""
+  },
+  "text129": {
+    "val": "Кримінальні справи:",
+    "english": "Criminal cases:",
+    "page": ""
+  },
+  "text13": {
+    "val": "Перший онлайн квест в Украіні",
+    "english": "1st DIGITAL GAME IN NORWAY",
+    "page": ""
+  },
+  "text130": {
+    "val": "2000 – Озброєне пограбування",
+    "english": "2000 – Armed robbery",
+    "page": ""
+  },
+  "text131": {
+    "val": "2008 – Напад із тяжкими тілесними ушкодженнями",
+    "english": "2008 – Assault causing serious injury",
+    "page": ""
+  },
+  "text132": {
+    "val": "Аксель Род",
+    "english": "Axel Rod",
+    "page": ""
+  },
+  "text133": {
+    "val": "Аксель",
+    "english": "Axel",
+    "page": ""
+  },
+  "text134": {
+    "val": "Род",
+    "english": "Rod",
+    "page": ""
+  },
+  "text135": {
+    "val": "06.12.1978",
+    "english": "06.12.1978",
+    "page": ""
+  },
+  "text136": {
+    "val": "Посада:",
+    "english": "Position:",
+    "page": ""
+  },
+  "text137": {
+    "val": "Генеральний директор",
+    "english": "CEO",
+    "page": ""
+  },
+  "text138": {
+    "val": "Місце роботи:",
+    "english": "Work place:",
+    "page": ""
+  },
+  "text139": {
+    "val": "Green Pace Group",
+    "english": "Green Pace Group",
+    "page": ""
+  },
+  "text14": {
+    "val": "розроблено місцевою командою",
+    "english": "developed by a local team",
+    "page": ""
+  },
+  "text140": {
+    "val": "Пошук перехоплених дзвінків і повідомлень:",
+    "english": "Search for captured mobile calls and messages:",
+    "page": ""
+  },
+  "text141": {
+    "val": "Код країни",
+    "english": "Country code",
+    "page": ""
+  },
+  "text142": {
+    "val": "Номер",
+    "english": "Number",
+    "page": ""
+  },
+  "text143": {
+    "val": "ДАНІ ВІДСУТНІ",
+    "english": "NO DATA FOUND",
+    "page": ""
+  },
+  "text144": {
+    "val": "Глобальне розвідувальне агентство не перехопило жодних підозрілих дзвінків або повідомлень для цього номера.",
+    "english": "Global Intelligence Agency have not intercepted any suspicious calls or messages for this mobile number.",
+    "page": ""
+  },
+  "text145": {
+    "val": "ПЕРЕХОПЛЕНІ ПОВІДОМЛЕННЯ",
+    "english": "INTERCEPTED MESSAGES",
+    "page": ""
+  },
+  "text146": {
+    "val": "Глобальне розвідувальне агентство перехопило такі підозрілі повідомлення для вказаного номера.",
+    "english": "Global Intelligence Agency have intercepted the following suspicious messages for the given mobile number.",
+    "page": ""
+  },
+  "text147": {
+    "val": "Привіт, це я",
+    "english": "Hi, this is me",
+    "page": ""
+  },
+  "text148": {
+    "val": "Пишу з безпечного номера. Зі справою все гаразд?",
+    "english": "Writing to you from a safe number. Is everything fine with the case?",
+    "page": ""
+  },
+  "text149": {
+    "val": "Привіт. Так, навіть більше ніж добре! Більше шуму не буде",
+    "english": "Hi. Oh yes, more than fine! There will be no more noise",
+    "page": ""
+  },
+  "text15": {
+    "val": "система управління",
+    "english": "control-system",
+    "page": ""
+  },
+  "text150": {
+    "val": "Чудово!",
+    "english": "Brilliant!",
+    "page": ""
+  },
+  "text151": {
+    "val": "Давай перевіримо нашу систему кодування! Відповідай зашифрованим повідомленням. Де ти зараз?",
+    "english": "Let’s test our coding system! Reply to me with a coded message. Where are you now?",
+    "page": ""
+  },
+  "text152": {
+    "val": "UIF VSBM NPVOUBJOT",
+    "english": "UIF VSBM NPVOUBJOT",
+    "page": ""
+  },
+  "text153": {
+    "val": "Ідеально! Ось пароль для нових наказів: FDPUSBOTGFS",
+    "english": "Perfect! Here is the password for new orders: FDPUSBOTGFS",
+    "page": ""
+  },
+  "text154": {
+    "val": "Зрозумів",
+    "english": "Got it",
+    "page": ""
+  },
+  "text155": {
+    "val": "Привіт. Надсилаю посилання на нове завдання",
+    "english": "Hi. Sending a link to a new order",
+    "page": ""
+  },
+  "text156": {
+    "val": "Я буду писати сайти ось так: moc.elgoog",
+    "english": "I will write websites in this way: moc.elgoog",
+    "page": ""
+  },
+  "text157": {
+    "val": "Ось посилання:",
+    "english": "Here is the link:",
+    "page": ""
+  },
+  "text158": {
+    "val": "lmth.tnemucod/moc.ezilatseuq.kcab",
+    "english": "lmth.tnemucod/moc.ezilatseuq.kcab",
+    "page": ""
+  },
+  "text159": {
+    "val": "Я виправлю це",
+    "english": "I’ll fix it",
+    "page": ""
+  },
+  "text16": {
+    "val": "вихід",
+    "english": "exit",
+    "page": ""
+  },
+  "text160": {
+    "val": "Великий Бос",
+    "english": "Big Boss",
+    "page": ""
+  },
+  "text161": {
+    "val": "НЕ ЗНАЙДЕНО",
+    "english": "NO MATCH",
+    "page": ""
+  },
+  "text162": {
+    "val": "Штучний інтелект iNerd не виявив зв’язку компанії з нелегальним сміттєзвалищем в Уральських горах. Перевірте правильність назви компанії або спробуйте іншого підозрюваного.",
+    "english": "The artificial mind iNerd found no connection of the company to the illegal waste dump in the Ural Mountains. Doublecheck that you wrote the company’s name correctly or try to find another suspect.",
+    "page": ""
+  },
+  "text163": {
+    "val": "ПІДОЗРУ ПІДТВЕРДЖЕНО",
+    "english": "CONFIRMED SUSPICION",
+    "page": ""
+  },
+  "text164": {
+    "val": "Штучний інтелект iNerd підтвердив зв’язок компанії з нелегальним сміттєзвалищем в Уральських горах. Підключіть агента для продовження розслідування.",
+    "english": "The artificial mind iNerd has confirmed that the company is connected to the illegal waste dump in the Ural Mountains. Please, connect the agent to continue investigation.",
+    "page": ""
+  },
+  "text165": {
+    "val": "ПІДКЛЮЧИТИ АГЕНТА",
+    "english": "CONNECT THE AGENT",
+    "page": ""
+  },
+  "text166": {
+    "val": "Ви впевнені, що хочете вийти з гри?",
+    "english": "Are you sure you want to leave the game?",
+    "page": ""
+  },
+  "text167": {
+    "val": "НІ",
+    "english": "NO",
+    "page": ""
+  },
+  "text168": {
+    "val": "ТАК",
+    "english": "YES",
+    "page": ""
+  },
+  "text169": {
+    "val": "Дзвонить Джейн",
+    "english": "Jane calling",
+    "page": ""
+  },
+  "text17": {
+    "val": "Вихід",
+    "english": "Exit",
+    "page": ""
+  },
+  "text170": {
+    "val": "Особисті \r\nфайли",
+    "english": "Personal \r\nfiles",
+    "page": ""
+  },
+  "text171": {
+    "val": "автомобіль \r\nзареєструватися",
+    "english": "Car \r\nregister",
+    "page": ""
+  },
+  "text172": {
+    "val": "Ця сторінка зараз недоступна. Будь ласка, продовжуйте місію, використовуючи доступні файли та бази даних.",
+    "english": "This page is not available right now. \r\nPlease, continue with the mission using available files and databases.",
+    "page": ""
+  },
+  "text173": {
+    "val": "Передача даних",
+    "english": "Data transfer",
+    "page": ""
+  },
+  "text174": {
+    "val": "Оброблено",
+    "english": "Processed",
+    "page": ""
+  },
+  "text175": {
+    "val": "Агент Елісон Флойд",
+    "english": "Agent Jane",
+    "page": ""
+  },
+  "text176": {
+    "val": "Гео координати",
+    "english": "Geo coordinates",
+    "page": ""
+  },
+  "text177": {
+    "val": "Введіть GPS-координати іншого можливого місця незаконного сміттєзвалища.",
+    "english": "Enter the GPS coordinates of another possible illegal waste dump location.",
+    "page": ""
+  },
+  "text178": {
+    "val": "Широта",
+    "english": "Latitude",
+    "page": ""
+  },
+  "text179": {
+    "val": "Н",
+    "english": "N",
+    "page": ""
+  },
+  "text18": {
+    "val": "Мова",
+    "english": "Language",
+    "page": ""
+  },
+  "text180": {
+    "val": "С",
+    "english": "S",
+    "page": ""
+  },
+  "text181": {
+    "val": "Довгота",
+    "english": "Longitude",
+    "page": ""
+  },
+  "text182": {
+    "val": "E",
+    "english": "E",
+    "page": ""
+  },
+  "text183": {
+    "val": "В",
+    "english": "W",
+    "page": ""
+  },
+  "text184": {
+    "val": "Введіть",
+    "english": "Enter",
+    "page": ""
+  },
+  "text185": {
+    "val": "ADVANCED SEARCH \r\nДВИГУН",
+    "english": "ADVANCED SEARCH \r\nENGINE",
+    "page": ""
+  },
+  "text186": {
+    "val": "GPS \r\nКООРДИНАТИ",
+    "english": "GPS \r\nCOORDINATES",
+    "page": ""
+  },
+  "text187": {
+    "val": "СИМВОЛ \r\nДЕКОДЕР",
+    "english": "SYMBOL \r\nDECODER",
+    "page": ""
+  },
+  "text188": {
+    "val": "3D БУДІВЛЯ \r\nСКАНУВАТИ",
+    "english": "3D BUILDING \r\nSCAN",
+    "page": ""
+  },
+  "text189": {
+    "val": "Цей інструмент зараз недоступний. \r\nБудь ласка, продовжуйте місію, використовуючи інші доступні файли та інструменти.",
+    "english": "This tool is not available right now. \r\nPlease, continue with the mission using other available files and tools.",
+    "page": ""
+  },
+  "text19": {
+    "val": "час",
+    "english": "Time",
+    "page": ""
+  },
+  "text190": {
+    "val": "Обов'язкові поля",
+    "english": "Required fields",
+    "page": ""
+  },
+  "text191": {
+    "val": "ПОМИЛКА",
+    "english": "ERROR",
+    "page": ""
+  },
+  "text192": {
+    "val": "Штучний розум iNerd не виявив критичного рівня забруднення у вказаному місці. \r\nБудь ласка, подайте на експертизу інше місце.",
+    "english": "The artificial mind iNerd has not detected critical pollution levels at the specified location. \r\nPlease, submit a different location for examination.",
+    "page": ""
+  },
+  "text193": {
+    "val": "Критичний рівень забруднення",
+    "english": "Critical Pollution Level",
+    "page": ""
+  },
+  "text194": {
+    "val": "забруднення",
+    "english": "Pollution",
+    "page": ""
+  },
+  "text195": {
+    "val": "Статус забруднення",
+    "english": "Pollution status",
+    "page": ""
+  },
+  "text196": {
+    "val": "Штучний розум iNerd виявив критичний рівень забруднення у вказаному вами місці. Підключіть агента, щоб продовжити дослідження.",
+    "english": "The artificial mind iNerd detected a critical level of pollution at the location you have specified. Please, connect the agent to continue investigation.",
+    "page": ""
+  },
+  "text197": {
+    "val": "африканський партнер",
+    "english": "African partner",
+    "page": ""
+  },
+  "text198": {
+    "val": "Вкажіть партнера Green Pace Group в Африці.",
+    "english": "Specify the Green Pace Group’s partner in Africa.",
+    "page": ""
+  },
+  "text199": {
+    "val": "Назва компанії",
+    "english": "Company name",
+    "page": ""
+  },
+  "text2": {
+    "val": "ЦИФРОВА ГРА",
+    "english": "DIGITAL GAME",
+    "page": ""
+  },
+  "text20": {
+    "val": "iNerd",
+    "english": "iNerd",
+    "page": ""
+  },
+  "text200": {
+    "val": "Країна реєстрації",
+    "english": "Country of registration",
+    "page": ""
+  },
+  "text201": {
+    "val": "Дата заснування",
+    "english": "Founding date",
+    "page": ""
+  },
+  "text202": {
+    "val": "Штучний розум iNerd не підтвердив компанію як партнера Green Pace Group в Африці. Просимо продовжити розслідування та висунути іншу підозру.",
+    "english": "The artificial mind iNerd has not confirmed the company as the Green Pace Group’s partner in Africa. Please, continue the investigation and submit a different suspect.",
+    "page": ""
+  },
+  "text203": {
+    "val": "ПІДТВЕРДЖЕНИЙ ПАРТНЕР",
+    "english": "CONFIRMED PARTNER",
+    "page": ""
+  },
+  "text204": {
+    "val": "Штучний розум iNerd підтвердив компанію як партнера Green Pace Group в Африці. Підключіть агента, щоб продовжити дослідження.",
+    "english": "The artificial mind iNerd has confirmed the company as the Green Pace Group’s partner in Africa. Please, connect the agent to continue investigation.",
+    "page": ""
+  },
+  "text205": {
+    "val": "Місце зустрічі",
+    "english": "Meeting place",
+    "page": ""
+  },
+  "text206": {
+    "val": "Вкажіть адресу майбутньої зустрічі Акселя Рода.",
+    "english": "Provide the address of Axel Rod’s upcoming meeting.",
+    "page": ""
+  },
+  "text207": {
+    "val": "Назва вулиці",
+    "english": "Street name",
+    "page": ""
+  },
+  "text208": {
+    "val": "Місто",
+    "english": "City",
+    "page": ""
+  },
+  "text209": {
+    "val": "БАНКІВСЬКІ ОПЕРАЦІЇ",
+    "english": "BANK TRANSACTIONS",
+    "page": ""
+  },
+  "text21": {
+    "val": "Підказки",
+    "english": "Hints",
+    "page": ""
+  },
+  "text210": {
+    "val": "Глобальне розвідувальне агентство може відстежити останні банківські операції за платіжною карткою на основі таких даних:",
+    "english": "Global Intelligence Agency can trace recent bank transactions for a payment card based on the following data:",
+    "page": ""
+  },
+  "text211": {
+    "val": "Останні чотири цифри картки",
+    "english": "Last four digits of the card",
+    "page": ""
+  },
+  "text212": {
+    "val": "Сума транзакції",
+    "english": "Transaction amount",
+    "page": ""
+  },
+  "text213": {
+    "val": "Дата транзакції",
+    "english": "Transaction date",
+    "page": ""
+  },
+  "text214": {
+    "val": "Наші бази даних не змогли зіставити транзакцію з платіжною карткою.\r\nЩе раз перевірте, чи правильно введено дані, або спробуйте інший запит.",
+    "english": "Our databases have not managed to match the transaction to a payment card.\r\nDoublecheck that the data is entered correctly or try a different request.",
+    "page": ""
+  },
+  "text215": {
+    "val": "Останні банківські операції за карткою Visa *5684:",
+    "english": "Recent bank transactions for the card Visa *5684:",
+    "page": ""
+  },
+  "text216": {
+    "val": "Дата:",
+    "english": "Date:",
+    "page": ""
+  },
+  "text217": {
+    "val": "опис",
+    "english": "Description",
+    "page": ""
+  },
+  "text218": {
+    "val": "Гроші вийшли",
+    "english": "Money out",
+    "page": ""
+  },
+  "text219": {
+    "val": "Гроші в",
+    "english": "Money in",
+    "page": ""
+  },
+  "text22": {
+    "val": "Назад",
+    "english": "Back",
+    "page": ""
+  },
+  "text220": {
+    "val": "Кафе \"NaMomente\" 12:05",
+    "english": "Cafe \"NaMomente\" 12:05",
+    "page": ""
+  },
+  "text221": {
+    "val": "Внутрішній трансфер 4212324 Карі Нільсен",
+    "english": "Domestic transfer 4212324 Kari Nilsen",
+    "page": ""
+  },
+  "text222": {
+    "val": "Купівля Гранд Готель \"Європейський\" до 11:32",
+    "english": "Purchase Grand Hotel \"European\" by scandic 11:32",
+    "page": ""
+  },
+  "text223": {
+    "val": "Простор Сервіс Дніпро 11:02",
+    "english": "Prostor Service Dnipro 11:02",
+    "page": ""
+  },
+  "text224": {
+    "val": "Придбати Bolto Taxi 10:28",
+    "english": "Purchase Bolto Taxi 10:28",
+    "page": ""
+  },
+  "text225": {
+    "val": "Закупівля Сільпо на проспекті Поляків 10:19",
+    "english": "Purchase Silpo on Pole Avenue 10:19",
+    "page": ""
+  },
+  "text226": {
+    "val": "ТЦ NEO PLAZA Дніпро 8:26",
+    "english": "Shopping center NEO PLAZA Dnipro 8:26",
+    "page": ""
+  },
+  "text227": {
+    "val": "Дешифратор символів",
+    "english": "Symbol decoder",
+    "page": ""
+  },
+  "text228": {
+    "val": "Щоб використовувати декодер символів:",
+    "english": "In order to use the symbol decoder:",
+    "page": ""
+  },
+  "text229": {
+    "val": "Перейдіть на секретний сайт: \r\nwww.scanme.top",
+    "english": "Go to the secret website: \r\nwww.scanme.top",
+    "page": ""
+  },
+  "text23": {
+    "val": "Ваші бали",
+    "english": "Your points",
+    "page": ""
+  },
+  "text230": {
+    "val": "Відкрийте веб-сайт на своєму телефоні та відскануйте символ, який ви хочете розшифрувати.",
+    "english": "Open the website on your phone and scan the symbol you would like to decode.",
+    "page": ""
+  },
+  "text231": {
+    "val": "Штучний розум iNerd не знайшов жодної зустрічі Акселя Рода за запропонованою адресою. Перевірте, чи правильно ви ввели адресу, або введіть інше місце.",
+    "english": "The artificial mind iNerd has not found any meeting of Axel Rod at the suggested address. Please, check that you entered the address correctly or enter a different location.",
+    "page": ""
+  },
+  "text232": {
+    "val": "ПІДТВЕРДЖЕНА ЗУСТРІЧ",
+    "english": "CONFIRMED MEETING",
+    "page": ""
+  },
+  "text233": {
+    "val": "Штучний інтелект iNerd виявив ознаки зустрічі Акселя Рода у вказаному місці. Надсилання агентів на захоплення",
+    "english": "The iNerd's artificial intelligence has detected signs of an Axel Rod meeting at the specified location. Sending agents to capture",
+    "page": ""
+  },
+  "text234": {
+    "val": "НАДІСЛАТИ АГЕНТА",
+    "english": "SEND THE AGENT",
+    "page": ""
+  },
+  "text235": {
+    "val": "Назва кімнати",
+    "english": "Room name",
+    "page": ""
+  },
+  "text236": {
+    "val": "Вкажіть назву приміщення, де знаходиться центральний комп’ютер. Використовуйте 3D сканування.",
+    "english": "Specify the name of the room where the central computer is located. Use 3D scan.",
+    "page": ""
+  },
+  "text237": {
+    "val": "Назва кімнати з центральним комп'ютером:",
+    "english": "Name of the room with the central computer:",
+    "page": ""
+  },
+  "text238": {
+    "val": "3D сканування будівлі",
+    "english": "3D building scan",
+    "page": ""
+  },
+  "text239": {
+    "val": "Глобальне розвідувальне агентство проводить таємне сканування будівель за допомогою вдосконаленого дрона. \r\nДля запиту сканування введіть параметри сканування:",
+    "english": "Global Intelligence Agency performs secret building scans with help of an advanced drone. \r\nTo request a scan, please, enter the scan parameters:",
+    "page": ""
+  },
+  "text24": {
+    "val": "Ваша підказка",
+    "english": "Your hint",
+    "page": ""
+  },
+  "text240": {
+    "val": "Виберіть значення",
+    "english": "Select value",
+    "page": ""
+  },
+  "text241": {
+    "val": "Поточне значення",
+    "english": "Current value",
+    "page": ""
+  },
+  "text242": {
+    "val": "Розмір адреси N",
+    "english": "Address dimension N",
+    "page": ""
+  },
+  "text243": {
+    "val": "Розмір адреси S",
+    "english": "Address dimension S",
+    "page": ""
+  },
+  "text244": {
+    "val": "Розмір адреси E",
+    "english": "Address dimension E",
+    "page": ""
+  },
+  "text245": {
+    "val": "Розмір адреси W",
+    "english": "Address dimension W",
+    "page": ""
+  },
+  "text246": {
+    "val": "СКАНУВАТИ",
+    "english": "SCAN",
+    "page": ""
+  },
+  "text247": {
+    "val": "Неможливо виконати 3D-сканування дроном із вказаними вами параметрами. Будь ласка, змініть параметри та повторіть спробу.",
+    "english": "It is not possible to perform 3D scan with a drone with the parameters you provided. Please, change the parameters and try again.",
+    "page": ""
+  },
+  "text248": {
+    "val": "Сканування",
+    "english": "Scanning",
+    "page": ""
+  },
+  "text249": {
+    "val": "Секретний офіс Green Pace Group",
+    "english": "Green Pace Group’s secret office",
+    "page": ""
+  },
+  "text25": {
+    "val": "Ваша підказка буде показана тут. Виберіть підказку у вікні праворуч.",
+    "english": "Your hint will be shown here. Choose a hint in the window to the right.",
+    "page": ""
+  },
+  "text250": {
+    "val": "Агент Джейн не знайшла центрального комп'ютера в даній кімнаті. Будь ласка, відкрийте 3D скан офісу та знайдіть правильну назву приміщення.",
+    "english": "Agent Jane did not find central computer in the given room. Please, open the 3D scan of the office and find the correct room name.",
+    "page": ""
+  },
+  "text251": {
+    "val": "АГЕНТ ДЖЕЙН БЛОНД В ОФІСІ",
+    "english": "AGENT JANE BLOND IN THE OFFICE",
+    "page": ""
+  },
+  "text252": {
+    "val": "Агент Джейн Блонд на місці. Покажіть їй дорогу до кімнати з центральним комп'ютером. Слідкуйте, щоб її не помітили охоронці чи офісні працівники.",
+    "english": "Agent Jane Blond is at the location. Show her the way to the room with the central computer. Make sure she does not get spotted by the guards or office workers.",
+    "page": ""
+  },
+  "text253": {
+    "val": "Символи",
+    "english": "Symbols",
+    "page": ""
+  },
+  "text254": {
+    "val": "Джейн Блонд",
+    "english": "Jane Blond",
+    "page": ""
+  },
+  "text255": {
+    "val": "Охоронці",
+    "english": "Guards",
+    "page": ""
+  },
+  "text256": {
+    "val": "Офісні працівники",
+    "english": "Office workers",
+    "page": ""
+  },
+  "text257": {
+    "val": "Агент Джейн Блонд на місці. Покажіть їй дорогу до кімнати з центральним комп'ютером. Слідкуйте, щоб її не помітили охоронці чи офісні працівники.",
+    "english": "Agent Jane Blond is at the location. Show her the way to the room with the central computer. Make sure she does not get spotted by the guards or office workers.",
+    "page": ""
+  },
+  "text258": {
+    "val": "Несподівана помилка. Не вдалося завантажити міні-гру.",
+    "english": "Unexpected error. Failed to load mini-game.",
+    "page": ""
+  },
+  "text259": {
+    "val": "ТРИВОГА",
+    "english": "ALARM",
+    "page": ""
+  },
+  "text26": {
+    "val": "ПОТРІБНА ПІДКАЗКА",
+    "english": "NEED A HINT",
+    "page": ""
+  },
+  "text260": {
+    "val": "Агента Джейн Блонд схопили",
+    "english": "Agent Jane Blond has been captured",
+    "page": ""
+  },
+  "text261": {
+    "val": "Агент надіслав вам екстрене повідомлення:",
+    "english": "The agent sent you a SOS message:",
+    "page": ""
+  },
+  "text262": {
+    "val": "Мені потрібна допомога Інтерполу! Розблокуйте жорсткий диск, зберіть докази проти Акселя Рода та надішліть їх до Інтерполу. Поспішайте, я маю небагато часу!",
+    "english": "I need help from Interpol! Unlock the hard drive, gather evidence against Axel Rod and send it to Interpol. Hurry up, I do not have much time!",
+    "page": ""
+  },
+  "text263": {
+    "val": "Пароль",
+    "english": "Password",
+    "page": ""
+  },
+  "text264": {
+    "val": "Критичне завдання",
+    "english": "Critical task",
+    "page": ""
+  },
+  "text265": {
+    "val": "Агент Джейн Блонд передала вам жорсткий диск. Введіть пароль, щоб отримати доступ до файлів доказів і зупинити Green Pace Group.",
+    "english": "Agent Jane Blond has transferred you a hard drive. Enter the password to access evidence files and stop Green Pace Group.",
+    "page": ""
+  },
+  "text266": {
+    "val": "ОРДЕР",
+    "english": "WARRANT",
+    "page": ""
+  },
+  "text267": {
+    "val": "ВАШ ОРДЕР ГОТОВИЙ",
+    "english": "YOUR WARRANT IS READY",
+    "page": ""
+  },
+  "text268": {
+    "val": "Зараз штучний розум iNerd зібрав докази проти Green Pace Group та її генерального директора Акселя Рода. Ордер готовий до відправлення в Інтерпол. Будь ласка, підтвердьте дію.",
+    "english": "The artificial mind iNerd has now compiled the evidence against Green Pace Group and its CEO Axel Rod. The warrant is ready to be sent to Interpol. Please, confirm the action.",
+    "page": ""
+  },
+  "text269": {
+    "val": "Заява про арешт",
+    "english": "Arrest statement",
+    "page": ""
+  },
+  "text27": {
+    "val": "Якщо ви не впевнені, з чого почати, ви можете скористатися підказкою зараз. Ви не втратите бали за цю підказку. Клацніть підказку, яку ви бажаєте використати.",
+    "english": "If you are unsure where to start, you can use a hint now. You will not lose points for this hint. Click on the hint you would like to use.",
+    "page": ""
+  },
+  "text270": {
+    "val": "GIA склало справу про негайний арешт Акселя Рода та закриття Green Pace Group. Матеріали справи додаються.\r\n\r\nЗвинувачення: незаконне сміттєзвалище, шахрайство, напад.",
+    "english": "GIA has compiled a case for an immediate arrest of Axel Rod and closedown of Green Pace Group. Case materials are attached.\r\n\r\nCharges: illegal waste dump, fraud, assault.",
+    "page": ""
+  },
+  "text271": {
+    "val": "Дата",
+    "english": "Date",
+    "page": ""
+  },
+  "text272": {
+    "val": "Підписано",
+    "english": "Signed",
+    "page": ""
+  },
+  "text273": {
+    "val": "НАДІСЛАТИ В ІНТЕРПОЛ",
+    "english": "SEND TO INTERPOL",
+    "page": ""
+  },
+  "text274": {
+    "val": "НЕПРАВИЛЬНИЙ ПАРОЛЬ",
+    "english": "WRONG PASSWORD",
+    "page": ""
+  },
+  "text275": {
+    "val": "Введений пароль неправильний.",
+    "english": "The password you entered is wrong.",
+    "page": ""
+  },
+  "text276": {
+    "val": "СПРОБУЙТЕ ТАКОЖ",
+    "english": "TRY ALSO",
+    "page": ""
+  },
+  "text277": {
+    "val": "https://www.escapegames.no/en/",
+    "english": "https://www.escapegames.no/en/",
+    "page": ""
+  },
+  "text278": {
+    "val": "https://www.vrgames.no/en/",
+    "english": "https://www.vrgames.no/en/",
+    "page": ""
+  },
+  "text279": {
+    "val": "МІСІЯ",
+    "english": "MISSION",
+    "page": ""
+  },
+  "text28": {
+    "val": "Підказка",
+    "english": "Hint",
+    "page": ""
+  },
+  "text280": {
+    "val": "ЗАВЕРШЕНО",
+    "english": "COMPLETED",
+    "page": ""
+  },
+  "text281": {
+    "val": "Фантастична робота, агенти! Місія успішно виконана!\nGreen Pace Group було закрито.",
+    "english": "Fantastic job, agents! The mission is successfully accomplished!\nGreen Pace Group have been closed down.",
+    "page": ""
+  },
+  "text282": {
+    "val": "Ваш рахунок",
+    "english": "Your score",
+    "page": ""
+  },
+  "text283": {
+    "val": "Ваш час",
+    "english": "Your time",
+    "page": ""
+  },
+  "text284": {
+    "val": "ПЕРЕГЛЯНУТИ РЕЗУЛЬТАТИ ІНШИХ КОМАНД",
+    "english": "VIEW OTHER TEAMS’ SCORE",
+    "page": ""
+  },
+  "text285": {
+    "val": "Замовте квест у нас",
+    "english": "Book a quest with us",
+    "page": ""
+  },
+  "text286": {
+    "val": "ПАРТНЕРИ",
+    "english": "PARTNERS",
+    "page": ""
+  },
+  "text287": {
+    "val": "Сьогоднішні результати",
+    "english": "Today’s Results ",
+    "page": ""
+  },
+  "text288": {
+    "val": "Рекорди за весь час",
+    "english": "All-time Records",
+    "page": ""
+  },
+  "text289": {
+    "val": "Команда",
+    "english": "Team",
+    "page": ""
+  },
+  "text29": {
+    "val": "Несподівана помилка",
+    "english": "Unexpected error",
+    "page": ""
+  },
+  "text290": {
+    "val": "ранг",
+    "english": "Rank",
+    "page": ""
+  },
+  "text291": {
+    "val": "Статус",
+    "english": "Status",
+    "page": ""
+  },
+  "text292": {
+    "val": "час",
+    "english": "Time",
+    "page": ""
+  },
+  "text293": {
+    "val": "Підказки",
+    "english": "Hints",
+    "page": ""
+  },
+  "text294": {
+    "val": "Оцінка",
+    "english": "Score",
+    "page": ""
+  },
+  "text295": {
+    "val": "повний",
+    "english": "complete",
+    "page": ""
+  },
+  "text296": {
+    "val": "Результатів не знайдено",
+    "english": "No results found",
+    "page": ""
+  },
+  "text297": {
+    "val": "/результати",
+    "english": "/results",
+    "page": ""
+  },
+  "text298": {
+    "val": "Агент Джейн недоступний",
+    "english": "Agent Jane is not available",
+    "page": ""
+  },
+  "text299": {
+    "val": "УВАГА",
+    "english": "WARNING",
+    "page": ""
+  },
+  "text3": {
+    "val": "ЕКО МІСІЯ:",
+    "english": "ECO MISSION:",
+    "page": ""
+  },
+  "text30": {
+    "val": "Відповідь",
+    "english": "Answer",
+    "page": ""
+  },
+  "text300": {
+    "val": "Агента Джейн ледь не спіймали. Будьте обережнішими.",
+    "english": "Agent Jane has almost got caught. Be more careful.",
+    "page": ""
+  },
+  "text301": {
+    "val": "Готово",
+    "english": "Finished",
+    "page": ""
+  },
+  "text302": {
+    "val": "Таймер запускається після того, як ви прийняли нову місію.",
+    "english": "Timer starts after you have accepted a new mission.",
+    "page": ""
+  },
+  "text303": {
+    "val": "МІСІЯ ПОЧАТОК",
+    "english": "MISSION START",
+    "page": ""
+  },
+  "text304": {
+    "val": "https://skuespillerkatalogen.no/artist/andrea-telle-1769.html?share_key=44625ad606d4075e691244a58c795b02",
+    "english": "https://skuespillerkatalogen.no/artist/andrea-telle-1769.html?share_key=44625ad606d4075e691244a58c795b02",
+    "page": ""
+  },
+  "text305": {
+    "val": "Відео закрито іншим гравцем. Бажаєте переглянути повне відео в новій вкладці?",
+    "english": "Video was closed by another player. Would you like to watch the full video in a new tab?",
+    "page": ""
+  },
+  "text306": {
+    "val": "Критичне завдання:",
+    "english": "Critical task:",
+    "page": ""
+  },
+  "text307": {
+    "val": "Агент Джейн Блонд перенесла жорсткий диск на приладову панель. Пошукайте місце, щоб знайти пароль і отримати доступ до доказів проти Green Pace Group.",
+    "english": "Agent Jane Blond has transferred a hard drive to the Dashboard. Search the location to find the password and access evidence against Green Pace Group.",
+    "page": ""
+  },
+  "text308": {
+    "val": "Телефонуйте на мобільний",
+    "english": "Call mobile",
+    "page": ""
+  },
+  "text309": {
+    "val": "ДО ВАШОЇ ІНФОРМАЦІЇ",
+    "english": "FOR YOUR INFORMATION",
+    "page": ""
+  },
+  "text31": {
+    "val": "Завантаження",
+    "english": "Loading",
+    "page": ""
+  },
+  "text310": {
+    "val": "Тепер ви можете телефонувати на місцеві та міжнародні номери зі свого мобільного телефону, коли цього потребує подальше дослідження.",
+    "english": "You can now call local and international numbers from your mobile phone when further investigation requires it.",
+    "page": ""
+  },
+  "text32": {
+    "val": "Сьогодні",
+    "english": "Today",
+    "page": ""
+  },
+  "text33": {
+    "val": "вчора",
+    "english": "Yesterday",
+    "page": ""
+  },
+  "text34": {
+    "val": "Введіть текст тут…",
+    "english": "Type your text here…",
+    "page": ""
+  },
+  "text35": {
+    "val": "Штучний розум iNerd зараз недоступний для спілкування. Будь ласка, зв'яжіться пізніше.",
+    "english": "The artificial mind iNerd is not available for chat right now. Please, take contact later.",
+    "page": ""
+  },
+  "text36": {
+    "val": "ПРИЙМІТЬ НОВУ МІСІЮ",
+    "english": "ACCEPT A NEW MISSION",
+    "page": ""
+  },
+  "text37": {
+    "val": "ПРИЙНЯТИ",
+    "english": "ACCEPT",
+    "page": ""
+  },
+  "text38": {
+    "val": "Введіть кодову назву місії",
+    "english": "Enter mission code name",
+    "page": ""
+  },
+  "text39": {
+    "val": "НЕДОСТАТНЬО ПРАВ",
+    "english": "NO ACCESS",
+    "page": ""
+  },
+  "text4": {
+    "val": "GEM",
+    "english": "GEM",
+    "page": ""
+  },
+  "text40": {
+    "val": "Ця сторінка зараз недоступна.\r\nБудь ласка, прийміть нову місію, щоб отримати авторизований доступ.",
+    "english": "This page is not available right now.\r\nPlease, accept a new mission to get authorized access.",
+    "page": ""
+  },
+  "text41": {
+    "val": "Ви ввели неправильну кодову назву місії.",
+    "english": "The mission code name you entered is wrong.",
+    "page": ""
+  },
+  "text42": {
+    "val": "Вхідний дзвінок",
+    "english": "Incoming call",
+    "page": ""
+  },
+  "text43": {
+    "val": "відхилити",
+    "english": "Decline",
+    "page": ""
+  },
+  "text44": {
+    "val": "ВИБЕРІТЬ ПІДКАЗКУ",
+    "english": "CHOOSE A HINT",
+    "page": ""
+  },
+  "text45": {
+    "val": "За кожну використану підказку ви отримуватимете бали. Вартість підказки вказана червоним кольором. Клацніть підказку, яку ви бажаєте використати.",
+    "english": "You will get subtracted points for each hint you use. Hint cost is shown in red. Click on the hint you would like to use.",
+    "page": ""
+  },
+  "text46": {
+    "val": "Назва місії",
+    "english": "Mission name",
+    "page": ""
+  },
+  "text47": {
+    "val": "G.E.M.",
+    "english": "G.E.M.",
+    "page": ""
+  },
+  "text48": {
+    "val": "Підозрювана компанія",
+    "english": "Suspected company",
+    "page": ""
+  },
+  "text49": {
+    "val": "Поточне завдання:",
+    "english": "Current task:",
+    "page": ""
+  },
+  "text5": {
+    "val": "На основі правдивих фактів",
+    "english": "Based on true facts",
+    "page": ""
+  },
+  "text50": {
+    "val": "Використовуйте доступні файли та бази даних, щоб знайти компанію, пов'язану з незаконним звалищем відходів в Уральських горах.",
+    "english": "Use available files and databases to find a company connected to the illegal waste dump in the Ural Mountains.",
+    "page": ""
+  },
+  "text51": {
+    "val": "Компанія",
+    "english": "Company",
+    "page": ""
+  },
+  "text52": {
+    "val": "ДОСЛІДЖУЙТЕ",
+    "english": "INVESTIGATE",
+    "page": ""
+  },
+  "text53": {
+    "val": "Ім'я",
+    "english": "Name",
+    "page": ""
+  },
+  "text54": {
+    "val": "Час дзвінка",
+    "english": "Calling time",
+    "page": ""
+  },
+  "text55": {
+    "val": "Послухайте ще раз",
+    "english": "Listen again",
+    "page": ""
+  },
+  "text56": {
+    "val": "Подзвони Джейн",
+    "english": "Call Jane",
+    "page": ""
+  },
+  "text57": {
+    "val": "Особисті файли",
+    "english": "Personal \r\nfiles",
+    "page": ""
+  },
+  "text58": {
+    "val": "Реєстрація автомобіля",
+    "english": "Car \r\nregister",
+    "page": ""
+  },
+  "text59": {
+    "val": "Мобільні дзвінки та SMS",
+    "english": "Mobile \r\ncalls & SMS",
+    "page": ""
+  },
+  "text6": {
+    "val": "Висвітлює проблеми глобального забруднення",
+    "english": "Brings to light global pollution issues",
+    "page": ""
+  },
+  "text60": {
+    "val": "Банківські операції",
+    "english": "Bank \r\ntransactions",
+    "page": ""
+  },
+  "text61": {
+    "val": "Зараз ця база даних недоступна.\r\nБудь ласка, продовжуйте місію, використовуючи інші доступні файли та бази даних.",
+    "english": "This database is not available right now.\r\nPlease, continue with the mission using other available files and databases.",
+    "page": ""
+  },
+  "text62": {
+    "val": "Шукайте реєстраційний талон автомобіля за такими даними:",
+    "english": "Search for the car registration card based on the following data:",
+    "page": ""
+  },
+  "text63": {
+    "val": "Номерний знак",
+    "english": "License plate",
+    "page": ""
+  },
+  "text64": {
+    "val": "Країна",
+    "english": "Country",
+    "page": ""
+  },
+  "text65": {
+    "val": "Дата",
+    "english": "Date",
+    "page": ""
+  },
+  "text66": {
+    "val": "ПОШУК",
+    "english": "SEARCH",
+    "page": ""
+  },
+  "text67": {
+    "val": "сонце",
+    "english": "Sun",
+    "page": ""
+  },
+  "text68": {
+    "val": "Пн",
+    "english": "Mon",
+    "page": ""
+  },
+  "text69": {
+    "val": "Вт",
+    "english": "Tue",
+    "page": ""
+  },
+  "text7": {
+    "val": "Надихає на більш зелене майбутнє",
+    "english": "Inspires to a greener future",
+    "page": ""
+  },
+  "text70": {
+    "val": "ср",
+    "english": "Wed",
+    "page": ""
+  },
+  "text71": {
+    "val": "чт",
+    "english": "Thu",
+    "page": ""
+  },
+  "text72": {
+    "val": "пт",
+    "english": "Fri",
+    "page": ""
+  },
+  "text73": {
+    "val": "сб",
+    "english": "Sat",
+    "page": ""
+  },
+  "text74": {
+    "val": "січня",
+    "english": "January",
+    "page": ""
+  },
+  "text75": {
+    "val": "Лютий",
+    "english": "February",
+    "page": ""
+  },
+  "text76": {
+    "val": "березень",
+    "english": "March",
+    "page": ""
+  },
+  "text77": {
+    "val": "квітень",
+    "english": "April",
+    "page": ""
+  },
+  "text78": {
+    "val": "травня",
+    "english": "May",
+    "page": ""
+  },
+  "text79": {
+    "val": "червень",
+    "english": "June",
+    "page": ""
+  },
+  "text8": {
+    "val": "ПРИЄДНУЙТЕСЯ ДО МІСІЇ",
+    "english": "JOIN THE MISSION",
+    "page": ""
+  },
+  "text80": {
+    "val": "липень",
+    "english": "July",
+    "page": ""
+  },
+  "text81": {
+    "val": "Серпень",
+    "english": "August",
+    "page": ""
+  },
+  "text82": {
+    "val": "вересень",
+    "english": "September",
+    "page": ""
+  },
+  "text83": {
+    "val": "жовтень",
+    "english": "October",
+    "page": ""
+  },
+  "text84": {
+    "val": "Листопад",
+    "english": "November",
+    "page": ""
+  },
+  "text85": {
+    "val": "грудень",
+    "english": "December",
+    "page": ""
+  },
+  "text86": {
+    "val": "Обов'язкове поле",
+    "english": "Required field",
+    "page": ""
+  },
+  "text87": {
+    "val": "ПОШУК",
+    "english": "SEARCHING",
+    "page": ""
+  },
+  "text88": {
+    "val": "База даних не містить даних, які відповідають вашому запиту. \r\nЩе раз перевірте, чи правильно введено дані, або спробуйте інший запит.",
+    "english": "The database does not contain any data matching your request. \r\nDoublecheck that the data is entered correctly or try a different request.",
+    "page": ""
+  },
+  "text89": {
+    "val": "Збігів не знайдено",
+    "english": "NO MATCH FOUND",
+    "page": ""
+  },
+  "text9": {
+    "val": "ГРА ВТЕЧА №1 У НОРВЕГІЇ",
+    "english": "#1 ESCAPE GAME IN NORWAY",
+    "page": ""
+  },
+  "text90": {
+    "val": "Mercedes-Benz G 55 AMG",
+    "english": "Mercedes-Benz G 55 AMG",
+    "page": ""
+  },
+  "text91": {
+    "val": "Специфікація",
+    "english": "Specification",
+    "page": ""
+  },
+  "text92": {
+    "val": "Модель:",
+    "english": "Model:",
+    "page": ""
+  },
+  "text93": {
+    "val": "2015 Mercedes-Benz G 55 AMG Compressor",
+    "english": "2015 Mercedes-Benz G 55 AMG Compressor",
+    "page": ""
+  },
+  "text94": {
+    "val": "Ідентифікаційний номер транспортного засобу:",
+    "english": "Vehicle Identification Number:",
+    "page": ""
+  },
+  "text95": {
+    "val": "WDB4632701X164678",
+    "english": "WDB4632701X164678",
+    "page": ""
+  },
+  "text96": {
+    "val": "Реєстрація",
+    "english": "Registration",
+    "page": ""
+  },
+  "text97": {
+    "val": "Країна реєстрації:",
+    "english": "Country of registration:",
+    "page": ""
+  },
+  "text98": {
+    "val": "Росія",
+    "english": "Russia",
+    "page": ""
+  },
+  "text99": {
+    "val": "Номерний знак:",
+    "english": "License plate:",
+    "page": ""
   }
-  
+}

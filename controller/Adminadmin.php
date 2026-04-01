@@ -951,6 +951,8 @@ class Adminadmin
         $selected_lang = null;
         $words = [];
         $words_with_english = [];
+        /** Админка: один «срез» словаря по page (несколько строк с одним field и разным page — отдельные записи) */
+        $dict_page_scope = 'game';
 
         if ($selected_lang_id > 0) {
             // Получаем информацию о выбранном языке
@@ -958,25 +960,6 @@ class Adminadmin
             $selected_lang = $this->db->selectRow($query_lang, [$selected_lang_id]);
 
             if ($selected_lang) {
-                // Условие поиска: по field (коду) или по val (переводу)
-                $search_where = '';
-                $search_params = [];
-                if ($search !== '') {
-                    $search_like = '%' . $search . '%';
-                    $lang_ids = [$selected_lang_id];
-                    if ($english_lang_id && !in_array($english_lang_id, $lang_ids)) {
-                        $lang_ids[] = $english_lang_id;
-                    }
-                    $placeholders = implode(',', array_fill(0, count($lang_ids), '{?}'));
-                    $search_where = " WHERE (`field` LIKE {?} OR (`language_id` IN (" . $placeholders . ") AND `val` LIKE {?}))";
-                    $search_params = array_merge([$search_like], $lang_ids, [$search_like]);
-                }
-
-                // Получаем количество уникальных field (с учётом поиска)
-                $query_count = "SELECT COUNT(*) as total FROM (SELECT DISTINCT `field` FROM `lang_words_admin`" . $search_where . ") AS sub";
-                $total_words = $this->db->selectCell($query_count, $search_params);
-
-                // Настройка пагинации
                 $urlPag = '/language';
                 $urlParams = ['lang_id' => $selected_lang_id];
                 if ($search !== '') {
@@ -984,44 +967,159 @@ class Adminadmin
                 }
                 $urlPagFull = $urlPag . '?' . http_build_query($urlParams);
 
+                $dict_limit = max(50, (int) ($this->settings['limit'] ?? 20));
+
                 $this->pagination = new Pagination();
-                $this->pagination->total = $total_words;
-                $this->pagination->page = $this->page;
-                $this->pagination->limit = $this->settings['limit'];
                 $this->pagination->url = $urlPagFull . '&page={page}';
 
-                // Получаем уникальные field с пагинацией (с учётом поиска)
-                $query_fields = "SELECT DISTINCT `field` FROM `lang_words_admin`" . $search_where . " ORDER BY `field` LIMIT " . $this->start . ", " . $this->settings['limit'];
-                $fields = $this->db->select($query_fields, $search_params);
+                if ($english_lang_id && (int) $selected_lang_id === (int) $english_lang_id) {
+                    // Только строки английского (page = game)
+                    $where_base = "`lw`.`page` = {?} AND `lw`.`language_id` = {?}";
+                    $params_base = [$dict_page_scope, $selected_lang_id];
 
-                // Для каждого field получаем переводы
-                foreach ($fields as $field_row) {
-                    $field = $field_row['field'];
-                    
-                    // Получаем слово для выбранного языка
-                    $query_word = "SELECT `id`, `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-                    $word = $this->db->selectRow($query_word, [$field, $selected_lang_id]);
-                    
-                    // Получаем английский аналог
-                    $english_word = null;
-                    if ($english_lang_id) {
-                        if ($selected_lang_id == $english_lang_id) {
-                            // Если выбран английский язык, то val и english_val одинаковые
-                            $english_word = $word ? $word['val'] : '';
-                        } else {
-                            // Если выбран другой язык, получаем английский аналог
-                            $query_english = "SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-                            $english_word = $this->db->selectCell($query_english, [$field, $english_lang_id]);
-                        }
+                    $search_sql = '';
+                    $search_params = [];
+                    if ($search !== '') {
+                        $search_like = '%' . $search . '%';
+                        $search_sql = " AND (`lw`.`field` LIKE {?} OR `lw`.`val` LIKE {?})";
+                        $search_params = [$search_like, $search_like];
                     }
-                    
-                    $words_with_english[] = [
-                        'field' => $field,
-                        'id' => $word ? $word['id'] : null,
-                        'val' => $word ? $word['val'] : '',
-                        'page' => $word ? $word['page'] : '',
-                        'english_val' => $english_word ? $english_word : ''
-                    ];
+
+                    $list_params = array_merge($params_base, $search_params);
+
+                    $query_count = "SELECT COUNT(*) FROM `lang_words_admin` `lw` WHERE " . $where_base . $search_sql;
+                    $total_words = (int) $this->db->selectCell($query_count, $list_params);
+
+                    $num_pages = $total_words > 0 ? max(1, (int) ceil($total_words / $dict_limit)) : 0;
+                    if ($num_pages > 0 && $this->page > $num_pages) {
+                        $this->page = $num_pages;
+                    }
+                    if ($this->page < 1) {
+                        $this->page = 1;
+                    }
+                    $dict_start = ($this->page - 1) * $dict_limit;
+                    $this->start = $dict_start;
+                    $this->pagination->page = $this->page;
+                    $this->pagination->limit = $dict_limit;
+                    $this->pagination->total = $total_words;
+
+                    $query_list = "SELECT `lw`.`id`, `lw`.`field`, `lw`.`val`, `lw`.`page` FROM `lang_words_admin` `lw` WHERE " . $where_base . $search_sql
+                        . " ORDER BY `lw`.`field` ASC LIMIT " . $dict_start . ", " . $dict_limit;
+                    $rows = $this->db->select($query_list, $list_params);
+
+                    foreach ($rows as $word) {
+                        $words_with_english[] = [
+                            'field' => $word['field'],
+                            'id' => $word['id'],
+                            'val' => $word['val'],
+                            'page' => $word['page'],
+                            'english_val' => $word['val'],
+                            'missing_in_selected' => false,
+                        ];
+                    }
+                } elseif ($english_lang_id) {
+                    // Все field, где есть запись на выбранном языке ИЛИ в английском (page = game)
+                    $lang_in = '`lw`.`language_id` IN ({?}, {?})';
+                    $params_base = [$dict_page_scope, $selected_lang_id, $english_lang_id];
+
+                    $search_sql = '';
+                    $search_params = [];
+                    if ($search !== '') {
+                        $search_like = '%' . $search . '%';
+                        $search_sql = " AND (`lw`.`field` LIKE {?} OR (`lw`.`language_id` = {?} AND `lw`.`val` LIKE {?}) OR (`lw`.`language_id` = {?} AND `lw`.`val` LIKE {?}))";
+                        $search_params = [$search_like, $selected_lang_id, $search_like, $english_lang_id, $search_like];
+                    }
+
+                    $where_full = "`lw`.`page` = {?} AND " . $lang_in . $search_sql;
+                    $list_params = array_merge($params_base, $search_params);
+
+                    $query_count = "SELECT COUNT(DISTINCT `lw`.`field`) FROM `lang_words_admin` `lw` WHERE " . $where_full;
+                    $total_words = (int) $this->db->selectCell($query_count, $list_params);
+
+                    $num_pages = $total_words > 0 ? max(1, (int) ceil($total_words / $dict_limit)) : 0;
+                    if ($num_pages > 0 && $this->page > $num_pages) {
+                        $this->page = $num_pages;
+                    }
+                    if ($this->page < 1) {
+                        $this->page = 1;
+                    }
+                    $dict_start = ($this->page - 1) * $dict_limit;
+                    $this->start = $dict_start;
+                    $this->pagination->page = $this->page;
+                    $this->pagination->limit = $dict_limit;
+                    $this->pagination->total = $total_words;
+
+                    $query_list = "SELECT DISTINCT `lw`.`field` FROM `lang_words_admin` `lw` WHERE " . $where_full
+                        . " ORDER BY `lw`.`field` ASC LIMIT " . $dict_start . ", " . $dict_limit;
+                    $field_rows = $this->db->select($query_list, $list_params);
+
+                    foreach ($field_rows as $fr) {
+                        $field = $fr['field'];
+                        $word = $this->db->selectRow(
+                            "SELECT `id`, `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1",
+                            [$field, $selected_lang_id, $dict_page_scope]
+                        );
+                        $english_val = (string) $this->db->selectCell(
+                            "SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1",
+                            [$field, $english_lang_id, $dict_page_scope]
+                        );
+
+                        $missing_in_selected = !$word && $english_val !== '';
+
+                        $words_with_english[] = [
+                            'field' => $field,
+                            'id' => $word ? $word['id'] : null,
+                            'val' => $word ? $word['val'] : '',
+                            'page' => $word ? $word['page'] : $dict_page_scope,
+                            'english_val' => $english_val,
+                            'missing_in_selected' => $missing_in_selected,
+                        ];
+                    }
+                } else {
+                    // В БД нет языка en — только выбранный язык
+                    $where_base = "`lw`.`page` = {?} AND `lw`.`language_id` = {?}";
+                    $params_base = [$dict_page_scope, $selected_lang_id];
+
+                    $search_sql = '';
+                    $search_params = [];
+                    if ($search !== '') {
+                        $search_like = '%' . $search . '%';
+                        $search_sql = " AND (`lw`.`field` LIKE {?} OR `lw`.`val` LIKE {?})";
+                        $search_params = [$search_like, $search_like];
+                    }
+
+                    $list_params = array_merge($params_base, $search_params);
+
+                    $query_count = "SELECT COUNT(*) FROM `lang_words_admin` `lw` WHERE " . $where_base . $search_sql;
+                    $total_words = (int) $this->db->selectCell($query_count, $list_params);
+
+                    $num_pages = $total_words > 0 ? max(1, (int) ceil($total_words / $dict_limit)) : 0;
+                    if ($num_pages > 0 && $this->page > $num_pages) {
+                        $this->page = $num_pages;
+                    }
+                    if ($this->page < 1) {
+                        $this->page = 1;
+                    }
+                    $dict_start = ($this->page - 1) * $dict_limit;
+                    $this->start = $dict_start;
+                    $this->pagination->page = $this->page;
+                    $this->pagination->limit = $dict_limit;
+                    $this->pagination->total = $total_words;
+
+                    $query_list = "SELECT `lw`.`id`, `lw`.`field`, `lw`.`val`, `lw`.`page` FROM `lang_words_admin` `lw` WHERE " . $where_base . $search_sql
+                        . " ORDER BY `lw`.`field` ASC LIMIT " . $dict_start . ", " . $dict_limit;
+                    $rows = $this->db->select($query_list, $list_params);
+
+                    foreach ($rows as $word) {
+                        $words_with_english[] = [
+                            'field' => $word['field'],
+                            'id' => $word['id'],
+                            'val' => $word['val'],
+                            'page' => $word['page'],
+                            'english_val' => '',
+                            'missing_in_selected' => false,
+                        ];
+                    }
                 }
             }
         }

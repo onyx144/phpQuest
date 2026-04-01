@@ -19,6 +19,7 @@ if (!defined('GD_ACCESS')) {
 	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/tailwind.css">
 
 	<link rel="stylesheet" href="<?= BASE_URI ?>/public/css/binance.css">
+    <script src="<?= BASE_URI ?>/views/js/app_lang.js?v=1.1"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     

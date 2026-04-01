@@ -399,16 +399,23 @@ $(function() {
 	});
 
 /* ЯЗЫКИ */
+	function languageMenuHeightPx() {
+		var n = $('.language_hidden .language_hidden_item').length;
+		return Math.max(38, n * 38);
+	}
+
 	// показать меню выбора языка
 	$('.language').click(function(){
 		if ($(this).hasClass('language_open')) {
 			$('.language_hidden').animate({height: '0px'},100);
 			$(this).removeClass('language_open');
 		} else {
-			$('.language_hidden').animate({height: '75px'},100);
+			$('.language_hidden').animate({height: languageMenuHeightPx() + 'px'},100);
 			$(this).addClass('language_open');
 		}
 	});
+
+	// .js-set-app-lang обрабатывается в view/js/app_lang.js (без jQuery)
 
 	// закрывать меню языков при клике вне меню
 	$(document).mouseup(function(e){

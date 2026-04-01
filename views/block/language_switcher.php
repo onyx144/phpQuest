@@ -20,23 +20,15 @@ if (!defined('GD_ACCESS')) {
 </div>
 <div class="language_hidden">
     <?php
-    if ($language->getCurrentLang() == 'en') {
-        echo '<div class="language_hidden_item language_hidden_item_active">
-                <img src="<?= BASE_URI ?>/images/gb.jpg" alt=""> English
-              </div>
-              ';
-    } /*
-    <a href="?lang=no" class="language_hidden_item">
-                <img src="<?= BASE_URI ?>/images/no.png" alt=""> Norwegian
-              </a>
-              else {
-        echo '<a href="?lang=en" class="language_hidden_item">
-                <img src="<?= BASE_URI ?>/images/gb.jpg" alt=""> Engelsk
-              </a>
-              <div class="language_hidden_item language_hidden_item_active">
-                <img src="<?= BASE_URI ?>/images/no.png" alt=""> Norsk
-              </div>';
-    }*/
+    $currentLang = $language->getCurrentLang();
+
+    if ($currentLang === 'en') {
+        echo '<div class="language_hidden_item language_hidden_item_active"><img src="' . BASE_URI . '/images/gb.jpg" alt=""> English</div>';
+        echo '<a href="#" class="language_hidden_item js-set-app-lang" data-lang="ua"><img src="' . BASE_URI . '/images/flags/ua.png" alt=""> Ukrainian</a>';
+    } else {
+        echo '<a href="#" class="language_hidden_item js-set-app-lang" data-lang="en"><img src="' . BASE_URI . '/images/gb.jpg" alt=""> English</a>';
+        echo '<div class="language_hidden_item language_hidden_item_active"><img src="' . BASE_URI . '/images/flags/ua.png" alt=""> Ukrainian</div>';
+    }
     ?>
 </div>
 

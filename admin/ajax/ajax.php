@@ -723,6 +723,9 @@ if (isset($_POST['op'])) {
 				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
 				$english_val = isset($_POST['english_val']) ? trim($_POST['english_val']) : '';
 				$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
+				if ($page === '') {
+					$page = 'game';
+				}
 
 				if (empty($lang_id) || empty($field)) {
 					$return['error'] = 'Language ID and Field are required';
@@ -732,9 +735,9 @@ if (isset($_POST['op'])) {
 
 					// Если выбран не английский язык, добавляем слово для выбранного языка
 					if ($lang_id != $english_lang_id && !empty($val)) {
-						// Проверяем, существует ли уже слово с таким field для этого языка
-						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-						$existing = $db->selectCell($sql, [$field, $lang_id]);
+						// Уникальность: field + language_id + page (как в админке /language)
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1";
+						$existing = $db->selectCell($sql, [$field, $lang_id, $page]);
 						if ($existing) {
 							// Обновляем существующее слово
 							$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
@@ -748,8 +751,8 @@ if (isset($_POST['op'])) {
 
 					// Добавляем английский аналог, если он указан и английский язык существует
 					if ($english_lang_id && !empty($english_val)) {
-						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-						$existing_english = $db->selectCell($sql, [$field, $english_lang_id]);
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1";
+						$existing_english = $db->selectCell($sql, [$field, $english_lang_id, $page]);
 						if ($existing_english) {
 							// Обновляем существующее английское слово
 							$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
@@ -777,6 +780,7 @@ if (isset($_POST['op'])) {
 				$field = isset($_POST['field']) ? strip_tags(trim($_POST['field'])) : '';
 				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
 				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
 
 				if (empty($field) || empty($lang_id)) {
 					$return['error'] = 'Field and Language ID are required';
@@ -784,25 +788,24 @@ if (isset($_POST['op'])) {
 					// Если word_id существует, сначала пробуем обновить по нему
 					$updated = false;
 					if ($word_id > 0) {
-						$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?} AND `language_id` = {?}";
-						$db->query($sql, [$val, $word_id, $lang_id]);
+						$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?} AND `language_id` = {?}";
+						$db->query($sql, [$val, $page, $word_id, $lang_id]);
 						$updated = true;
 					}
 
-					// Для слов без word_id (или если id не подошел) обновляем по field + language_id
+					// Для слов без word_id обновляем по field + language_id + page
 					if (!$updated || $word_id <= 0) {
-						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-						$existing_word_id = $db->selectCell($sql, [$field, $lang_id]);
+						$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1";
+						$existing_word_id = $db->selectCell($sql, [$field, $lang_id, $page]);
 						if ($existing_word_id) {
-							$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?}";
-							$db->query($sql, [$val, $existing_word_id]);
+							$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+							$db->query($sql, [$val, $page, $existing_word_id]);
 							$updated = true;
 						}
 					}
 
 					// Если записи нет - создаем новую
 					if (!$updated) {
-						$page = isset($_POST['page']) ? strip_tags(trim($_POST['page'])) : '';
 						$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
 						$db->query($sql, [$field, $val, $lang_id, $page]);
 					}
@@ -831,21 +834,29 @@ if (isset($_POST['op'])) {
 					} else {
 						// Получаем ID английского языка
 						$english_lang_id = $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
-						
+						$import_scope_page = 'game';
+
 						$imported_count = 0;
 						$updated_count = 0;
 
 						foreach ($data as $field => $value) {
 							if (is_array($value)) {
-								// Формат: {"field1": {"val": "value1", "english": "english_value1"}}
+								// Формат: {"field1": {"val": "…", "english": "…", "page": "…"}}
 								$val = isset($value['val']) ? trim($value['val']) : '';
 								$english_val = isset($value['english']) ? trim($value['english']) : '';
-								$page = isset($value['page']) ? strip_tags(trim($value['page'])) : '';
+								if (array_key_exists('page', $value)) {
+									$targetPage = strip_tags(trim((string) $value['page']));
+									$pageColUpdate = true;
+								} else {
+									$targetPage = $import_scope_page;
+									$pageColUpdate = false;
+								}
 							} else {
-								// Формат: {"field1": "value1"}
+								// Строка — строка словаря с page = game (как в админке)
 								$val = trim($value);
 								$english_val = '';
-								$page = '';
+								$targetPage = $import_scope_page;
+								$pageColUpdate = false;
 							}
 
 							if (empty($field)) {
@@ -854,29 +865,39 @@ if (isset($_POST['op'])) {
 
 							// Если выбран не английский язык и есть значение для этого языка
 							if ($lang_id != $english_lang_id && !empty($val)) {
-								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-								$existing = $db->selectCell($sql, [$field, $lang_id]);
+								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1";
+								$existing = $db->selectCell($sql, [$field, $lang_id, $targetPage]);
 								if ($existing) {
-									$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
-									$db->query($sql, [$val, $page, $existing]);
+									if ($pageColUpdate) {
+										$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+										$db->query($sql, [$val, $targetPage, $existing]);
+									} else {
+										$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?}";
+										$db->query($sql, [$val, $existing]);
+									}
 									$updated_count++;
 								} else {
 									$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
-									$db->query($sql, [$field, $val, $lang_id, $page]);
+									$db->query($sql, [$field, $val, $lang_id, $targetPage]);
 									$imported_count++;
 								}
 							}
 
 							// Добавляем английский аналог, если он указан
 							if ($english_lang_id && !empty($english_val)) {
-								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1";
-								$existing_english = $db->selectCell($sql, [$field, $english_lang_id]);
+								$sql = "SELECT `id` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1";
+								$existing_english = $db->selectCell($sql, [$field, $english_lang_id, $targetPage]);
 								if ($existing_english) {
-									$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
-									$db->query($sql, [$english_val, $page, $existing_english]);
+									if ($pageColUpdate) {
+										$sql = "UPDATE `lang_words_admin` SET `val` = {?}, `page` = {?} WHERE `id` = {?}";
+										$db->query($sql, [$english_val, $targetPage, $existing_english]);
+									} else {
+										$sql = "UPDATE `lang_words_admin` SET `val` = {?} WHERE `id` = {?}";
+										$db->query($sql, [$english_val, $existing_english]);
+									}
 								} else {
 									$sql = "INSERT INTO `lang_words_admin` SET `field` = {?}, `val` = {?}, `language_id` = {?}, `page` = {?}";
-									$db->query($sql, [$field, $english_val, $english_lang_id, $page]);
+									$db->query($sql, [$field, $english_val, $english_lang_id, $targetPage]);
 								}
 							}
 						}
@@ -908,27 +929,23 @@ if (isset($_POST['op'])) {
 					} else {
 						// Получаем ID английского языка
 						$english_lang_id = $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
-						
-						// Получаем все уникальные field
-						$fields = $db->select("SELECT DISTINCT `field` FROM `lang_words_admin` ORDER BY `field`");
+						$export_scope_page = 'game';
+
+						$fields = $db->select("SELECT DISTINCT `field` FROM `lang_words_admin` WHERE `page` = {?} ORDER BY `field`", [$export_scope_page]);
 						
 						$export_data = [];
 						
 						foreach ($fields as $field_row) {
 							$field = $field_row['field'];
 							
-							// Получаем слово для выбранного языка
-							$word = $db->selectRow("SELECT `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1", [$field, $lang_id]);
+							$word = $db->selectRow("SELECT `val`, `page` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1", [$field, $lang_id, $export_scope_page]);
 							
-							// Получаем английский аналог
 							$english_word = '';
 							if ($english_lang_id) {
 								if ($lang_id == $english_lang_id) {
-									// Если выбран английский, то английский аналог = val
 									$english_word = $word ? $word['val'] : '';
 								} else {
-									// Получаем английский аналог
-									$english_word = $db->selectCell("SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} LIMIT 1", [$field, $english_lang_id]);
+									$english_word = $db->selectCell("SELECT `val` FROM `lang_words_admin` WHERE `field` = {?} AND `language_id` = {?} AND `page` = {?} LIMIT 1", [$field, $english_lang_id, $export_scope_page]);
 								}
 							}
 							

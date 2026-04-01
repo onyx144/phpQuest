@@ -38,29 +38,31 @@ class Pagination
         }
 
         $num_links = $this->num_links;
-        $num_pages = ceil($total / $limit);
+        $num_pages = $total > 0 ? max(1, (int) ceil($total / $limit)) : 0;
 
         $this->url = str_replace('%7Bpage%7D', '{page}', $this->url);
 
+        $urlFirst = str_replace(array('&amp;page={page}', '?page={page}', '&page={page}'), '', $this->url);
+
         $output = '';
 
-        if ($page > 1) {
-            $output .= '<div class="first_page page-item"><a href="' . str_replace(array('&amp;page={page}', '?page={page}', '&page={page}'), '', $this->url) . '" class="page-link">' . $this->text_first . '</a></div>';
-
-            if ($page - 1 === 1) {
-                $output .= '<div class="prev_page page-item"><a href="' . str_replace(array('&amp;page={page}', '?page={page}', '&page={page}'), '', $this->url) . '" class="page-link">' . $this->text_prev . '</a></div>';
-            } else {
-                $output .= '<div class="prev_page page-item"><a href="' . str_replace('{page}', $page - 1, $this->url) . '" class="page-link">' . $this->text_prev . '</a></div>';
-            }
-        }
-
         if ($num_pages > 1) {
+            if ($page > 1) {
+                $output .= '<li class="page-item first_page"><a href="' . htmlspecialchars($urlFirst, ENT_QUOTES, 'UTF-8') . '" class="page-link">' . $this->text_first . '</a></li>';
+
+                if ($page - 1 === 1) {
+                    $output .= '<li class="page-item prev_page"><a href="' . htmlspecialchars($urlFirst, ENT_QUOTES, 'UTF-8') . '" class="page-link">' . $this->text_prev . '</a></li>';
+                } else {
+                    $output .= '<li class="page-item prev_page"><a href="' . htmlspecialchars(str_replace('{page}', (string) ($page - 1), $this->url), ENT_QUOTES, 'UTF-8') . '" class="page-link">' . $this->text_prev . '</a></li>';
+                }
+            }
+
             if ($num_pages <= $num_links) {
                 $start = 1;
                 $end = $num_pages;
             } else {
-                $start = $page - floor($num_links / 2);
-                $end = $page + floor($num_links / 2);
+                $start = $page - (int) floor($num_links / 2);
+                $end = $page + (int) floor($num_links / 2);
 
                 if ($start < 1) {
                     $end += abs($start) + 1;
@@ -73,30 +75,29 @@ class Pagination
                 }
             }
 
-//            for ($i = $start; $i <= $end; $i++) {
-//                if ($page == $i) {
-//                    $output .= '<li class="active"><span>' . $i . '</span></li>';
-//                } else {
-//                    if ($i === 1) {
-//                        $output .= '<li><a href="' . str_replace(array('&amp;page={page}', '?page={page}', '&page={page}'), '', $this->url) . '">' . $i . '</a></li>';
-//                    } else {
-//                        $output .= '<li><a href="' . str_replace('{page}', $i, $this->url) . '">' . $i . '</a></li>';
-//                    }
-//                }
-//            }
-            $output .= '<div class="active_page page-item page-link">' . $page . '</div>';
-        }
+            for ($i = $start; $i <= $end; $i++) {
+                if ($page == $i) {
+                    $output .= '<li class="page-item active active_page" aria-current="page"><span class="page-link">' . (int) $i . '</span></li>';
+                } else {
+                    if ($i === 1) {
+                        $output .= '<li class="page-item"><a href="' . htmlspecialchars($urlFirst, ENT_QUOTES, 'UTF-8') . '" class="page-link">' . (int) $i . '</a></li>';
+                    } else {
+                        $output .= '<li class="page-item"><a href="' . htmlspecialchars(str_replace('{page}', (string) $i, $this->url), ENT_QUOTES, 'UTF-8') . '" class="page-link">' . (int) $i . '</a></li>';
+                    }
+                }
+            }
 
-        if ($page < $num_pages) {
-            $output .= '<div class="next_page page-item"><a href="' . str_replace('{page}', $page + 1, $this->url) . '" class="page-link">' . $this->text_next . '</a></div>';
-            $output .= '<div class="last_page page-item"><a href="' . str_replace('{page}', $num_pages, $this->url) . '" class="page-link">' . $this->text_last . '</a></div>';
+            if ($page < $num_pages) {
+                $output .= '<li class="page-item next_page"><a href="' . htmlspecialchars(str_replace('{page}', (string) ($page + 1), $this->url), ENT_QUOTES, 'UTF-8') . '" class="page-link">' . $this->text_next . '</a></li>';
+                $output .= '<li class="page-item last_page"><a href="' . htmlspecialchars(str_replace('{page}', (string) $num_pages, $this->url), ENT_QUOTES, 'UTF-8') . '" class="page-link">' . $this->text_last . '</a></li>';
+            }
         }
 
         if ($num_pages > 1) {
-            return $output;
-        } else {
-            return '';
+            return '<ul class="pagination pagination-sm mb-0 flex-wrap justify-content-center">' . $output . '</ul>';
         }
+
+        return '';
     }
 
 }

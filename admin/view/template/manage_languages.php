@@ -62,6 +62,7 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                     <div class="col">
                                         <h5 class="card-title mb-0">
                                             Words Dictionary: <?php echo htmlspecialchars($selected_lang['lang_name']); ?>
+                                            <span class="badge bg-dark">page: <?php echo htmlspecialchars($dict_page_scope ?? 'game'); ?></span>
                                             <?php if ($selected_lang['lang_abbr'] == 'en'): ?>
                                                 <span class="badge bg-info">English</span>
                                             <?php endif; ?>
@@ -102,47 +103,87 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                         </div>
                                     </div>
                                 </form>
+                                <?php if ($this->pagination && (int) $this->pagination->total > 0): ?>
+                                <?php
+                                $pg = $this->pagination;
+                                $show_from = ($pg->page - 1) * $pg->limit + 1;
+                                $show_to = min($pg->page * $pg->limit, (int) $pg->total);
+                                ?>
+                                <p class="text-muted small mb-2">
+                                    Showing <strong><?php echo (int) $show_from; ?>–<?php echo (int) $show_to; ?></strong> of <strong><?php echo (int) $pg->total; ?></strong> entries
+                                    <?php if ((int) ceil($pg->total / max(1, (int) $pg->limit)) > 1): ?>
+                                        — use pagination below for more.
+                                    <?php endif; ?>
+                                </p>
+                                <?php endif; ?>
+                                <p class="text-muted small mb-2">
+                                    Only entries with <code>page</code> = <strong><?php echo htmlspecialchars($dict_page_scope ?? 'game'); ?></strong> are listed (same scope for export/import).
+                                    Use <i class="fas fa-edit"></i> to edit text and page tag; changing page moves the row out of this list.
+                                </p>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-hover card-table">
                                         <thead>
                                             <tr>
-                                                <th style="width: 20%;">Field (Code)</th>
-                                                <th style="width: 35%;">Word in <?php echo htmlspecialchars($selected_lang['lang_name']); ?></th>
-                                                <th style="width: 35%;">English Equivalent</th>
-                                                <th style="width: 10%;">Actions</th>
+                                                <th style="width: 18%;">Field (Code)</th>
+                                                <th style="width: 28%;">Word in <?php echo htmlspecialchars($selected_lang['lang_name']); ?></th>
+                                                <th style="width: 26%;">English Equivalent</th>
+                                                <th style="width: 16%;">Page</th>
+                                                <th style="width: 12%;">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="words-table-body">
                                             <?php foreach ($words_with_english as $word): ?>
-                                                <tr data-word-id="<?php echo $word['id']; ?>" data-field="<?php echo htmlspecialchars($word['field']); ?>">
+                                                <?php $missing_tr = !empty($word['missing_in_selected']); ?>
+                                                <tr data-word-id="<?php echo (int) ($word['id'] ?? 0); ?>" data-field="<?php echo htmlspecialchars($word['field']); ?>">
                                                     <td>
                                                         <code><?php echo htmlspecialchars($word['field']); ?></code>
                                                     </td>
                                                     <td>
-                                                        <?php if ($selected_lang['lang_abbr'] == 'en'): ?>
-                                                            <span class="word-val-display"><?php echo htmlspecialchars($word['val'] ?: '(empty)'); ?></span>
-                                                            <input type="text" class="form-control form-control-sm word-val-input d-none" 
-                                                                   value="<?php echo htmlspecialchars($word['val']); ?>" 
-                                                                   data-field="<?php echo htmlspecialchars($word['field']); ?>">
-                                                        <?php else: ?>
-                                                            <span class="word-val-display"><?php echo htmlspecialchars($word['val'] ?: '(empty)'); ?></span>
-                                                            <input type="text" class="form-control form-control-sm word-val-input d-none" 
-                                                                   value="<?php echo htmlspecialchars($word['val']); ?>" 
-                                                                   data-field="<?php echo htmlspecialchars($word['field']); ?>">
-                                                        <?php endif; ?>
+                                                        <div class="word-val-static">
+                                                            <?php if ($missing_tr): ?>
+                                                                <span class="word-val-display text-muted fst-italic">empty</span>
+                                                                <br><small class="text-muted">Defined in English only — add a translation here.</small>
+                                                            <?php else: ?>
+                                                                <span class="word-val-display"><?php echo htmlspecialchars(($word['val'] ?? '') !== '' ? $word['val'] : '(empty)'); ?></span>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                        <input type="text" class="form-control form-control-sm word-val-input d-none" 
+                                                               value="<?php echo htmlspecialchars($word['val'] ?? ''); ?>" 
+                                                               data-field="<?php echo htmlspecialchars($word['field']); ?>">
                                                     </td>
                                                     <td>
-                                                        <span class="english-val-display"><?php echo htmlspecialchars($word['english_val'] ?: '(empty)'); ?></span>
+                                                        <div class="english-val-static">
+                                                            <span class="english-val-display"><?php echo htmlspecialchars(($word['english_val'] ?? '') !== '' ? $word['english_val'] : '(empty)'); ?></span>
+                                                            <?php if ($missing_tr): ?>
+                                                                <br><small class="text-success">In English</small>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        $pageVal = isset($word['page']) ? trim((string) $word['page']) : '';
+                                                        ?>
+                                                        <div class="page-cell">
+                                                            <?php if ($pageVal !== ''): ?>
+                                                                <span class="page-display"><span class="badge bg-info text-dark"><?php echo htmlspecialchars($pageVal); ?></span></span>
+                                                            <?php else: ?>
+                                                                <span class="page-display"><span class="badge bg-secondary">No page</span></span>
+                                                            <?php endif; ?>
+                                                            <input type="text" class="form-control form-control-sm page-input d-none mt-1"
+                                                                   value="<?php echo htmlspecialchars($pageVal); ?>"
+                                                                   placeholder="Page id (optional)">
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-sm btn-primary edit-word-btn" 
-                                                                data-word-id="<?php echo $word['id']; ?>" 
+                                                                data-word-id="<?php echo (int) ($word['id'] ?? 0); ?>" 
                                                                 data-field="<?php echo htmlspecialchars($word['field']); ?>"
-                                                                data-val="<?php echo htmlspecialchars($word['val']); ?>">
+                                                                data-val="<?php echo htmlspecialchars($word['val']); ?>"
+                                                                data-page="<?php echo htmlspecialchars($pageVal, ENT_QUOTES, 'UTF-8'); ?>">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm btn-success save-word-btn d-none" 
-                                                                data-word-id="<?php echo $word['id']; ?>" 
+                                                                data-word-id="<?php echo (int) ($word['id'] ?? 0); ?>" 
                                                                 data-field="<?php echo htmlspecialchars($word['field']); ?>">
                                                             <i class="fas fa-save"></i>
                                                         </button>
@@ -157,9 +198,12 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                 </div>
                                 
                                 <?php if ($this->pagination): ?>
-                                    <div class="mt-3">
-                                        <?php echo $this->pagination->render(); ?>
-                                    </div>
+                                    <?php $pagination_html = $this->pagination->render(); ?>
+                                    <?php if ($pagination_html !== ''): ?>
+                                    <nav class="mt-3 d-flex justify-content-center" aria-label="Dictionary pages">
+                                        <?php echo $pagination_html; ?>
+                                    </nav>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -261,9 +305,9 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                         <input type="text" class="form-control" id="word_english_val" name="word_english_val" required>
                     </div>
                     <div class="mb-3">
-                        <label for="word_page" class="form-label">Page (optional):</label>
-                        <input type="text" class="form-control" id="word_page" name="word_page">
-                        <small class="form-text text-muted">Page identifier where this word is used</small>
+                        <label for="word_page" class="form-label">Page:</label>
+                        <input type="text" class="form-control" id="word_page" name="word_page" value="<?php echo htmlspecialchars($dict_page_scope ?? 'game'); ?>">
+                        <small class="form-text text-muted">Default matches this dictionary scope (usually <code>game</code>).</small>
                     </div>
                 </form>
             </div>
@@ -290,8 +334,8 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                         <label for="json_data" class="form-label">JSON Data:</label>
                         <textarea class="form-control" id="json_data" name="json_data" rows="15" required></textarea>
                         <small class="form-text text-muted">
-                            Format: <code>{"field1": "value1", "field2": "value2", ...}</code><br>
-                            Or with English: <code>{"field1": {"val": "value1", "english": "english_value1"}, ...}</code>
+                            String values apply to <code>page = <?php echo htmlspecialchars($dict_page_scope ?? 'game'); ?></code> (this screen).<br>
+                            Object without <code>page</code>: <code>{"field1": {"val": "…", "english": "…"}}</code> — same scope. Add <code>"page": "…"</code> to target another page explicitly.
                         </small>
                     </div>
                 </form>
@@ -512,8 +556,10 @@ $(document).ready(function() {
     // Edit word (используем делегирование)
     $(document).on('click', '.edit-word-btn', function() {
         var row = $(this).closest('tr');
-        row.find('.word-val-display').addClass('d-none');
+        row.find('.word-val-static').addClass('d-none');
         row.find('.word-val-input').removeClass('d-none');
+        row.find('.page-display').addClass('d-none');
+        row.find('.page-input').removeClass('d-none');
         row.find('.edit-word-btn').addClass('d-none');
         row.find('.save-word-btn').removeClass('d-none');
         row.find('.cancel-edit-btn').removeClass('d-none');
@@ -522,10 +568,18 @@ $(document).ready(function() {
     // Cancel edit (используем делегирование)
     $(document).on('click', '.cancel-edit-btn', function() {
         var row = $(this).closest('tr');
-        var originalVal = row.find('.edit-word-btn').data('val');
+        var $editBtn = row.find('.edit-word-btn');
+        var originalVal = $editBtn.data('val');
+        var originalPage = typeof $editBtn.data('page') !== 'undefined' ? $editBtn.data('page') : '';
+        if (originalPage === null) {
+            originalPage = '';
+        }
         row.find('.word-val-input').val(originalVal);
-        row.find('.word-val-display').removeClass('d-none');
+        row.find('.page-input').val(originalPage);
+        row.find('.word-val-static').removeClass('d-none');
         row.find('.word-val-input').addClass('d-none');
+        row.find('.page-display').removeClass('d-none');
+        row.find('.page-input').addClass('d-none');
         row.find('.edit-word-btn').removeClass('d-none');
         row.find('.save-word-btn').addClass('d-none');
         row.find('.cancel-edit-btn').addClass('d-none');
@@ -538,6 +592,10 @@ $(document).ready(function() {
         var wordId = btn.data('word-id');
         var field = btn.data('field');
         var val = row.find('.word-val-input').val();
+        var pageVal = row.find('.page-input').val();
+        if (typeof pageVal === 'undefined' || pageVal === null) {
+            pageVal = '';
+        }
         var langId = <?php echo $selected_lang_id ? $selected_lang_id : 0; ?>;
 
         if (!langId || langId <= 0) {
@@ -550,6 +608,7 @@ $(document).ready(function() {
         formData.append('word_id', wordId);
         formData.append('field', field);
         formData.append('val', val);
+        formData.append('page', pageVal);
         formData.append('lang_id', langId);
 
         $.ajax({
@@ -562,10 +621,23 @@ $(document).ready(function() {
             data: formData,
             success: function(json) {
                 if (json.success) {
-                    row.find('.word-val-display').text(val || '(empty)');
+                    row.find('.word-val-static').removeClass('d-none').empty().append(
+                        $('<span class="word-val-display"></span>').text(val || '(empty)')
+                    );
                     row.find('.edit-word-btn').data('val', val);
-                    row.find('.word-val-display').removeClass('d-none');
+                    var pTrim = (pageVal || '').trim();
+                    row.find('.edit-word-btn').data('page', pTrim);
+                    var $pd = row.find('.page-display');
+                    if (pTrim) {
+                        $pd.html('<span class="badge bg-info text-dark"></span>');
+                        $pd.find('.badge').text(pTrim);
+                    } else {
+                        $pd.html('<span class="badge bg-secondary">No page</span>');
+                    }
+                    row.find('.english-val-static small').remove();
                     row.find('.word-val-input').addClass('d-none');
+                    row.find('.page-display').removeClass('d-none');
+                    row.find('.page-input').addClass('d-none');
                     row.find('.edit-word-btn').removeClass('d-none');
                     row.find('.save-word-btn').addClass('d-none');
                     row.find('.cancel-edit-btn').addClass('d-none');

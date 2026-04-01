@@ -148,12 +148,7 @@ $(function() {
 
 		hiddenMainPreloader();
 
-		// меняем ссылки в переключателе языков
-		if ($('.language_hidden_item[href="/no/game"]').length) {
-			$('.language_hidden_item[href="/no/game"]').attr('href', '/no/results');
-		} else if ($('.language_hidden_item[href="/game"]').length) {
-			$('.language_hidden_item[href="/game"]').attr('href', '/results');
-		}
+		// Язык переключается через localStorage/cookie (site_lang), URL страницы не меняем
 	} else if ($('.game_code_field_wrapper_inner').length) { // страница ввода кода и названия команды
 		hiddenMainPreloader();
 

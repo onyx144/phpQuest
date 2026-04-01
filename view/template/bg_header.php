@@ -79,13 +79,36 @@ if (!isset($svg) && isset($GLOBALS['svg'])) {
 			</div>
 			<div class="language_hidden">
 				<?php
-					if ($this->lang->getParam('lang_abbr') == 'en') {
-						echo '<div class="language_hidden_item language_hidden_item_active"><img src="/images/gb.jpg" alt=""> English</div>
-							<a href="/no/game" class="language_hidden_item"><img src="/images/no.png" alt=""> Norwegian</a>';
-					} /*else {
-						echo '<a href="/game" class="language_hidden_item"><img src="/images/gb.jpg" alt=""> Engelsk</a>
-							<div class="language_hidden_item language_hidden_item_active"><img src="/images/no.png" alt=""> Norsk</div>';
-					}*/
+					$activeLangCode = strtr((string) $this->lang->getParam('lang'), ['а' => 'a', 'А' => 'A']);
+					$activeLangs = $this->lang->getAllActiveLangs('id');
+					$hasUkrainian = false;
+
+					if ($activeLangs) {
+						foreach ($activeLangs as $langItem) {
+							$langCode = strtr((string) $langItem['lang'], ['а' => 'a', 'А' => 'A']);
+							$langName = $langItem['lang_name'];
+							$langFlag = $langItem['flag'];
+							$isActive = ($langCode === $activeLangCode);
+							if ($langCode === 'ua' || $langCode === 'uk') {
+								$hasUkrainian = true;
+							}
+
+							if ($isActive) {
+								echo '<div class="language_hidden_item language_hidden_item_active"><img src="/' . $langFlag . '" alt=""> ' . $langName . '</div>';
+							} else {
+								echo '<a href="#" class="language_hidden_item js-set-app-lang" data-lang="' . htmlspecialchars($langCode, ENT_QUOTES, 'UTF-8') . '"><img src="/' . $langFlag . '" alt=""> ' . $langName . '</a>';
+							}
+						}
+					}
+
+					// Fallback: если украинский не пришел из БД, показываем его в переключателе вручную.
+					if (!$hasUkrainian) {
+						if ($activeLangCode === 'ua' || $activeLangCode === 'uk') {
+							echo '<div class="language_hidden_item language_hidden_item_active"><img src="/images/flags/ua.png" alt=""> Ukrainian</div>';
+						} else {
+							echo '<a href="#" class="language_hidden_item js-set-app-lang" data-lang="ua"><img src="/images/flags/ua.png" alt=""> Ukrainian</a>';
+						}
+					}
 				?>
 			</div>
 
