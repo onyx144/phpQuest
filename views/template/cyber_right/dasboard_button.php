@@ -1,10 +1,10 @@
 <?php
 $sections = [
-    ['id' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'dashboard_dashboard'],
-    ['id' => 'calls', 'label' => 'Calls', 'icon' => 'dashboard_calls'],
-    ['id' => 'files', 'label' => 'Files', 'icon' => 'dashboard_files'],
-    ['id' => 'databases', 'label' => 'Databases', 'icon' => 'dashboard_databases'],
-    ['id' => 'tools', 'label' => 'Tools', 'icon' => 'dashboard_tools'],
+    ['id' => 'dashboard', 'textKey' => 'text11', 'icon' => 'dashboard_dashboard'],
+    ['id' => 'calls', 'textKey' => 'text12', 'icon' => 'dashboard_calls'],
+    ['id' => 'files', 'textKey' => 'text15', 'icon' => 'dashboard_files'],
+    ['id' => 'databases', 'textKey' => 'text13', 'icon' => 'dashboard_databases'],
+    ['id' => 'tools', 'textKey' => 'text14', 'icon' => 'dashboard_tools'],
 ];
 
 $activeSection = $_GET['section'] ?? 'dashboard'; // активный таб
@@ -22,7 +22,7 @@ $activeSection = $_GET['section'] ?? 'dashboard'; // активный таб
     >      
     <?php echo $this->svg[$section['icon']]; ?>
 
-      <span class="font-medium"><?= htmlspecialchars($section['label']) ?></span>
+      <span class="font-medium"><?= htmlspecialchars($translation[$section['textKey']] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
        
     </button>
     </div>

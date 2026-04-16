@@ -154,7 +154,7 @@
 		}, 1000);
 
 		$('#popup_video_phone .popup_video_phone_wifi_icons').html('<img src="/images/wifi_icons.png" alt="">');
-		$('#popup_video_phone .popup_video_phone_name').html('Jane Blond');
+		//$('#popup_video_phone .popup_video_phone_name').html('Jane Blond');
 		$('#popup_video_phone').attr('class','').addClass('popup_video_phone_incoming_company_investigate');
 
 		// звук вызова

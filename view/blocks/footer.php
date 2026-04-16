@@ -1,5 +1,10 @@
         </div><!-- end main -->
 
+    <?php
+        if (!isset($translation) || !is_array($translation)) {
+            $translation = $this->lang->getWordsByPage('game');
+        }
+    ?>
     <?php if ($this->userInfo) { ?>
         <!-- music -->
         <div id="jquery_jplayer_1"></div>
@@ -57,10 +62,16 @@
                     </div>
                 </div>
                 <div class="popup_video_phone_title"><?php if (isset($translation['text42'])) { echo $translation['text42']; } ?></div>
-                <div class="popup_video_phone_photo">
-                    <img src="/images/incoming_jane_blond.png" alt="">
+                <div class="relative mx-auto rounded-lg overflow-hidden border-2 border-cyber-neon-blue glow-effect popup_video_phone_media_frame" style="width: 16rem; height: 24rem;">
+                    <img class="w-full h-full object-cover popup_video_phone_preview_img" src="/images/agent_profile.jpg" alt="">
+                    <video class="object-cover popup_video_phone_inline_video" playsinline controls style="display:none; position:absolute; left:1px; width:calc(100% - 2px); height:calc(100% - 5px); z-index:20; background:rgb(0, 0, 0);">
+               
+               
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <div class="popup_video_phone_name"></div>
+                <div class="popup_video_phone_name"><?php if (isset($translation['text8'])) { echo $translation['text8']; } ?></div>
                 <div class="popup_video_phone_btns">
                     <div class="popup_video_phone_btn_decline_wrapper">
                         <div class="popup_video_phone_btn">

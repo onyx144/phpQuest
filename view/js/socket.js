@@ -707,9 +707,17 @@ $(function() {
 					// Проверяем, что сообщение для нашей команды
 					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
 					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+					var currentUserId = $('#section_game').length ? parseInt($('#section_game').attr('data-user-id')) : 0;
+					var messageUserId = parameters.user_id ? parseInt(parameters.user_id) : 0;
 					
 					// Обрабатываем только если это сообщение для нашей команды
 					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
+						// Для инициатора принятия звонка локальная логика уже отрабатывает в 1_accept_mission.js.
+						// Не запускаем здесь старый popup-поток повторно, чтобы не сбивать inline-видео.
+						if (currentUserId > 0 && messageUserId > 0 && currentUserId === messageUserId) {
+							return;
+						}
+
 						// запускаем фоновую музыку, если была
 						/*if (music_before) {
 							playMusic();
@@ -769,30 +777,6 @@ $(function() {
 					        acceptMission();
 					    }
 					});*/
-				} else if (op == 'acceptMissionIncomingCallAccept') { // приняли миссию. Видео доиграло до конца
-					closePopupVideo();
-
-					// пишем игроку первые 100 баллов
-					incrementScoreWithoutSaveDb(100, 'main', 0);
-
-					// запускаем таймер
-					updateTimerUploadPage();
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых баз данных
-					updateDontOpenDatabasesQt();
-
-			    	// отображаем блок Mission name GEM
-					$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
-					setTeamTabsTextInfo('view_gem', 1);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('company_name', false);
-
-					// отображаем блок Call Jane
-					$('.call_jane').addClass('call_jane_active');
 				} else if (op == 'stopVideoAndClosePopupVideoAndAcceptMission') { // приняли миссию путем закрытия видео
 					stopVideo();
 					closePopupVideo();

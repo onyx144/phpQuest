@@ -635,16 +635,201 @@ if (isset($_POST['op'])) {
 					if (!in_array($stage, $valid_stages)) {
 						$return['error'] = 'Invalid stage';
 					} else {
-						// Обновляем стадию в БД
-						$sql = "UPDATE `teams` SET `last_dashboard` = {?} WHERE `id` = {?}";
-						if ($db->query($sql, [$stage, $team_id])) {
+						$team = $db->selectRow("SELECT `id` FROM `teams` WHERE `id` = {?} LIMIT 1", [$team_id]);
+						if (!$team) {
+							$return['error'] = 'Team not found';
+						} else {
+							$getHintIdsByStep = function ($step_name) use ($db) {
+								$hint_ids = [];
+								$hints = $db->select("SELECT `id` FROM `hints` WHERE `step` = {?} ORDER BY `sort`, `number`", [$step_name]);
+
+								if ($hints) {
+									foreach ($hints as $hint) {
+										$hint_ids[] = (int) $hint['id'];
+									}
+								}
+
+								return $hint_ids;
+							};
+
+							$stage_state = [
+								'active_hints' => [],
+								'list_hints' => [1, 2, 3],
+								'list_hints_title_lang_var' => 'text26',
+								'list_hints_text_lang_var' => 'text27',
+								'active_files' => [],
+								'list_files' => [1],
+								'active_databases' => [],
+								'list_databases' => [],
+								'last_databases' => 'no_access',
+								'calls_outgoing_id' => 2,
+								'active_calls' => [['id' => 1, 'datetime' => '']],
+								'last_calls' => 'no_access',
+								'view_call_jane_btn' => 0,
+								'active_tools' => [],
+								'list_tools' => [],
+								'last_tools' => 'no_access',
+								'view_call_mobile_btn' => 0,
+								'open_call_mobile_btn' => 0,
+								'tools_advanced_search_engine_access' => 0,
+								'tools_symbol_decoder_access' => 0,
+								'tools_3d_bulding_scan_access' => 0,
+								'databases_bank_transactions_access' => 0,
+								'chat_send_message_access' => 0,
+								'dashboard_minigame_access' => 0,
+								'dashboard_minigame_active_step' => 0,
+								'dashboard_interpol_access' => 0
+							];
+
+							if ($stage == 'company_name') {
+								$stage_state['list_hints'] = $getHintIdsByStep('accept_mission');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+							} elseif ($stage == 'geo_coordinates') {
+								$stage_state['list_hints'] = $getHintIdsByStep('company_investigate');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates'];
+								$stage_state['last_tools'] = 'tools_start_four';
+							} elseif ($stage == 'african_partner') {
+								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5, 6, 7];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates', 'advanced_search_engine'];
+								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['tools_advanced_search_engine_access'] = 1;
+							} elseif ($stage == 'metting_place') {
+								$stage_state['list_hints'] = $getHintIdsByStep('african_partner');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5, 6, 7];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls', 'bank_transactions'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates', 'advanced_search_engine', 'symbol_decoder'];
+								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['view_call_mobile_btn'] = 1;
+								$stage_state['tools_advanced_search_engine_access'] = 1;
+								$stage_state['tools_symbol_decoder_access'] = 1;
+								$stage_state['databases_bank_transactions_access'] = 1;
+							} elseif ($stage == 'room_name') {
+								$stage_state['list_hints'] = $getHintIdsByStep('3d_plan');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5, 6, 7, 8];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls', 'bank_transactions'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates', 'advanced_search_engine', 'symbol_decoder', '3d_building_scan'];
+								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['view_call_mobile_btn'] = 1;
+								$stage_state['tools_advanced_search_engine_access'] = 1;
+								$stage_state['tools_symbol_decoder_access'] = 1;
+								$stage_state['tools_3d_bulding_scan_access'] = 1;
+								$stage_state['databases_bank_transactions_access'] = 1;
+							} elseif ($stage == 'password') {
+								$stage_state['list_hints'] = $getHintIdsByStep('minigame');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5, 6, 7, 8];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls', 'bank_transactions'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates', 'advanced_search_engine', 'symbol_decoder', '3d_building_scan'];
+								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['view_call_mobile_btn'] = 1;
+								$stage_state['tools_advanced_search_engine_access'] = 1;
+								$stage_state['tools_symbol_decoder_access'] = 1;
+								$stage_state['tools_3d_bulding_scan_access'] = 1;
+								$stage_state['databases_bank_transactions_access'] = 1;
+							}
+
+							$sql = "UPDATE `teams` SET
+								`last_dashboard` = {?},
+								`active_hints` = {?},
+								`list_hints` = {?},
+								`list_hints_title_lang_var` = {?},
+								`list_hints_text_lang_var` = {?},
+								`active_files` = {?},
+								`list_files` = {?},
+								`active_databases` = {?},
+								`list_databases` = {?},
+								`last_databases` = {?},
+								`calls_outgoing_id` = {?},
+								`active_calls` = {?},
+								`last_calls` = {?},
+								`view_call_jane_btn` = {?},
+								`active_tools` = {?},
+								`list_tools` = {?},
+								`last_tools` = {?},
+								`view_call_mobile_btn` = {?},
+								`open_call_mobile_btn` = {?},
+								`tools_advanced_search_engine_access` = {?},
+								`tools_symbol_decoder_access` = {?},
+								`tools_3d_bulding_scan_access` = {?},
+								`databases_bank_transactions_access` = {?},
+								`chat_send_message_access` = {?},
+								`dashboard_minigame_access` = {?},
+								`dashboard_minigame_active_step` = {?},
+								`dashboard_interpol_access` = {?}
+								WHERE `id` = {?}";
+
+							if ($db->query($sql, [
+								$stage,
+								json_encode($stage_state['active_hints'], JSON_UNESCAPED_UNICODE),
+								json_encode($stage_state['list_hints'], JSON_UNESCAPED_UNICODE),
+								$stage_state['list_hints_title_lang_var'],
+								$stage_state['list_hints_text_lang_var'],
+								json_encode($stage_state['active_files'], JSON_UNESCAPED_UNICODE),
+								json_encode($stage_state['list_files'], JSON_UNESCAPED_UNICODE),
+								json_encode($stage_state['active_databases'], JSON_UNESCAPED_UNICODE),
+								json_encode($stage_state['list_databases'], JSON_UNESCAPED_UNICODE),
+								$stage_state['last_databases'],
+								$stage_state['calls_outgoing_id'],
+								json_encode($stage_state['active_calls'], JSON_UNESCAPED_UNICODE),
+								$stage_state['last_calls'],
+								$stage_state['view_call_jane_btn'],
+								json_encode($stage_state['active_tools'], JSON_UNESCAPED_UNICODE),
+								json_encode($stage_state['list_tools'], JSON_UNESCAPED_UNICODE),
+								$stage_state['last_tools'],
+								$stage_state['view_call_mobile_btn'],
+								$stage_state['open_call_mobile_btn'],
+								$stage_state['tools_advanced_search_engine_access'],
+								$stage_state['tools_symbol_decoder_access'],
+								$stage_state['tools_3d_bulding_scan_access'],
+								$stage_state['databases_bank_transactions_access'],
+								$stage_state['chat_send_message_access'],
+								$stage_state['dashboard_minigame_access'],
+								$stage_state['dashboard_minigame_active_step'],
+								$stage_state['dashboard_interpol_access'],
+								$team_id
+							])) {
 							$return['success'] = 'ok';
 
 							// Синхронизация происходит через сокеты - вебхук на внешний URL не нужен
 							// Если нужен вебхук для логирования, можно добавить здесь
 							$return['webhook_sent'] = true; // Указываем успех, так как синхронизация через сокеты работает
-						} else {
-							$return['error'] = 'Failed to update database';
+							} else {
+								$return['error'] = 'Failed to update database';
+							}
 						}
 					}
 				} else {

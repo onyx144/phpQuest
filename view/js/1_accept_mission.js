@@ -1,6 +1,62 @@
 /* === ACCEPT A NEW MISSION === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	var acceptMissionVisualReady = false;
+
+	function acceptMissionServerUpdate() {
+		var formData = new FormData();
+    	formData.append('op', 'acceptMissionUpdateHint');
+    	formData.append('lang_abbr', $('html').attr('lang'));
+
+    	$.ajax({
+			url: '/ajax/ajax.php',
+	        type: "POST",
+	        dataType: "json",
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        data: formData,
+			success: function(json) {
+				if (json.error_verify) {
+					window.location.href = json.error_verify;
+				} else {
+					acceptMissionVisualReady = true;
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	function acceptMissionVisualUpdate() {
+		// пишем игроку первые 100 баллов
+		incrementScore(100, 'main', 0);
+
+		// запускаем таймер
+		updateTimerUploadPage();
+
+		// Обновить к-во непрочитанных файлов
+		updateDontOpenFilesQt();
+
+		// Обновить к-во неоткрытых баз данных
+		updateDontOpenDatabasesQt();
+
+    	// отображаем блок Mission name GEM
+		$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
+		setTeamTabsTextInfo('view_gem', 1);
+
+		// обновляем содержимое dashboard
+		uploadTypeTabsDashboardStep('company_name', false);
+
+		// запоминаем открытый calls
+		setTeamTabsTextInfo('last_calls', 'call_list');
+
+		// отображаем блок Call Jane
+		$('.call_jane').addClass('call_jane_active');
+		setTeamTabsTextInfo('view_call_jane_btn', 1);
+	}
+
 	// ввели и отправили название миссии
 	function newMissionAcceptClick() {
 		/*setTimeout(function(){
@@ -106,7 +162,7 @@
 		}, 1000);
 
 		$('#popup_video_phone .popup_video_phone_wifi_icons').html('<img src="/images/wifi_icons.png" alt="">');
-		$('#popup_video_phone .popup_video_phone_name').html('Jane Blond');
+		//$('#popup_video_phone .popup_video_phone_name').html('Jane Blond');
 		$('#popup_video_phone').attr('class','').addClass('popup_video_phone_incoming_new_mission');
 
 		// звук вызова
@@ -149,54 +205,8 @@
 
 	// игрок принял миссию - просмотрел incoming video либо закрыл попап входящего звонка
 	function acceptMission() {
-		var formData = new FormData();
-    	formData.append('op', 'acceptMissionUpdateHint');
-    	formData.append('lang_abbr', $('html').attr('lang'));
-
-    	$.ajax({
-			url: '/ajax/ajax.php',
-	        type: "POST",
-	        dataType: "json",
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: formData,
-			success: function(json) {
-				if (json.error_verify) {
-					window.location.href = json.error_verify;
-				} else {
-					// пишем игроку первые 100 баллов
-					incrementScore(100, 'main', 0);
-
-					// запускаем таймер
-					updateTimerUploadPage();
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых баз данных
-					updateDontOpenDatabasesQt();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				// alert('Error');
-				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
-
-    	// отображаем блок Mission name GEM
-		$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
-		setTeamTabsTextInfo('view_gem', 1);
-
-		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('company_name', false);
-
-		// запоминаем открытый calls
-		setTeamTabsTextInfo('last_calls', 'call_list');
-
-		// отображаем блок Call Jane
-		$('.call_jane').addClass('call_jane_active');
-		setTeamTabsTextInfo('view_call_jane_btn', 1);
+		acceptMissionServerUpdate();
+		acceptMissionVisualUpdate();
 	}
 
 $(function() {
@@ -259,7 +269,7 @@ $(function() {
 		// очищаем данные
 		setTimeout(function(){
 			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-			$('#popup_video_phone .popup_video_phone_name').html('');
+			//$('#popup_video_phone .popup_video_phone_name').html('');
 			$('#popup_video_phone').attr('class','');
 		}, 210);
 	});
@@ -295,22 +305,55 @@ $(function() {
 		clearInterval(incomingCallTimer);
 		incomingCallTimer = false;
 
-		// скрываем блок с телефоном
-		$('#popup_video_phone').fadeOut(200);
+		// Воспроизводим видео прямо в рамке входящего звонка (без отдельного popup-видеоплеера).
+		var langCode = ($('html').attr('lang') || '').toLowerCase();
+		var videoSrc = (langCode === 'en') ? '/video/one_second.mp4' : '/video/ua/first_cut.mp4';
+		var $phonePopup = $('#popup_video_phone');
+		var $inlineVideo = $phonePopup.find('.popup_video_phone_inline_video');
+		var $previewImage = $phonePopup.find('.popup_video_phone_preview_img');
+		var $phoneButtons = $phonePopup.find('.popup_video_phone_btns');
+		var $mediaFrame = $phonePopup.find('.popup_video_phone_media_frame');
 
-		// очищаем данные в блоке с телефоном
-		setTimeout(function(){
-			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-			$('#popup_video_phone .popup_video_phone_name').html('');
-			$('#popup_video_phone').attr('class','');
-		}, 210);
+		if ($inlineVideo.length) {
+			var inlineVideoEl = $inlineVideo.get(0);
 
-		// открыть видео и сразу запустить его
-		playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-		openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call');
-		playVideo('call');
-		// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call_jane');
-		// playVideoCall();
+			var resetIncomingPopupState = function() {
+				inlineVideoEl.pause();
+				inlineVideoEl.currentTime = 0;
+				$inlineVideo.hide();
+				$previewImage.show();
+				$phoneButtons.show();
+				$mediaFrame.css({ width: '16rem', height: '24rem' });
+			};
+
+			$phoneButtons.hide();
+			$mediaFrame.css({ width: '22rem', height: '35rem' });
+			$inlineVideo.find('source').attr('src', videoSrc);
+			inlineVideoEl.load();
+			$previewImage.hide();
+			$inlineVideo.show();
+			inlineVideoEl.play().catch(function() {});
+
+			// На старте ролика сразу фиксируем этап на сервере.
+			var timerSeconds = parseInt($('.timer').attr('data-timer'), 10);
+			if (timerSeconds == 0) {
+		        acceptMissionServerUpdate();
+		    }
+
+			$inlineVideo.off('ended.inlineIncoming').on('ended.inlineIncoming', function() {
+				$phonePopup.fadeOut(200, function() {
+					resetIncomingPopupState();
+					$phonePopup.find('.popup_video_phone_wifi_icons').html('');
+					$phonePopup.attr('class', '');
+
+					// Визуально продвигаем миссию только после полного просмотра и закрытия popup.
+					if (acceptMissionVisualReady) {
+						acceptMissionVisualUpdate();
+						acceptMissionVisualReady = false;
+					}
+				});
+			});
+		}
 
 		/*// когда видео доиграло до конца, то закрываем и производим нужные действия
 		$('.new_mission_answer_incoming_video video').on('ended', function() {
