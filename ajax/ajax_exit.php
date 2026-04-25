@@ -2,6 +2,18 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/ajax/ajax_header.php');
 
+function buildLangPath($lang_abbr, $path = '')
+{
+    $langCode = strtolower(trim((string) $lang_abbr));
+    $path = ltrim((string) $path, '/');
+
+    if ($langCode === '' || $langCode === 'en') {
+        return $path === '' ? '/' : '/' . $path;
+    }
+
+    return $path === '' ? '/' . $langCode : '/' . $langCode . '/' . $path;
+}
+
 if (isset($_POST['op'])) {
     $return = [];
 
@@ -15,11 +27,7 @@ if (isset($_POST['op'])) {
 
             setcookie('hash', '', time() - (60 * 60 * 24 * 1), '/');
 
-            if ($lang_abbr == 'en') {
-                $return['success'] = '/';
-            } else {
-                $return['success'] = '/no';
-            }
+            $return['success'] = buildLangPath($lang_abbr);
 
             print_r(json_encode($return));
             break;

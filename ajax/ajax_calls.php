@@ -103,6 +103,11 @@ if (isset($_POST['op'])) {
 							$call_info = $db->selectRow($sql, [$team_info['calls_outgoing_id'], $lang_id]);
 							if ($call_info) {
 								$return['path'] = $call_info['video'];
+
+								// For the first call in Ukrainian, override video path.
+								if ($lang_abbr === 'ua' && (int) $call_info['id'] === 1) {
+									$return['path'] = 'video/ua/first_cut.mp4';
+								}
 								$return['video_with_path'] = $call_info['video_with_path'];
 								// $return['type'] = $call_info['type'];
 								$return['call_id'] = $call_info['id'];

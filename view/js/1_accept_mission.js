@@ -3,6 +3,21 @@
 /* ОБЩИЕ ФУНКЦИИ */
 	var acceptMissionVisualReady = false;
 
+	// Секунды таймера миссии с data-timer у .timer (0 = миссия ещё не принята / таймер не тикает).
+	// Пустой атриут или NaN трактуем как 0 — иначе acceptMissionServerUpdate никогда не вызывался.
+	function getMissionTimerElapsedSeconds() {
+		var raw = $('.timer').first().attr('data-timer');
+		if (raw === undefined || raw === null || String(raw).trim() === '') {
+			return 0;
+		}
+		var n = parseInt(raw, 10);
+		return isNaN(n) ? 0 : n;
+	}
+
+	function isFirstMissionAcceptByTimer() {
+		return getMissionTimerElapsedSeconds() === 0;
+	}
+
 	function acceptMissionServerUpdate() {
 		var formData = new FormData();
     	formData.append('op', 'acceptMissionUpdateHint');
@@ -29,6 +44,11 @@
 		});
 	}
 
+	// Сразу переключить дашборд на этап Company Name (контент + last_dashboard в БД через setTeamTabsTextInfo внутри uploadTypeTabsDashboardStep).
+	function acceptMissionShowCompanyNameDashboard() {
+		uploadTypeTabsDashboardStep('company_name', false);
+	}
+
 	function acceptMissionVisualUpdate() {
 		// пишем игроку первые 100 баллов
 		incrementScore(100, 'main', 0);
@@ -47,7 +67,7 @@
 		setTeamTabsTextInfo('view_gem', 1);
 
 		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('company_name', false);
+		acceptMissionShowCompanyNameDashboard();
 
 		// запоминаем открытый calls
 		setTeamTabsTextInfo('last_calls', 'call_list');
@@ -334,10 +354,10 @@ $(function() {
 			$inlineVideo.show();
 			inlineVideoEl.play().catch(function() {});
 
-			// На старте ролика сразу фиксируем этап на сервере.
-			var timerSeconds = parseInt($('.timer').attr('data-timer'), 10);
-			if (timerSeconds == 0) {
+			// На старте ролика: сервер + сразу экран Company Name (остальное — после ролика в acceptMissionVisualUpdate).
+			if (isFirstMissionAcceptByTimer()) {
 		        acceptMissionServerUpdate();
+		        acceptMissionShowCompanyNameDashboard();
 		    }
 
 			$inlineVideo.off('ended.inlineIncoming').on('ended.inlineIncoming', function() {
@@ -353,6 +373,10 @@ $(function() {
 					}
 				});
 			});
+		} else if (isFirstMissionAcceptByTimer()) {
+			// Нет inline-video в разметке — сервер + экран Company Name при ответе на звонок.
+			acceptMissionServerUpdate();
+			acceptMissionShowCompanyNameDashboard();
 		}
 
 		/*// когда видео доиграло до конца, то закрываем и производим нужные действия
@@ -408,8 +432,7 @@ $(function() {
 		// closePopupVideoCall();
 
 		// принятие миссии запускаем единожды
-		var timerSeconds = parseInt($('.timer').attr('data-timer'), 10);
-		if (timerSeconds == 0) {
+		if (isFirstMissionAcceptByTimer()) {
 			playVideoSeeking = true;
 
 			// socket

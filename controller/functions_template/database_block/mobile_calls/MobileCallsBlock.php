@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT . '/admin/view/template/component/autocomplete_select.php');
+
 /**
  * Trait для работы с базой данных Mobile Calls
  */
@@ -238,73 +240,43 @@ trait MobileCallsBlock
      */
     private function generateMessageBlocks($translation, $isPopup = false)
     {
-        $iconPath = $isPopup ? 'icon_mobile_calls2_face_from_big.png' : 'icon_mobile_calls2_face_from.png';
+        /*
+         * Legacy card-based mobile-calls renderer kept for reference.
+         * Replaced with a single chat stream in temp.html style.
+         */
 
         $messages = [
-            [
-                'class' => 'dashboard_mobile_calls2_message_item1',
-                'time' => $translation['text69'] . ' 30.08.22 16:46',
-                'items' => [
-                    ['from' => true, 'text' => $translation['text147'] . ' 🤙', 'hasIcon' => false],
-                    ['from' => true, 'text' => $translation['text148'] . ' 🤔', 'hasIcon' => true],
-                    ['from' => false, 'text' => $translation['text149'] . '☠️', 'hasIcon' => true],
-                    ['from' => true, 'text' => $translation['text150'] . ' 🤟', 'hasIcon' => true],
-                ]
-            ],
-            [
-                'class' => 'dashboard_mobile_calls2_message_item2',
-                'time' => $translation['text69'] . ' 30.08.22 16:47',
-                'items' => [
-                    ['from' => true, 'text' => $translation['text151'], 'hasIcon' => true],
-                    ['from' => false, 'text' => $translation['text152'], 'hasIcon' => true],
-                    ['from' => true, 'text' => $translation['text153'], 'hasIcon' => true],
-                    ['from' => false, 'text' => $translation['text154'] . ' 👊', 'hasIcon' => true],
-                ]
-            ],
-            [
-                'class' => 'dashboard_mobile_calls2_message_item3',
-                'time' => $translation['text69'] . ' 30.08.22 23:01',
-                'items' => [
-                    ['from' => true, 'text' => $translation['text155'] . ' 🙌', 'hasIcon' => false],
-                    ['from' => true, 'text' => $translation['text156'], 'hasIcon' => false],
-                    ['from' => true, 'html' => $translation['text157'] . ' <span class="as_link">' . $translation['text158'] . '</span>', 'hasIcon' => true],
-                    ['from' => false, 'text' => $translation['text159'] . ' ✊', 'hasIcon' => true],
-                ]
-            ]
+            ['role' => 'boss', 'text' => $translation['text147'] . ' 🤙 <br> ' . $translation['text148'] . ' 🤔'],
+            ['role' => 'subordinate', 'text' => $translation['text149'] . '☠️ <br> ' . $translation['text150'] . ' 🤟'],
+            ['role' => 'boss', 'text' => $translation['text151']],
+            ['role' => 'subordinate', 'text' => $translation['text152']],
+            ['role' => 'boss', 'text' => $translation['text153']],
+            ['role' => 'subordinate', 'text' => $translation['text154'] . ' 👊'],
+            ['role' => 'subordinate', 'text' => $translation['text155'] . ' 🙌 <br> ' . $translation['text156'] . ' <br> ' . $translation['text157'] . ' <span class="highlight-blue">' . $translation['text158'] . '</span>'],
+            ['role' => 'boss', 'text' => $translation['text159'] . ' ✊']
         ];
 
-        $html = '';
-        foreach ($messages as $block) {
-            $html .= '<div class="dashboard_mobile_calls2_message_item ' . $block['class'] . '">
-                        <div class="dashboard_mobile_calls2_message_inner">
-                            <div class="dashboard_mobile_calls2_message_inner_top">
-                                <img src="/images/icons/' . $iconPath . '" alt="">
-                                <span>' . $translation['text160'] . '</span>
-                            </div>
-                            <div class="dashboard_mobile_calls2_message_inner_bottom">
-                                <div class="dashboard_mobile_calls2_message_inner_bottom_time">' . $block['time'] . '</div>';
-            
-            foreach ($block['items'] as $msg) {
-                $direction = $msg['from'] ? 'from' : 'to';
-                $hasIconClass = ($msg['hasIcon'] ?? false) ? ' dashboard_mobile_calls2_message_' . $direction . '_has_icon' : '';
-                $content = isset($msg['html']) ? $msg['html'] : '<span>' . $msg['text'] . '</span>';
-                
-                $html .= '<div class="dashboard_mobile_calls2_message dashboard_mobile_calls2_message_' . $direction . $hasIconClass . '">' . $content . '</div>';
+        $streamClass = $isPopup
+            ? 'dashboard_mobile_calls2_chat_stream dashboard_mobile_calls2_chat_stream_popup'
+            : 'dashboard_mobile_calls2_chat_stream';
+
+        $html = '<div class="' . $streamClass . '">';
+
+        foreach ($messages as $msg) {
+            $isBoss = ($msg['role'] === 'boss');
+            $roleClass = $isBoss ? 'boss' : 'subordinate';
+
+            $html .= '<div class="message ' . $roleClass . '">';
+            if ($isBoss) {
+                $html .= '<div class="sender-label">' . $translation['text160'] . '</div>';
             }
-            
-            $html .= '      </div>
-                        </div>';
-            
-            if (!$isPopup) {
-                $html .= '<div class="dashboard_mobile_calls2_message_item_border_right_bottom_bg">
-                            <svg width="83" height="10" viewBox="0 0 83 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M75.9846 9.49998L82.501 0L9.86363 1.3677e-05L0.000442505 9.49999L75.9846 9.49998Z" fill="#00F0FF"/>
-                            </svg>
-                        </div>';
-            }
-            
-            $html .= '</div>';
+            $html .= '   <div class="bubble">
+                            <div class="text">' . $msg['text'] . '</div>
+                        </div>
+                    </div>';
         }
+
+        $html .= '</div>';
 
         return $html;
     }
@@ -314,27 +286,38 @@ trait MobileCallsBlock
      */
     private function generateCountryCodeSelect($lang_id, $team_info, $translation)
     {
-        $sql = "SELECT c.code, cd.name, c.id
+        $sql = "SELECT c.code, COALESCE(cd_lang.name, cd_default.name) AS name, c.id
                 FROM countries c
-                JOIN countries_description cd ON c.id = cd.country_id
-                WHERE cd.lang_id = {?}
-                ORDER BY cd.name";
+                LEFT JOIN countries_description cd_lang
+                    ON c.id = cd_lang.country_id AND cd_lang.lang_id = {?}
+                LEFT JOIN countries_description cd_default
+                    ON c.id = cd_default.country_id AND cd_default.lang_id = 3
+                WHERE cd_lang.name IS NOT NULL OR cd_default.name IS NOT NULL
+                ORDER BY COALESCE(cd_lang.name, cd_default.name)";
         $countries = $this->db->select($sql, [$lang_id]);
 
         if (!$countries) {
             return '';
         }
 
-        $options = '<option disabled="disabled"' . (empty($team_info['mobile_calls_country_id']) ? ' selected="selected"' : '') . '>' 
-                  . $translation['text141'] . '</option>';
+        $componentData = [];
+        $selectedCountryId = '';
 
         foreach ($countries as $country) {
-            $selected = ($team_info['mobile_calls_country_id'] == $country['id']) ? ' selected="selected"' : '';
-            $options .= '<option value="' . $country['id'] . '"' . $selected . '>+' . $country['code'] . ' ' . $country['name'] . '</option>';
+            $componentData[] = [
+                'value' => (string) $country['id'],
+                'label' => '+' . $country['code'] . ' ' . $country['name']
+            ];
         }
 
-        return '<select class="dashboard_mobile_calls1_country_code">' . $options . '</select>'
-              . $this->getCountryCodeSelectScript();
+        return renderAutocompleteSelectComponent([
+            'id' => 'dashboard-mobile-calls-country-code-select',
+            'hidden_class' => 'dashboard_mobile_calls1_country_code',
+            'wrapper_class' => 'dashboard_mobile_calls1_country_code_autocomplete',
+            'placeholder' => $translation['text141'],
+            'selected_value' => $selectedCountryId,
+            'options' => $componentData
+        ]) . $this->getCountryCodeSelectScript();
     }
 
     /**
@@ -344,37 +327,11 @@ trait MobileCallsBlock
     {
         return '<script>
             $(function() {
-                var scrollbarPositionPixel = 0;
-                var isScrollOpen = false;
+                if (window.initAutocompleteSelectComponent) {
+                    window.initAutocompleteSelectComponent("#dashboard-mobile-calls-country-code-select");
+                }
 
-                $(".dashboard_mobile_calls1_country_code").selectric({
-                    maxHeight: 236,
-                    onInit: function() {
-                        $(".selectric-dashboard_mobile_calls1_country_code .selectric-scroll").mCustomScrollbar({
-                            scrollInertia: 700,
-                            theme: "minimal-dark",
-                            scrollbarPosition: "inside",
-                            alwaysShowScrollbar: 2,
-                            autoHideScrollbar: false,
-                            mouseWheel:{ deltaFactor: 200 },
-                            callbacks:{
-                                whileScrolling:function() {
-                                    scrollbarPositionPixel = this.mcs.top;
-                                    if (isScrollOpen) {
-                                        $(".dashboard_mobile_calls1_country_code").selectric("open");
-                                    }
-                                }
-                            }
-                        });
-                    },
-                    onOpen: function() {
-                        if (!isScrollOpen) {
-                            $(".selectric-dashboard_mobile_calls1_country_code .selectric-scroll").mCustomScrollbar("scrollTo", Math.abs(scrollbarPositionPixel));
-                            isScrollOpen = true;
-                        }
-                    }
-                })
-                .on("change", function() {
+                $(".dashboard_mobile_calls1_country_code").off("change.mobileCallsCountryCode").on("change.mobileCallsCountryCode", function() {
                     var formData = new FormData();
                     formData.append("op", "saveTeamTextField");
                     formData.append("field", "mobile_calls_country_id");
@@ -402,7 +359,6 @@ trait MobileCallsBlock
                             }
                         }
                     });
-                    isScrollOpen = false;
                 });
             });
         </script>';

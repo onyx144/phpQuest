@@ -1055,7 +1055,11 @@ $(function() {
 					}
 				} else if (op == 'databaseMobileCallsUpdateCountryCode') { // database - первый экран mobile calls - выбираем значение в Country code
 					if ($('.dashboard_mobile_calls1_country_code').length && $('.dashboard_mobile_calls1_country_code').val() != parameters.country_lang[$('html').attr('lang')]) {
-						$('.dashboard_mobile_calls1_country_code').val(parameters.country_lang[$('html').attr('lang')]).change().selectric('refresh');
+						var $countryCode = $('.dashboard_mobile_calls1_country_code');
+						$countryCode.val(parameters.country_lang[$('html').attr('lang')]).change();
+						if (typeof $countryCode.selectric === 'function' && $countryCode.closest('.autocomplete_select_component').length === 0) {
+							$countryCode.selectric('refresh');
+						}
 					}
 				} else if (op == 'databaseMobileCallsNoEmptyFields') { // database - mobile calls - нет пустых полей, открываем попап поиска
 					scoreBeforeDatabaseMobileCalls = parameters.scoreBeforeDatabaseMobileCalls;

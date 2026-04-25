@@ -7,6 +7,32 @@ class Login extends Admin
         parent::__construct();
     }
 
+    private function getCurrentSiteLang()
+    {
+        if (!empty($_COOKIE['site_lang'])) {
+            return strtolower(trim((string) $_COOKIE['site_lang']));
+        }
+
+        $langAbbr = (string) $this->lang->getParam('lang_abbr');
+        if ($langAbbr !== '') {
+            return strtolower(trim($langAbbr));
+        }
+
+        return 'en';
+    }
+
+    private function buildLangPath($path = '')
+    {
+        $langCode = $this->getCurrentSiteLang();
+        $path = ltrim((string) $path, '/');
+
+        if ($langCode === 'en' || $langCode === '') {
+            return $path === '' ? '/' : '/' . $path;
+        }
+
+        return $path === '' ? '/' . $langCode : '/' . $langCode . '/' . $path;
+    }
+
     // первая страница игры
     public function joinGame()
     {
@@ -48,11 +74,7 @@ class Login extends Admin
 	                setcookie('hash', '', time()+(60*60*24*1), '/');
 	            }
 
-	            if ($this->lang->getParam('lang_abbr') == 'en') {
-    				header('Location: /control-system');
-    			} else {
-    				header('Location: /no/control-system');
-    			}
+	            header('Location: ' . $this->buildLangPath('control-system'));
     		// }
 
             exit();

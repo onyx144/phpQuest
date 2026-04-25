@@ -174,6 +174,7 @@ if (isset($_POST['op'])) {
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
 			$translation = $lang->getWordsByPage('game', $lang_id);
 
+			//Возможно поменять (номер телефона Дудика)
 			if (!empty($country_code) && !empty($number)) {
 				if (($country_code == '167' || $country_code == 167 || $country_code == '102' || $country_code == 102) && ($number == '94054421337' || $number == '794054421337' || $number == '+794054421337' || $number == '+94054421337')) {
 					$return['success'] = 'ok';

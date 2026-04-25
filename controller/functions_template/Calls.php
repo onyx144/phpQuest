@@ -56,6 +56,7 @@ private function uploadCallsList($team_id, $lang_id)
 {
 $translation = $this->getWordsByPage('game', $lang_id);
 $team_info   = $this->teamInfo($team_id);
+$lang_abbr   = $this->db->selectCell("SELECT `lang_abbr` FROM `langs` WHERE `id` = {?} LIMIT 1", [$lang_id]);
 
 $return = [];
 
@@ -83,6 +84,21 @@ if ($team_info) {
             WHERE c.id = {?} AND cd.lang_id = {?}
         ";
         $call_info = $this->db->selectRow($sql, [$call['id'], $lang_id]);
+        if ($lang_abbr === 'uk' && (int) $call['id'] === 1) {
+            if (!$call_info) {
+                $call_info = [
+                    'type' => 'incoming',
+                    'video' => 'video/ua/first_cut.mp4',
+                    'name' => '',
+                    'video_with_path' => 'first_cut.mp4'
+                ];
+            } else {
+                $call_info['video'] = 'video/ua/first_cut.mp4';
+                if (empty($call_info['video_with_path'])) {
+                    $call_info['video_with_path'] = 'first_cut.mp4';
+                }
+            }
+        }
 
         // Иконка звонка
         $icon = '';
@@ -108,24 +124,22 @@ if ($team_info) {
 
         // Кнопка прослушивания
         $listen_btn = '';
-        if (!empty($call_info['video']) || !empty($call_info['video_with_path'])) {
+         
             $listen_btn = '
                 <button 
-                    class="px-3 py-1 rounded-lg border border-primary/30 text-primary hover:bg-primary/20 transition-all duration-300 flex items-center gap-2"
+                    class="dashboard_tab_content_item_calls_list_td_again_btn px-3 py-1 rounded-lg border border-primary/30 text-primary hover:bg-primary/20 transition-all duration-300 flex items-center gap-2"
                     data-path="' . (!empty($call_info['video']) ? $call_info['video'] : '') . '"
                     data-video-with-path="' . (!empty($call_info['video_with_path']) ? $call_info['video_with_path'] : '') . '">
                     ▶ ' . $translation['text55'] . '
                 </button>';
-        }
+        
 
         $return['content'] .= '
             <div class="bg-muted/20 border-border/50 hover:bg-muted/30 transition-all duration-300 p-4 rounded-lg flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-2">
                         ' . $icon . '
-                        <div class="p-2 rounded-full bg-muted/50">
-                            <img src="/images/user_icon.png" class="h-4 w-4 opacity-70" alt="User">
-                        </div>
+                         
                     </div>
                     <div>
                         <h3 class="font-semibold text-foreground text-lg">' . (!empty($call_info['name']) ? $call_info['name'] : $translation['text175']) . '</h3>

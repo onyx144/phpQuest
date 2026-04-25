@@ -1085,7 +1085,11 @@ $(function() {
 			uploadTypeTabsDatabasesStep('databases_start_four_inner_first_mobile_calls', 'mobile_calls');
 		} else if (op == 'databaseMobileCallsUpdateCountryCode') { // database - первый экран mobile calls - выбираем значение в Country code
 			if ($('.dashboard_mobile_calls1_country_code').length && $('.dashboard_mobile_calls1_country_code').val() != parameters.country_lang[$('html').attr('lang')]) {
-				$('.dashboard_mobile_calls1_country_code').val(parameters.country_lang[$('html').attr('lang')]).change().selectric('refresh');
+				var $countryCode = $('.dashboard_mobile_calls1_country_code');
+				$countryCode.val(parameters.country_lang[$('html').attr('lang')]).change();
+				if (typeof $countryCode.selectric === 'function' && $countryCode.closest('.autocomplete_select_component').length === 0) {
+					$countryCode.selectric('refresh');
+				}
 			}
 		} else if (op == 'databaseMobileCallsNumberKeyup') {
 			if ($('.dashboard_mobile_calls1_number').length && $('.dashboard_mobile_calls1_number').val() != parameters.number) {

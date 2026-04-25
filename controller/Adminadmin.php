@@ -952,7 +952,15 @@ class Adminadmin
         $words = [];
         $words_with_english = [];
         /** Админка: один «срез» словаря по page (несколько строк с одним field и разным page — отдельные записи) */
-        $dict_page_scope = 'game';
+        $dict_page_scope = isset($_GET['dict_page_scope']) ? trim((string) $_GET['dict_page_scope']) : 'game';
+        if ($dict_page_scope === '') {
+            $dict_page_scope = 'game';
+        }
+        $dict_page_scope = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dict_page_scope);
+        if ($dict_page_scope === '') {
+            $dict_page_scope = 'game';
+        }
+        $available_dict_pages = ['game'];
 
         if ($selected_lang_id > 0) {
             // Получаем информацию о выбранном языке
@@ -961,11 +969,33 @@ class Adminadmin
 
             if ($selected_lang) {
                 $urlPag = '/language';
-                $urlParams = ['lang_id' => $selected_lang_id];
+                $urlParams = [
+                    'lang_id' => $selected_lang_id,
+                    'dict_page_scope' => $dict_page_scope,
+                ];
                 if ($search !== '') {
                     $urlParams['search'] = $search;
                 }
                 $urlPagFull = $urlPag . '?' . http_build_query($urlParams);
+                $page_lang_ids = [$selected_lang_id];
+                if ($english_lang_id && (int) $english_lang_id !== (int) $selected_lang_id) {
+                    $page_lang_ids[] = (int) $english_lang_id;
+                }
+                $lang_ids_for_sql = implode(',', array_map('intval', $page_lang_ids));
+                if ($lang_ids_for_sql !== '') {
+                    $query_pages = "SELECT DISTINCT `page` FROM `lang_words_admin` WHERE `language_id` IN (" . $lang_ids_for_sql . ") AND TRIM(COALESCE(`page`, '')) <> '' ORDER BY `page` ASC";
+                    $page_rows = $this->db->select($query_pages);
+                    $available_dict_pages = [];
+                    foreach ($page_rows as $page_row) {
+                        $page_val = trim((string) ($page_row['page'] ?? ''));
+                        if ($page_val !== '' && !in_array($page_val, $available_dict_pages, true)) {
+                            $available_dict_pages[] = $page_val;
+                        }
+                    }
+                }
+                if (!in_array('game', $available_dict_pages, true)) {
+                    array_unshift($available_dict_pages, 'game');
+                }
 
                 $dict_limit = max(50, (int) ($this->settings['limit'] ?? 20));
 

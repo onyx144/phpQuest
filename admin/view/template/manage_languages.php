@@ -84,6 +84,12 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                 </div>
                             </div>
                             <div class="card-body">
+                                <?php
+                                $dict_pages_for_select = !empty($available_dict_pages) && is_array($available_dict_pages) ? $available_dict_pages : ['game'];
+                                if (!in_array('game', $dict_pages_for_select, true)) {
+                                    array_unshift($dict_pages_for_select, 'game');
+                                }
+                                ?>
                                 <form method="get" action="/language" class="mb-4">
                                     <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
                                     <div class="row g-2 align-items-end">
@@ -93,12 +99,22 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                                    value="<?php echo htmlspecialchars($search); ?>" 
                                                    placeholder="Enter field code or word...">
                                         </div>
+                                        <div class="col-md-4 col-lg-3">
+                                            <label for="dict-page-scope" class="form-label mb-0">Page:</label>
+                                            <select class="form-select" id="dict-page-scope" name="dict_page_scope">
+                                                <?php foreach ($dict_pages_for_select as $dict_page_option): ?>
+                                                    <option value="<?php echo htmlspecialchars((string) $dict_page_option); ?>" <?php echo ((string) ($dict_page_scope ?? 'game') === (string) $dict_page_option) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars((string) $dict_page_option); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-search"></i> Search
                                             </button>
                                             <?php if ($search !== ''): ?>
-                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>" class="btn btn-outline-secondary">Clear</a>
+                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>&dict_page_scope=<?php echo urlencode((string) ($dict_page_scope ?? 'game')); ?>" class="btn btn-outline-secondary">Clear</a>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -216,6 +232,12 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                             <div class="card-body">
                                 <form method="get" action="/language" class="mb-3">
                                     <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
+                                    <?php
+                                    $dict_pages_for_select = !empty($available_dict_pages) && is_array($available_dict_pages) ? $available_dict_pages : ['game'];
+                                    if (!in_array('game', $dict_pages_for_select, true)) {
+                                        array_unshift($dict_pages_for_select, 'game');
+                                    }
+                                    ?>
                                     <div class="row g-2 align-items-end">
                                         <div class="col-md-6 col-lg-4">
                                             <label for="search-field-empty" class="form-label mb-0">Search by Field (Code) or Word:</label>
@@ -223,10 +245,20 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                                    value="<?php echo htmlspecialchars($search); ?>" 
                                                    placeholder="Enter field code or word...">
                                         </div>
+                                        <div class="col-md-4 col-lg-3">
+                                            <label for="dict-page-scope-empty" class="form-label mb-0">Page:</label>
+                                            <select class="form-select" id="dict-page-scope-empty" name="dict_page_scope">
+                                                <?php foreach ($dict_pages_for_select as $dict_page_option): ?>
+                                                    <option value="<?php echo htmlspecialchars((string) $dict_page_option); ?>" <?php echo ((string) ($dict_page_scope ?? 'game') === (string) $dict_page_option) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars((string) $dict_page_option); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
                                             <?php if ($search !== ''): ?>
-                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>" class="btn btn-outline-secondary">Clear</a>
+                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>&dict_page_scope=<?php echo urlencode((string) ($dict_page_scope ?? 'game')); ?>" class="btn btn-outline-secondary">Clear</a>
                                             <?php endif; ?>
                                         </div>
                                     </div>

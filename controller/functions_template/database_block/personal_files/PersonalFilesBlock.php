@@ -323,11 +323,7 @@ trait PersonalFilesBlock
                                     </span>
                                 </div>
                             </div>
-                            <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_photo_frame">
-                                <div class="dashboard_personal_files2_private_individuals_huilov_vehicle_photo_inner">
-                                    <img src="/images/slider_stalin_car/1.png" alt="">
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

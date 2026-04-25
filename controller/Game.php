@@ -15,6 +15,32 @@ class Game extends Admin
         parent::__construct();
     }
 
+    private function getCurrentSiteLang()
+    {
+        if (!empty($_COOKIE['site_lang'])) {
+            return strtolower(trim((string) $_COOKIE['site_lang']));
+        }
+
+        $langAbbr = (string) $this->lang->getParam('lang_abbr');
+        if ($langAbbr !== '') {
+            return strtolower(trim($langAbbr));
+        }
+
+        return 'en';
+    }
+
+    private function buildLangPath($path = '')
+    {
+        $langCode = $this->getCurrentSiteLang();
+        $path = ltrim((string) $path, '/');
+
+        if ($langCode === 'en' || $langCode === '') {
+            return $path === '' ? '/' : '/' . $path;
+        }
+
+        return $path === '' ? '/' . $langCode : '/' . $langCode . '/' . $path;
+    }
+
     // Основная страница игры
     public function main()
     {
@@ -29,21 +55,13 @@ class Game extends Admin
                 if ($this->db->query($query, [$this->userInfo['id']])) {
                     setcookie('hash', '', time()+(60*60*24*1), '/');
                 }
-                
-                if ($this->lang->getParam('lang_abbr') == 'en') {
-                    header('Location: /');
-                } else {
-                    header('Location: /no');
-                }
+
+                header('Location: ' . $this->buildLangPath());
 
                 exit();
             }
         } else {
-            if ($this->lang->getParam('lang_abbr') == 'en') {
-                header('Location: /');
-            } else {
-                header('Location: /no');
-            }
+            header('Location: ' . $this->buildLangPath());
 
             exit();
         }

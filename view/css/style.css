@@ -573,6 +573,99 @@ a {
     bottom: -3px;
     left: 16px;
 }
+/*mobile calls*/
+.chat-wrapper {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    position: relative;
+}
+
+/* --- БОСС (СЛЕВА) --- */
+.boss {
+    align-self: flex-start;
+}
+
+.boss .sender-label {
+    color: var(--cyber-red);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.boss .bubble {
+    background: var(--boss-bg);
+    padding: 15px 25px;
+    color: #fff;
+    position: relative;
+    /* Динамический срез угла */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+    border-left: 2px solid var(--cyber-red);
+}
+
+/* Красные отломления для босса */
+.boss .bubble::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px;
+    width: 30px; height: 10px;
+    border-top: 2px solid var(--cyber-red);
+    border-left: 2px solid var(--cyber-red);
+}
+
+.boss .bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; right: -2px;
+    width: 15px; height: 15px;
+    background: var(--cyber-red);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* --- ПОДЧИНЕННЫЙ (СПРАВА) --- */
+.subordinate {
+    align-self: flex-end;
+}
+
+.subordinate .bubble {
+    background: rgba(0, 240, 255, 0.03);
+    padding: 15px 25px;
+    color: var(--cyber-blue);
+    text-align: right;
+    border-right: 1px solid var(--cyber-blue);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+}
+
+.subordinate .bubble::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 10px; height: 2px;
+    background: var(--cyber-blue);
+}
+
+/* Общие стили текста */
+
+
+.highlight-red {
+    color: var(--cyber-red);
+    font-weight: bold;
+}
+
+.highlight-blue {
+    color: var(--cyber-blue);
+    text-decoration: underline;
+}
 .section_main_bg_header .text_top {
     position: absolute;
     top: 0;
@@ -4949,11 +5042,11 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     left: 205px;
 }
 .dashboard_personal_files2_private_individuals_huilov_label {
-    width: 192px;
+    width: 210px;
     float: left;
-    line-height: 63px;
+    line-height: 55px;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     color: white;
 }
 .dashboard_personal_files2_private_individuals_huilov_input .dots_top {
@@ -5080,6 +5173,59 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     width: 100%;
     height: 100%;
 }
+.dashboard_mobile_calls1_country_code_autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_input {
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 27px;
+    color: #00F0FF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_input::placeholder {
+    color: #00F0FF;
+    opacity: 0.7;
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 236px;
+    overflow-y: auto;
+    z-index: 15;
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_option {
+    font-size: 24px;
+    color: #00F0FF;
+    padding: 10px 22px;
+    line-height: 26px;
+    cursor: pointer;
+}
+.dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_option:hover {
+    background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
+}
 .selectric-dashboard_mobile_calls1_country_code .selectric-items li {
     font-size: 24px;
     color: #00F0FF;
@@ -5116,6 +5262,64 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     display: flex;
     justify-content: space-between;
     margin: 10px 0 0;
+}
+.dashboard_mobile_calls2_chat_stream {
+    width: 100%;
+    max-height: 315px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 6px 8px 12px;
+    box-sizing: border-box;
+}
+.dashboard_mobile_calls2_chat_stream .message {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+    position: relative;
+}
+.dashboard_mobile_calls2_chat_stream .boss {
+    align-self: flex-start;
+}
+.dashboard_mobile_calls2_chat_stream .subordinate {
+    align-self: flex-end;
+}
+.dashboard_mobile_calls2_chat_stream .boss .sender-label {
+    color: #FF004E;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+.dashboard_mobile_calls2_chat_stream .boss .bubble {
+    background: rgba(0, 240, 255, 0.07);
+    padding: 15px 20px;
+    color: #FFFFFF;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+    border-left: 2px solid #FF004E;
+}
+.dashboard_mobile_calls2_chat_stream .subordinate .bubble {
+    background: rgba(0, 240, 255, 0.03);
+    padding: 15px 20px;
+    color: #00F0FF;
+    text-align: right;
+    border-right: 1px solid #00F0FF;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+}
+.dashboard_mobile_calls2_chat_stream .text {
+    font-size: 16px;
+    line-height: 22px;
+}
+.dashboard_mobile_calls2_chat_stream .highlight-blue {
+    color: #00F0FF;
+    text-decoration: underline;
+}
+#popup_mobile_calls_messages .dashboard_mobile_calls2_chat_stream {
+    max-height: 650px;
+    padding-right: 16px;
 }
 .dashboard_mobile_calls2_message_item {
     width: 303px;
