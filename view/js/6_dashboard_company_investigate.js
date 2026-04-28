@@ -88,11 +88,15 @@
 								dataTransferAudio.pause();
 							}
 
-							if (json.success) {
+							var langCode = $('html').attr('lang');
+							var successLang = (json.success_lang && json.success_lang[langCode]) ? json.success_lang[langCode] : false;
+							var errorLang = (json.error_lang && json.error_lang[langCode]) ? json.error_lang[langCode] : false;
+
+							if (json.success && successLang) {
 								// попап с текстом успеха
-								$('#popup_success .popup_success_input').html(json.success_lang[$('html').attr('lang')].success_input);
-								$('#popup_success .popup_success_text').html(json.success_lang[$('html').attr('lang')].success_text);
-								$('#popup_success .popup_success_close .btn span').html(json.success_lang[$('html').attr('lang')].success_close);
+								$('#popup_success .popup_success_input').html(successLang.success_input);
+								$('#popup_success .popup_success_text').html(successLang.success_text);
+								$('#popup_success .popup_success_close .btn span').html(successLang.success_close);
 								$('#popup_success').addClass('popup_success_company_investigate').css('display','block');
 
 								// звук успешного выполнения
@@ -111,9 +115,18 @@
 									});
 								}
 							} else {
+								var errorInputText = errorLang ? errorLang.error_input : '';
+								var errorBodyText = errorLang ? errorLang.error_text : '';
+
+								if (json.success && !successLang) {
+									// fallback: если success есть, но текстов нет, не зависаем в пустом состоянии
+									errorInputText = 'Error';
+									errorBodyText = 'Response format error';
+								}
+
 								// отображаем попап ошибки
-								$('#popup_search_error .popup_search_error_input').html(json.error_lang[$('html').attr('lang')].error_input);
-								$('#popup_search_error .popup_search_error_text').html(json.error_lang[$('html').attr('lang')].error_text);
+								$('#popup_search_error .popup_search_error_input').html(errorInputText);
+								$('#popup_search_error .popup_search_error_text').html(errorBodyText);
 								$('#popup_search_error').css('display','block');
 
 								// звук ошибки
@@ -134,6 +147,29 @@
 							}
 						},
 						error: function(xhr, ajaxOptions, thrownError) {	
+							// Даже если сервер вернул невалидный JSON/ошибку, не оставляем игрока в "тишине".
+							$('#popup_data_transfer').fadeOut(200);
+
+							if (dataTransferAudio && isPlaying(dataTransferAudio)) {
+								dataTransferAudio.pause();
+							}
+
+							$('#popup_search_error .popup_search_error_input').html('Error');
+							$('#popup_search_error .popup_search_error_text').html('Search request failed');
+							$('#popup_search_error').css('display','block');
+
+							// звук ошибки
+							errorAudio = new Audio;
+							errorAudio.src = '/music/error.mp3';
+							var promise = errorAudio.play();
+							if (promise !== undefined) {
+								promise.then(_ => {
+									// console.log('autoplay');
+								}).catch(error => {
+									// console.log('autoplay ERR');
+								});
+							}
+
 							console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 						}
 					});

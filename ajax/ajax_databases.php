@@ -222,7 +222,8 @@ if (isset($_POST['op'])) {
 			$translation = $lang->getWordsByPage('game', $lang_id);
 
 			if (!empty($firstname) && !empty($lastname)) {
-				if (mb_strtolower($firstname, 'UTF-8') == 'axel' && mb_strtolower($lastname, 'UTF-8') == 'rod') {
+				//Robert Engel Возможно поменять 
+				if (mb_strtolower($firstname, 'UTF-8') == 'robert' && mb_strtolower($lastname, 'UTF-8') == 'engel') {
 					$return['success'] = 'ok';
 				} else {
 					// переводы для всех языков. Для синхронизации

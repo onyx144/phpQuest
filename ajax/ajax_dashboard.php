@@ -30,8 +30,9 @@ if (isset($_POST['op'])) {
 				$check_company_name = str_replace('«', '', $check_company_name);
 				$check_company_name = str_replace('»', '', $check_company_name);
 				$check_company_name = str_replace('"', '', $check_company_name);
+				$check_company_name = preg_replace('/\s+/u', ' ', trim($check_company_name));
 
-				if ($check_company_name == 'green pace' || $check_company_name == 'green pace group') {
+				if ($check_company_name == 'peace group') {
 					$return['success'] = 'ok';
 
 					// переводы для всех языков. Для синхронизации
@@ -48,6 +49,13 @@ if (isset($_POST['op'])) {
 							$return['success_lang'][$lang2['lang_abbr']]['success_close'] = $translation['text165'];
 						}
 					}
+
+					if (empty($return['success_lang'])) {
+						$return['success_lang'] = [];
+						$return['success_lang'][$lang_abbr]['success_input'] = isset($translation['text163']) ? $translation['text163'] : '';
+						$return['success_lang'][$lang_abbr]['success_text'] = isset($translation['text164']) ? $translation['text164'] : '';
+						$return['success_lang'][$lang_abbr]['success_close'] = isset($translation['text165']) ? $translation['text165'] : '';
+					}
 				} else {
 					// переводы для всех языков. Для синхронизации
 					$sql = "SELECT `lang_abbr`, `id` FROM `langs` WHERE `status` = {?}";
@@ -61,6 +69,12 @@ if (isset($_POST['op'])) {
 							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'];
 							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'];
 						}
+					}
+
+					if (empty($return['error_lang'])) {
+						$return['error_lang'] = [];
+						$return['error_lang'][$lang_abbr]['error_input'] = isset($translation['text161']) ? $translation['text161'] : '';
+						$return['error_lang'][$lang_abbr]['error_text'] = isset($translation['text162']) ? $translation['text162'] : '';
 					}
 				}
 			} else {
@@ -76,6 +90,12 @@ if (isset($_POST['op'])) {
 						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'];
 						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'];
 					}
+				}
+
+				if (empty($return['error_lang'])) {
+					$return['error_lang'] = [];
+					$return['error_lang'][$lang_abbr]['error_input'] = isset($translation['text161']) ? $translation['text161'] : '';
+					$return['error_lang'][$lang_abbr]['error_text'] = isset($translation['text162']) ? $translation['text162'] : '';
 				}
 			}
 

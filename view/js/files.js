@@ -229,6 +229,15 @@
 		return !audelem.paused;
 	}
 
+	// Единый визуальный апдейт после успешного видеозвонка от Jane.
+	function applyJaneCallVisualUpdate() {
+		$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
+		setTeamTabsTextInfo('view_gem', 1);
+		setTeamTabsTextInfo('last_calls', 'call_list');
+		$('.call_jane').addClass('call_jane_active');
+		setTeamTabsTextInfo('view_call_jane_btn', 1);
+	}
+
 	// закрыть попап с видео
 	function closePopupVideo() {
 		$('#popup_video').fadeOut(200);
@@ -727,6 +736,19 @@ $(function() {
 
 	// когда видео доиграло до конца, то закрываем и производим нужные действия. Если звонок
 	$('#popup_video_phone_video #popup_video_mp4_call').on('ended', function(e){
+		var isJaneIncomingVideo = (
+			$('#popup_video_phone_video').hasClass('company_investigate_answer_incoming_video') ||
+			$('#popup_video_phone_video').hasClass('geo_coordinates_answer_incoming_video') ||
+			$('#popup_video_phone_video').hasClass('african_partner_answer_incoming_video') ||
+			$('#popup_video_phone_video').hasClass('metting_place_answer_incoming_video') ||
+			$('#popup_video_phone_video').hasClass('room_name_answer_incoming_video') ||
+			$('#popup_video_phone_video').hasClass('minigame_answer_incoming_video')
+		);
+
+		if (isJaneIncomingVideo) {
+			applyJaneCallVisualUpdate();
+		}
+
 		if (
 			// $('#popup_video_phone_video').hasClass('new_mission_answer_incoming_video') || 
 			$('#popup_video_phone_video').hasClass('company_investigate_answer_incoming_video') || 

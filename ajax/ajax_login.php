@@ -105,7 +105,7 @@ if (isset($_POST['op'])) {
 						setcookie('hash', $hash, time() + (60 * 60 * 24 * 1), '/');
 					}
 
-					$return['success_link'] = buildLangPath($lang_abbr, 'game');
+					$return['success_link'] = '/game';
 				}
 			} else {
 				$return['error'] = 'ok';

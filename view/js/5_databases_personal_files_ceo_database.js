@@ -1,5 +1,8 @@
 /* === DATABASES - PERSONAL FILES - CEO DATABASE === */
 
+var ceoDatabaseSearchRequestInProgress = false;
+var ceoDatabaseSearchRequestTimeoutMs = 15000;
+
 /* ОБЩИЕ ФУНКЦИИ */
 	function databasePersonalFilesCeoDatabaseNoEmptyFields(firstname, lastname, lang_abbr2) {
 		// на всякий случай скрываем окно с ошибкой
@@ -60,6 +63,7 @@
 					url: '/ajax/ajax_databases.php',
 			        type: "POST",
 			        dataType: "json",
+			        timeout: ceoDatabaseSearchRequestTimeoutMs,
 			        cache: false,
 			        contentType: false,
 			        processData: false,
@@ -118,8 +122,28 @@
 							}
 						}
 					},
-					error: function(xhr, ajaxOptions, thrownError) {	
+					error: function(xhr, ajaxOptions, thrownError) {
+						// показываем ошибку, чтобы поиск не оставался бесконечным
+						$('#popup_search_processing').css('display','none');
+						$('#popup_search_error').css('display','block');
+
+						if (searchAudio && isPlaying(searchAudio)) {
+							searchAudio.pause();
+						}
+
+						errorAudio = new Audio;
+						errorAudio.src = '/music/error.mp3';
+
+						var promise = errorAudio.play();
+						if (promise !== undefined) {
+							promise.then(_ => {}).catch(error => {});
+						}
+
 						console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					},
+					complete: function() {
+						ceoDatabaseSearchRequestInProgress = false;
+						$('.dashboard_personal_files2_ceo_database_search').removeClass('btn_disabled');
 					}
 				});
 			}
@@ -144,6 +168,10 @@ $(function() {
 
 	// нажали на кнопку поиска
 	$('body').on('click', '.dashboard_personal_files2_ceo_database_search', function(e){
+		if (ceoDatabaseSearchRequestInProgress) {
+			return false;
+		}
+
 		var err = false;
 		var firstname = $.trim($('.dashboard_personal_files2_private_individuals_input_wrapper_firstname input').val());
 		var lastname = $.trim($('.dashboard_personal_files2_private_individuals_input_wrapper_lastname input').val());
@@ -163,6 +191,9 @@ $(function() {
 		}
 
 		if (!err) {
+			ceoDatabaseSearchRequestInProgress = true;
+			$('.dashboard_personal_files2_ceo_database_search').addClass('btn_disabled');
+
 			// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
 			$.when(getTeamInfo()).done(function(teamResponse){
 				var teamInfo = teamResponse.success;
@@ -184,6 +215,10 @@ $(function() {
 		        sendMessageSocket(JSON.stringify(message));
 
 				databasePersonalFilesCeoDatabaseNoEmptyFields(firstname, lastname, $('html').attr('lang'));
+			}).fail(function() {
+				ceoDatabaseSearchRequestInProgress = false;
+				$('.dashboard_personal_files2_ceo_database_search').removeClass('btn_disabled');
+				$('#popup_search_error').css('display','block');
 			});
 		} else {
 			// socket
