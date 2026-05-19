@@ -205,7 +205,41 @@ class Language
     // идентификатор языка в зависимости от атрибута языка, который в теге html
     public function getLangIdByHtmlAttr($abbr)
     {
+        $abbr = strtolower(trim(strtr((string) $abbr, ['а' => 'a', 'А' => 'a'])));
+        if ($abbr === '') {
+            return false;
+        }
+
         $sql = "SELECT `id` FROM `langs` WHERE `lang_abbr` = {?}";
-        return $this->db->selectCell($sql, [$abbr]);
+        $candidates = [$abbr];
+        // Как в Router / app_lang.js / I18n: украинский может приходить как uk при lang_abbr ua в БД (и наоборот).
+        if ($abbr === 'uk') {
+            $candidates[] = 'ua';
+        } elseif ($abbr === 'ua') {
+            $candidates[] = 'uk';
+        }
+
+        foreach ($candidates as $code) {
+            $id = $this->db->selectCell($sql, [$code]);
+            if ($id !== false) {
+                return $id;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Дублирует ветки ua ↔ uk в ответах API: ключи совпадают с <html lang> и POST lang_abbr.
+     */
+    public function mirrorUkUaByLang(array $byLang)
+    {
+        if (isset($byLang['ua']) && !isset($byLang['uk'])) {
+            $byLang['uk'] = $byLang['ua'];
+        } elseif (isset($byLang['uk']) && !isset($byLang['ua'])) {
+            $byLang['ua'] = $byLang['uk'];
+        }
+
+        return $byLang;
     }
 }

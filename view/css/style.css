@@ -12,6 +12,9 @@ body {
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
     display: block;
 }
+.popup_success_confirmed_star img {
+    margin: auto;
+}
 audio, canvas, progress, video {
     display: inline-block;
     vertical-align: baseline;

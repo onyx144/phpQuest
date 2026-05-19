@@ -40,21 +40,38 @@ if (isset($_POST['op'])) {
 					$langs = $db->select($sql, [1]);
 					if ($langs) {
 						$return['success_lang'] = [];
+						$return['translation'] = [];
+						$return['lang_ids'] = [];
 
 						foreach ($langs as $lang2) {
 							$translation = $lang->getWordsByPage('game', $lang2['id']);
+							$return['translation'][$lang2['lang_abbr']] = $translation;
+							$return['lang_ids'][$lang2['lang_abbr']] = $lang2['id'];
 
-							$return['success_lang'][$lang2['lang_abbr']]['success_input'] = $translation['text163'];
-							$return['success_lang'][$lang2['lang_abbr']]['success_text'] = $translation['text164'];
-							$return['success_lang'][$lang2['lang_abbr']]['success_close'] = $translation['text165'];
+							$return['success_lang'][$lang2['lang_abbr']]['success_input'] = $translation['text163'] ?? '';
+							$return['success_lang'][$lang2['lang_abbr']]['success_text'] = $translation['text164'] ?? '';
+							$return['success_lang'][$lang2['lang_abbr']]['success_close'] = $translation['text165'] ?? '';
 						}
+						$return['success_lang'] = $lang->mirrorUkUaByLang($return['success_lang']);
+						$return['translation'] = $lang->mirrorUkUaByLang($return['translation']);
+						$return['lang_ids'] = $lang->mirrorUkUaByLang($return['lang_ids']);
 					}
 
 					if (empty($return['success_lang'])) {
+						$translation = $lang->getWordsByPage('game', $lang_id);
+
 						$return['success_lang'] = [];
 						$return['success_lang'][$lang_abbr]['success_input'] = isset($translation['text163']) ? $translation['text163'] : '';
 						$return['success_lang'][$lang_abbr]['success_text'] = isset($translation['text164']) ? $translation['text164'] : '';
 						$return['success_lang'][$lang_abbr]['success_close'] = isset($translation['text165']) ? $translation['text165'] : '';
+						$return['success_lang'] = $lang->mirrorUkUaByLang($return['success_lang']);
+
+						$return['translation'] = [];
+						$return['translation'][$lang_abbr] = $translation;
+						$return['translation'] = $lang->mirrorUkUaByLang($return['translation']);
+						$return['lang_ids'] = [];
+						$return['lang_ids'][$lang_abbr] = $lang_id;
+						$return['lang_ids'] = $lang->mirrorUkUaByLang($return['lang_ids']);
 					}
 				} else {
 					// переводы для всех языков. Для синхронизации
@@ -66,15 +83,17 @@ if (isset($_POST['op'])) {
 						foreach ($langs as $lang2) {
 							$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'];
-							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'];
+							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'] ?? '';
+							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'] ?? '';
 						}
+						$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang']);
 					}
 
 					if (empty($return['error_lang'])) {
 						$return['error_lang'] = [];
 						$return['error_lang'][$lang_abbr]['error_input'] = isset($translation['text161']) ? $translation['text161'] : '';
 						$return['error_lang'][$lang_abbr]['error_text'] = isset($translation['text162']) ? $translation['text162'] : '';
+						$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang']);
 					}
 				}
 			} else {
@@ -87,15 +106,17 @@ if (isset($_POST['op'])) {
 					foreach ($langs as $lang2) {
 						$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'];
-						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'];
+						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text161'] ?? '';
+						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text162'] ?? '';
 					}
+					$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang']);
 				}
 
 				if (empty($return['error_lang'])) {
 					$return['error_lang'] = [];
 					$return['error_lang'][$lang_abbr]['error_input'] = isset($translation['text161']) ? $translation['text161'] : '';
 					$return['error_lang'][$lang_abbr]['error_text'] = isset($translation['text162']) ? $translation['text162'] : '';
+					$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang']);
 				}
 			}
 
