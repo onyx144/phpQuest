@@ -133,6 +133,77 @@
 		});
 	}
 
+	// Воспроизведение видео в inline-рамке #popup_video_phone (стиль входящего звонка).
+	// videoSrc — URL с ведущим слэшем, напр. /video/en/video_jane_2.mp4
+	// options.onEnded — после окончания ролика и закрытия попапа
+	// options.onStart — сразу после старта воспроизведения
+	function playPopupVideoPhoneInline(videoSrc, options) {
+		options = options || {};
+		var eventNamespace = options.eventNamespace || 'inlinePhone';
+		var fadeOutOnEnd = options.fadeOutOnEnd !== false;
+		var clearPopupClass = options.clearPopupClass !== false;
+		var playSize = options.playMediaFrameSize || { width: '22rem', height: '35rem' };
+		var idleSize = options.idleMediaFrameSize || { width: '16rem', height: '24rem' };
+
+		var $phonePopup = $('#popup_video_phone');
+		var $inlineVideo = $phonePopup.find('.popup_video_phone_inline_video');
+		var $previewImage = $phonePopup.find('.popup_video_phone_preview_img');
+		var $phoneButtons = $phonePopup.find('.popup_video_phone_btns');
+		var $mediaFrame = $phonePopup.find('.popup_video_phone_media_frame');
+
+		if (!$inlineVideo.length || !videoSrc) {
+			if (typeof options.onEnded === 'function') {
+				options.onEnded();
+			}
+			return false;
+		}
+
+		var inlineVideoEl = $inlineVideo.get(0);
+
+		var resetPopupVideoPhoneInline = function() {
+			inlineVideoEl.pause();
+			inlineVideoEl.currentTime = 0;
+			$inlineVideo.hide();
+			$previewImage.show();
+			$phoneButtons.show();
+			$mediaFrame.css(idleSize);
+		};
+
+		$phoneButtons.hide();
+		$mediaFrame.css(playSize);
+		$inlineVideo.find('source').attr('src', videoSrc);
+		inlineVideoEl.load();
+		$previewImage.hide();
+		$inlineVideo.show();
+		inlineVideoEl.play().catch(function() {});
+
+		if (typeof options.onStart === 'function') {
+			options.onStart();
+		}
+
+		$inlineVideo.off('ended.' + eventNamespace).on('ended.' + eventNamespace, function() {
+			var afterClose = function() {
+				resetPopupVideoPhoneInline();
+				if (clearPopupClass) {
+					$phonePopup.find('.popup_video_phone_wifi_icons').html('');
+					$phonePopup.find('.popup_video_phone_name').html('');
+					$phonePopup.attr('class', '');
+				}
+				if (typeof options.onEnded === 'function') {
+					options.onEnded();
+				}
+			};
+
+			if (fadeOutOnEnd) {
+				$phonePopup.fadeOut(200, afterClose);
+			} else {
+				afterClose();
+			}
+		});
+
+		return true;
+	}
+
 	// одновременное обновление действий команды
 	function uploadGameByActionName(op, parameters) {
 		// console.log('uploadGameByActionName');

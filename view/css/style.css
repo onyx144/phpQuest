@@ -350,7 +350,7 @@ a {
     overflow: hidden;
     min-height: 100vh;*/
     position: relative;
-    max-width: 1920px;
+    max-width: 100%;
     overflow: hidden;
     width: 100%;
     float: left;
@@ -5736,6 +5736,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     display: flex;
     justify-content: space-between;
     margin: 0 0 8px;
+    align-items: flex-end;
 }
 .dashboard_tab_content_item_geo_coordinates_title_text_left {
     font-weight: bold;

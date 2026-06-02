@@ -1,6 +1,41 @@
 /* === DASHBOARD - COMPANY INVESTIGATE === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	var companyInvestigateJaneVideoSrc = '';
+
+	function getCompanyInvestigateJaneVideoSrc() {
+		if (companyInvestigateJaneVideoSrc) {
+			return companyInvestigateJaneVideoSrc;
+		}
+		return '/video/' + $('html').attr('lang') + '/video_jane_2.mp4';
+	}
+
+	function companyInvestigateOnJaneVideoEnded() {
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse.success;
+
+			scoreBeforeDashboardCompanyInvestigate = parseInt(teamInfo.score, 10);
+
+			var message = {
+				'op': 'closePopupVideoAndCompanyInvestigateSuccess',
+				'parameters': {
+					'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
+
+			companyInvestigate();
+		});
+	}
+
+	function companyInvestigatePlayJaneInlineVideo() {
+		playPopupVideoPhoneInline(getCompanyInvestigateJaneVideoSrc(), {
+			eventNamespace: 'companyInvestigateJane',
+			onEnded: companyInvestigateOnJaneVideoEnded
+		});
+	}
 	// нажали на кнопку отправки данных
 	function companyInvestigateSubmit(companyName, lang_abbr2) {
 		// звук поиска
@@ -93,6 +128,12 @@
 							var errorLang = (json.error_lang && json.error_lang[langCode]) ? json.error_lang[langCode] : false;
 
 							if (json.success && successLang) {
+								if (json.video_src && json.video_src[langCode]) {
+									companyInvestigateJaneVideoSrc = json.video_src[langCode];
+								} else {
+									companyInvestigateJaneVideoSrc = '/video/' + langCode + '/video_jane_2.mp4';
+								}
+
 								// попап с текстом успеха
 								$('#popup_success .popup_success_input').html(successLang.success_input);
 								$('#popup_success .popup_success_text').html(successLang.success_text);
@@ -437,22 +478,8 @@ $(function() {
 		clearInterval(incomingCallTimer);
 		incomingCallTimer = false;
 
-		// скрываем блок с телефоном
-		$('#popup_video_phone').fadeOut(200);
-
-		// очищаем данные в блоке с телефоном
-		setTimeout(function(){
-			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-			$('#popup_video_phone .popup_video_phone_name').html('');
-			$('#popup_video_phone').attr('class','');
-		}, 210);
-
-		// открыть видео и сразу запустить его
-		playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-		openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_2.mp4', '', 'company_investigate_answer_incoming_video', 'call');
-		playVideo('call');
-		// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_2.mp4', '', 'company_investigate_answer_incoming_video', 'call_jane');
-		// playVideoCall();
+		// видео Jane в inline-рамке попапа телефона
+		companyInvestigatePlayJaneInlineVideo();
 
 		// сохранить время просмотра видео в списке звонков команды
 		var formData = new FormData();

@@ -1169,22 +1169,7 @@ $(function() {
 						incomingCallTimer = false;
 					}
 
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные в блоке с телефоном
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
-
-					// открыть видео и сразу запустить его
-					playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-					openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_2.mp4', '', 'company_investigate_answer_incoming_video', 'call');
-					playVideo('call');
-					// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_2.mp4', '', 'company_investigate_answer_incoming_video', 'call_jane');
-					// playVideoCall();
+					companyInvestigatePlayJaneInlineVideo();
 				} else if (op == 'closePopupVideoAndCompanyInvestigateSuccess') { // dashboard - company investigation. Видео доиграло до конца
 					// closePopupVideo();
 					closePopupVideoCall();

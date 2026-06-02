@@ -328,53 +328,24 @@ $(function() {
 		// Воспроизводим видео прямо в рамке входящего звонка (без отдельного popup-видеоплеера).
 		var langCode = ($('html').attr('lang') || '').toLowerCase();
 		var videoSrc = (langCode === 'en') ? '/video/one_second.mp4' : '/video/ua/first_cut.mp4';
-		var $phonePopup = $('#popup_video_phone');
-		var $inlineVideo = $phonePopup.find('.popup_video_phone_inline_video');
-		var $previewImage = $phonePopup.find('.popup_video_phone_preview_img');
-		var $phoneButtons = $phonePopup.find('.popup_video_phone_btns');
-		var $mediaFrame = $phonePopup.find('.popup_video_phone_media_frame');
 
-		if ($inlineVideo.length) {
-			var inlineVideoEl = $inlineVideo.get(0);
+		var startedInlineVideo = playPopupVideoPhoneInline(videoSrc, {
+			eventNamespace: 'inlineIncoming',
+			onStart: function() {
+				if (isFirstMissionAcceptByTimer()) {
+					acceptMissionServerUpdate();
+					acceptMissionShowCompanyNameDashboard();
+				}
+			},
+			onEnded: function() {
+				if (acceptMissionVisualReady) {
+					acceptMissionVisualUpdate();
+					acceptMissionVisualReady = false;
+				}
+			}
+		});
 
-			var resetIncomingPopupState = function() {
-				inlineVideoEl.pause();
-				inlineVideoEl.currentTime = 0;
-				$inlineVideo.hide();
-				$previewImage.show();
-				$phoneButtons.show();
-				$mediaFrame.css({ width: '16rem', height: '24rem' });
-			};
-
-			$phoneButtons.hide();
-			$mediaFrame.css({ width: '22rem', height: '35rem' });
-			$inlineVideo.find('source').attr('src', videoSrc);
-			inlineVideoEl.load();
-			$previewImage.hide();
-			$inlineVideo.show();
-			inlineVideoEl.play().catch(function() {});
-
-			// На старте ролика: сервер + сразу экран Company Name (остальное — после ролика в acceptMissionVisualUpdate).
-			if (isFirstMissionAcceptByTimer()) {
-		        acceptMissionServerUpdate();
-		        acceptMissionShowCompanyNameDashboard();
-		    }
-
-			$inlineVideo.off('ended.inlineIncoming').on('ended.inlineIncoming', function() {
-				$phonePopup.fadeOut(200, function() {
-					resetIncomingPopupState();
-					$phonePopup.find('.popup_video_phone_wifi_icons').html('');
-					$phonePopup.attr('class', '');
-
-					// Визуально продвигаем миссию только после полного просмотра и закрытия popup.
-					if (acceptMissionVisualReady) {
-						acceptMissionVisualUpdate();
-						acceptMissionVisualReady = false;
-					}
-				});
-			});
-		} else if (isFirstMissionAcceptByTimer()) {
-			// Нет inline-video в разметке — сервер + экран Company Name при ответе на звонок.
+		if (!startedInlineVideo && isFirstMissionAcceptByTimer()) {
 			acceptMissionServerUpdate();
 			acceptMissionShowCompanyNameDashboard();
 		}

@@ -16,7 +16,7 @@ dist-ssr
 *.local
 zombie
 vaccine
-
+pdf/
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

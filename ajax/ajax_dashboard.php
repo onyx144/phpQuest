@@ -38,6 +38,20 @@ if (isset($_POST['op'])) {
 					// переводы для всех языков. Для синхронизации
 					$sql = "SELECT `lang_abbr`, `id` FROM `langs` WHERE `status` = {?}";
 					$langs = $db->select($sql, [1]);
+
+					// видео Jane для inline-попапа телефона (по языкам)
+					$return['video_src'] = [];
+					if ($langs) {
+						foreach ($langs as $lang2) {
+							$return['video_src'][$lang2['lang_abbr']] = '/video/' . $lang2['lang_abbr'] . '/video_jane_2.mp4';
+						}
+						$return['video_src'] = $lang->mirrorUkUaByLang($return['video_src']);
+					}
+					if (empty($return['video_src'])) {
+						$return['video_src'][$lang_abbr] = '/video/' . $lang_abbr . '/video_jane_2.mp4';
+						$return['video_src'] = $lang->mirrorUkUaByLang($return['video_src']);
+					}
+
 					if ($langs) {
 						$return['success_lang'] = [];
 						$return['translation'] = [];
