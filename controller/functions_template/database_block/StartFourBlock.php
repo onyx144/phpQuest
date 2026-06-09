@@ -37,16 +37,15 @@ trait StartFourBlock
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
-    <span class="text-muted-foreground">Records:</span>
+    <span class="text-muted-foreground">' . $translation['records']. ':</span>
     <span class="text-cyan-400">12,345</span>
   </div>
-  <span class="badge w-full justify-center bg-green-400">ACTIVE</span>
-  <button data-database="personal_files" class="dashboard_tab_content_item_start_four_inner_item w-full text-cyan-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+   <button data-database="personal_files" class="dashboard_tab_content_item_start_four_inner_item w-full text-cyan-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
     <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
       <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
     </svg>
-    Access Database
+    ' . $translation['acces_db']. '
   </button>
 </div>
   </div>
@@ -65,16 +64,15 @@ trait StartFourBlock
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
-    <span class="text-muted-foreground">Records:</span>
+    <span class="text-muted-foreground">' . $translation['records']. ':</span>
     <span class="text-purple-400">8,764</span>
   </div>
-  <span class="badge w-full justify-center bg-yellow-400">LIMITED</span>
   <button data-database="car_register" class="dashboard_tab_content_item_start_four_inner_item w-full text-purple-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
     <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
       <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
     </svg>
-    Access Database
+    ' . $translation['acces_db']. '
   </button>
 </div>
   </div>
@@ -93,16 +91,15 @@ trait StartFourBlock
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
-    <span class="text-muted-foreground">Records:</span>
+    <span class="text-muted-foreground">' . $translation['records']. ':</span>
     <span class="text-blue-400">23,109</span>
   </div>
-  <span class="badge w-full justify-center bg-red-400">RESTRICTED</span>
   <button data-database="mobile_calls" class="dashboard_tab_content_item_start_four_inner_item w-full text-blue-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
     <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
       <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
     </svg>
-    Access Database
+    ' . $translation['acces_db']. '
   </button>
 </div>
   </div>
@@ -121,16 +118,15 @@ trait StartFourBlock
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
-    <span class="text-muted-foreground">Records:</span>
+    <span class="text-muted-foreground">' . $translation['records']. ':</span>
     <span class="text-green-400">45,876</span>
   </div>
-  <span class="badge w-full justify-center bg-green-400">ACTIVE</span>
-  <button data-database="bank_transactions" class="dashboard_tab_content_item_start_four_inner_item w-full text-green-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
+   <button data-database="bank_transactions" class="dashboard_tab_content_item_start_four_inner_item w-full text-green-400 border-current hover:bg-current/10 group-hover:glow-effect border rounded px-2 py-1 flex items-center justify-center text-sm">
     <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
       <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
     </svg>
-    Access Database
+    ' . $translation['acces_db']. '
   </button>
 </div>
   </div>

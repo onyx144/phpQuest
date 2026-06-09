@@ -3428,7 +3428,7 @@ a.language_hidden_item {
     width: 100%;
     float: left;
     text-align: center;
-    line-height: 55px;
+    line-height: 25px;
 }
 .dashboard_tab_content_item_company_name_top_text svg {
     position: relative;

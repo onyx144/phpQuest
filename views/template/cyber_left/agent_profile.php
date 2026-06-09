@@ -20,39 +20,36 @@
       <!-- Agent Info -->
       <div class="space-y-4">
         <h2 class="text-3xl font-bold neon-text animate-cyber-glow">
-          Agent Alison Floyd
+          <?php echo $translation['agent_name']; ?>
         </h2>
         
         <div class="cyber-card">
           <div class="cyber-grid grid-cols-3 gap-4 text-center">
             <div>
               <i class="fas fa-bolt h-6 w-6 text-cyber-neon-green mx-auto mb-2"></i>
-              <div class="text-sm text-gray-400">Status</div>
-              <div class="font-bold text-cyber-neon-green">Active</div>
+              <div class="text-sm text-gray-400"><?php echo $translation['status']; ?></div>
+              <div class="font-bold text-cyber-neon-green"><?php echo $translation['active']; ?></div>
             </div>
             <div>
               <i class="fas fa-star h-6 w-6 text-cyber-neon-blue mx-auto mb-2"></i>
-              <div class="text-sm text-gray-400">Rank</div>
-              <div class="font-bold text-cyber-neon-blue">Elite</div>
+              <div class="text-sm text-gray-400"><?php echo $translation['rank']; ?></div>
+              <div class="font-bold text-cyber-neon-blue"><?php echo $translation['elite']; ?></div>
             </div>
             <div>
               <i class="fas fa-shield-alt h-6 w-6 text-white mx-auto mb-2"></i>
-              <div class="text-sm text-gray-400">Clearance</div>
-              <div class="font-bold text-white">Level 9</div>
+              <div class="text-sm text-gray-400"><?php echo $translation['сlearance']; ?></div>
+              <div class="font-bold text-white"><?php echo $translation['level']; ?> 9</div>
             </div>
           </div>
         </div>
 
         <div class="bg-gradient-to-r from-cyber-neon-blue/20 to-cyber-neon-green/20 rounded-lg p-4 border border-cyber-neon-blue/30">
-          <h3 class="text-lg font-bold mb-2 text-cyber-neon-blue">Current Team</h3>
+          <h3 class="text-lg font-bold mb-2 text-cyber-neon-blue"><?php echo $translation['text6']; ?></h3>
           <p class="text-xl font-mono neon-text"><?= isset($teamName) ? $teamName : 'Alpha Team' ?></p>
         </div>
 
         <div class="text-sm text-gray-400 bg-cyber-panel-bg/20 rounded p-3">
-          <p class="italic">
-            "Специализируется на киберразведке и инфильтрации. 
-            Многолетний опыт работы в секретных операциях."
-          </p>
+          <p class="italic">"<?php echo $translation['elison_description']; ?>"</p>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ $return['titles'] = '
         <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">
             '.$svg['dashboard_files'].'
         </div>
-        <h2 class="text-3xl font-bold neon-text">Архив досье</h2>
+        <h2 class="text-3xl font-bold neon-text">'.$translation['text15'].' Архив досье</h2>
     </div>
 ';
 
@@ -26,7 +26,7 @@ $return['content'] = '
         <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path d="M4 4h16v16H4z"/>
         </svg>
-        <span class="text-sm text-primary">Архив документов, видео и изображений</span>
+        <span class="text-sm text-primary">'.$translation['archive'].'</span>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 ';
@@ -48,11 +48,11 @@ foreach ($list_files as $file_id) {
 
         // Определяем тип файла для кнопки
         $button_icon = $svg['eye'];
-        $button_text = 'Посмотреть';
+        $button_text = $translation['see'];
 
         if (in_array(strtolower($file_info['type']), ['video', 'mp4', 'mov', 'avi'])) {
             $button_icon = $svg['play'];
-            $button_text = 'Воспроизвести';
+            $button_text = $translation['wach_btn'];
         }
 
         // Карточка файла
