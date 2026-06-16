@@ -978,8 +978,13 @@ $(function() {
 						$('.dashboard_car_register1_license_plate').val(parameters.license_plate);
 					}
 				} else if (op == 'databaseCarRegisterUpdateCountry') { // database - первый экран car register - выбираем значение в Country
-					if ($('.dashboard_car_register1_country').length && $('.dashboard_car_register1_country').val() != parameters.country_lang[$('html').attr('lang')]) {
-						$('.dashboard_car_register1_country').val(parameters.country_lang[$('html').attr('lang')]).change().selectric('refresh');
+					var countryName = parameters.country_lang[$('html').attr('lang')];
+					if ($('.dashboard_car_register1_country').length && $('.dashboard_car_register1_country').val() != countryName) {
+						if (typeof setCarRegisterCountryValue === 'function') {
+							setCarRegisterCountryValue(countryName);
+						} else {
+							$('.dashboard_car_register1_country').val(countryName).trigger('change');
+						}
 					}
 				} else if (op == 'databaseCarRegisterUpdateDate') { // database - первый экран car register - выбираем дату
 					if ($('.dashboard_car_register1_date').length && $('.dashboard_car_register1_date').val() != parameters.date) {

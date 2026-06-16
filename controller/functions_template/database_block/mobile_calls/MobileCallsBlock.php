@@ -62,24 +62,24 @@ trait MobileCallsBlock
      */
     private function getMobileCallsTitles($translation)
     {
-        return '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                    </div>
-                </div>
-                <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="mobile_calls1">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            ' . $this->getMobileCallsIcon() . '
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text59'] . '</div>
-                    </div>
-                </div>';
+        return renderCyberBreadcrumbs([
+            [
+                'text' => $translation['text13'],
+                'url' => '#',
+                'data' => [
+                    'tab' => 'tab1',
+                    'step' => 'databases_start_four',
+                    'action-id' => 28,
+                    'database' => 'false',
+                ],
+            ],
+            [
+                'text' => $translation['text59'],
+                'data' => [
+                    'tab' => 'mobile_calls1',
+                ],
+            ],
+        ]);
     }
 
     /**

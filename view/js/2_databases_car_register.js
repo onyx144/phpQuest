@@ -1,6 +1,60 @@
 /* === DATABASES - CAR REGISTER. SEARCH 1 === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	function initCarRegisterCountryAutocomplete() {
+		var $root = $('#dashboard-car-register-country-select');
+		if (!$root.length) {
+			return;
+		}
+
+		$root.removeData('autocomplete-initialized');
+
+		if (window.initAutocompleteSelectComponent) {
+			window.initAutocompleteSelectComponent($root);
+		}
+
+		$('.dashboard_car_register1_country').off('change.carRegisterCountry').on('change.carRegisterCountry', function() {
+			var formData = new FormData();
+			formData.append('op', 'saveTeamTextField');
+			formData.append('field', 'car_register_country_id');
+			formData.append('val', $(this).val());
+
+			$.ajax({
+				url: '/ajax/ajax.php',
+				type: 'POST',
+				dataType: 'json',
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: formData,
+				success: function(json) {
+					if (json.country_lang) {
+						var message = {
+							'op': 'databaseCarRegisterUpdateCountry',
+							'parameters': {
+								'country_lang': json.country_lang,
+								'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+								'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+							}
+						};
+						sendMessageSocket(JSON.stringify(message));
+					}
+				}
+			});
+		});
+	}
+
+	function setCarRegisterCountryValue(countryName) {
+		var $hidden = $('.dashboard_car_register1_country');
+		if (!$hidden.length) {
+			return;
+		}
+
+		var $root = $hidden.closest('.autocomplete_select_component');
+		$hidden.val(countryName).trigger('change');
+		$root.find('.autocomplete_select_input').val(countryName);
+	}
+
 	// анимация поиска и результаты
 	function databaseCarRegisterNoEmptyFields(answer, country, date, lang_abbr2) {
 		// на всякий случай скрываем окно с ошибкой

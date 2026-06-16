@@ -33,7 +33,7 @@ trait StartFourBlock
     <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-400 border-2 border-background animate-pulse"></div>
   </div>
   <h3 class="text-xl mb-2">' . $translation['text57']. '</h3>
-  <p class="text-sm text-muted-foreground mb-3">Доступ к личным досье</p>
+  <p class="text-sm text-muted-foreground mb-3">Доступ до особистих досьє</p>
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
@@ -60,7 +60,7 @@ trait StartFourBlock
     <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-purple-400 border-2 border-background"></div>
   </div>
   <h3 class="text-xl mb-2">' . $translation['text58'] . '</h3>
-  <p class="text-sm text-muted-foreground mb-3">Реестр автомобилей</p>
+  <p class="text-sm text-muted-foreground mb-3">Реєстр автомобілів</p>
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
@@ -87,7 +87,7 @@ trait StartFourBlock
     <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-400 border-2 border-background"></div>
   </div>
   <h3 class="text-xl mb-2">' . $translation['text59'] . '</h3>
-  <p class="text-sm text-muted-foreground mb-3">История мобильных звонков</p>
+  <p class="text-sm text-muted-foreground mb-3">Історія мобільних дзвінків</p>
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">
@@ -114,7 +114,7 @@ trait StartFourBlock
     <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background"></div>
   </div>
   <h3 class="text-xl mb-2">' . $translation['text60'] . '</h3>
-  <p class="text-sm text-muted-foreground mb-3">Финансовые транзакции</p>
+  <p class="text-sm text-muted-foreground mb-3">Фінансові транзакції</p>
 </div>
 <div class="text-center space-y-3 px-4 pb-4">
   <div class="flex justify-between text-sm">

@@ -63,6 +63,7 @@
 		<link rel="stylesheet" href="/view/css/tailwind.css?v=<?php echo $random; ?>" />
 		<script src="/view/js/app_lang.js?v=<?php echo $random; ?>"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+		<script src="/view/js/autocomplete_select.js?v=<?php echo $random; ?>"></script>
 		<!-- <script src="/plugins/animating-roll-number/jquery.rollNumber.js"></script> -->
 		<script src="/plugins/selectric/jquery.selectric.min.js"></script>
 		<script src="/plugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>

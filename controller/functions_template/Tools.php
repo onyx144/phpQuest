@@ -121,7 +121,7 @@ $return['content'] = '
                     ' . $svg['loop'] . '
                 </div>
                 <button class="w-full border border-current text-blue-400 py-2 hover:bg-blue-500/10 rounded-lg text-center">
-                    Открыть
+                    ' . $translation['open'] . '
                 </button>
             </div>
         </div>
@@ -145,7 +145,7 @@ $return['content'] = '
                     ' . $svg['gps'] . '
                 </div>
                 <button class="w-full border border-current text-green-400 py-2 hover:bg-green-500/10 rounded-lg text-center">
-                    Открыть
+                    ' . $translation['open'] . '
                 </button>
             </div>
         </div>
@@ -169,7 +169,7 @@ $return['content'] = '
                     ' . $svg['decoder'] . '
                 </div>
                 <button class="w-full border border-current text-purple-400 py-2 hover:bg-purple-500/10 rounded-lg text-center">
-                    Запустить
+                    ' . $translation['launch'] . '
                 </button>
             </div>
         </div>
@@ -193,7 +193,7 @@ $return['content'] = '
                     ' . $svg['building'] . '
                 </div>
                 <button class="w-full border border-current text-red-400 py-2 hover:bg-red-500/10 rounded-lg text-center">
-                    Запустить
+                    ' . $translation['launch'] . '
                 </button>
             </div>
         </div>

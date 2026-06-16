@@ -28,7 +28,7 @@ if (isset($_POST['op'])) {
 			$mission_number = mb_strtolower($mission_number, 'UTF-8');
 
 			// $check = ['g.e.m', 'g. e. m', 'gem', 'global eco mission'];
-			$check = ['a.p.s.', 'a. p. s.', 'aegis protocol secret mission'];
+			$check = ['a.p.s.a.', 'a. p. s. a.', 'aegis protocol secret agency'];
 
 			if (in_array($mission_number, $check)) {
 				$return['success'] = 'ok';

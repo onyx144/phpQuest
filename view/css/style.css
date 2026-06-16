@@ -381,6 +381,7 @@ a {
     left: 50%;
     transform: translateX(-50%);
     padding: 0 15px;
+    margin-top: -64px;
 }
 @-webkit-keyframes changeOpacity {
     0% { opacity: 1; }
@@ -1478,6 +1479,7 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
 .game_right_column {
     float: right;
     width: 1090px;
+    margin-top: 4%;
 }
 .dashboard_info {
     float: left;
@@ -3428,7 +3430,7 @@ a.language_hidden_item {
     width: 100%;
     float: left;
     text-align: center;
-    line-height: 25px;
+    line-height: 50px;
 }
 .dashboard_tab_content_item_company_name_top_text svg {
     position: relative;
@@ -5227,6 +5229,59 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     cursor: pointer;
 }
 .dashboard_mobile_calls1_country_code_autocomplete .autocomplete_select_option:hover {
+    background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
+}
+.dashboard_car_register1_country_autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_input {
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 27px;
+    color: #00F0FF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_input::placeholder {
+    color: #00F0FF;
+    opacity: 0.7;
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 236px;
+    overflow-y: auto;
+    z-index: 15;
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_option {
+    font-size: 24px;
+    color: #00F0FF;
+    padding: 10px 22px;
+    line-height: 26px;
+    cursor: pointer;
+}
+.dashboard_car_register1_country_autocomplete .autocomplete_select_option:hover {
     background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
 }
 .selectric-dashboard_mobile_calls1_country_code .selectric-items li {
@@ -7675,6 +7730,7 @@ body:not(.body_desktop_scale) .btn_wrapper_blue:hover .btn_bg_center_line {
     .game_right_column {
         margin: 50px 0 0 -545px;
         position: relative;
+        margin-top: 5%;
         left: 50%;
         float: left;
     }

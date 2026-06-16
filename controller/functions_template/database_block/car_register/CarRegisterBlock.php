@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT . '/admin/view/template/component/autocomplete_select.php');
+
 /**
  * Trait для работы с базой данных Car Register
  */
@@ -60,30 +62,24 @@ trait CarRegisterBlock
      */
     private function getCarRegisterTitles($translation)
     {
-        return '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-action-id="28" data-database="false">
-            <div class="dashboard_tab_title_active_skew_right"></div>
-            <div class="dashboard_tab_title_inner">
-                <div class="dashboard_tab_title_img_wrapper">
-                    <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/>
-                        <rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/>
-                        <rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/>
-                    </svg>
-                </div>
-                <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-            </div>
-        </div>
-        <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="car_register1">
-            <div class="dashboard_tab_title_active_skew_right"></div>
-            <div class="dashboard_tab_title_inner">
-                <div class="dashboard_tab_title_img_wrapper" style="margin: -10px 0 0;">
-                    ' . $this->getCarIcon() . '
-                </div>
-                <div class="dashboard_tab_title_text">' . $translation['text171'] . '</div>
-            </div>
-        </div>';
+        return renderCyberBreadcrumbs([
+            [
+                'text' => $translation['text13'],
+                'url' => '#',
+                'data' => [
+                    'tab' => 'tab1',
+                    'step' => 'databases_start_four',
+                    'action-id' => 28,
+                    'database' => 'false',
+                ],
+            ],
+            [
+                'text' => $translation['text171'],
+                'data' => [
+                    'tab' => 'car_register1',
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -153,107 +149,42 @@ trait CarRegisterBlock
      */
     private function generateCountrySelect($lang_id, $team_info, $translation)
     {
-        $sql = "SELECT c.code, c.pos, cd.name, c.id
+        $sql = "SELECT c.code, c.pos, c.id, COALESCE(cd_lang.name, cd_default.name) AS name
                 FROM countries c
-                JOIN countries_description cd ON c.id = cd.country_id
-                WHERE cd.lang_id = {?}
-                ORDER BY cd.name";
+                LEFT JOIN countries_description cd_lang
+                    ON c.id = cd_lang.country_id AND cd_lang.lang_id = {?}
+                LEFT JOIN countries_description cd_default
+                    ON c.id = cd_default.country_id AND cd_default.lang_id = 3
+                WHERE cd_lang.name IS NOT NULL OR cd_default.name IS NOT NULL
+                ORDER BY COALESCE(cd_lang.name, cd_default.name)";
         $countries = $this->db->select($sql, [$lang_id]);
         
         if (!$countries) {
             return '';
         }
 
-        $options = '<option disabled="disabled"' . (empty($team_info['car_register_country_id']) ? ' selected="selected"' : '') . '>' 
-                  . $translation['text64'] . '</option>';
-        
+        $componentData = [];
+        $selectedValue = '';
+
         foreach ($countries as $country) {
-            $selected = ($team_info['car_register_country_id'] == $country['id']) ? ' selected="selected"' : '';
-            $options .= '<option value="' . htmlspecialchars($country['name'], ENT_QUOTES) . '" data-pos="' . $country['pos'] . '"' . $selected . '>' 
-                       . $country['name'] . '</option>';
+            $componentData[] = [
+                'value' => $country['name'],
+                'label' => $country['name'],
+            ];
+
+            if (!empty($team_info['car_register_country_id']) && (int) $team_info['car_register_country_id'] === (int) $country['id']) {
+                $selectedValue = $country['name'];
+            }
         }
 
-        return '<select class="dashboard_car_register1_country">' . $options . '</select>'
-              . $this->getCountrySelectScript($translation);
-    }
-
-    /**
-     * Получение скрипта для country select
-     * @param array $translation
-     * @return string
-     */
-    private function getCountrySelectScript($translation)
-    {
-        return '<script>
-            $(function() {
-                var scrollbarPositionPixel = 0;
-                var isScrollOpen = false;
-
-                $(".dashboard_car_register1_country").selectric({
-                    optionsItemBuilder: function(itemData, element, index) {
-                        return (!itemData.disabled) ? 
-                            \'<span class="select_country_flag" style="display:inline-block;width:16px;height:11px;background:url(/images/flags.png) no-repeat;background-position:\' + itemData.element[0].attributes[\'data-pos\'].value + \';margin: 0 15px 0 5px;"></span><span class="select_country_name" style="display:inline-block;max-width: 87%;">\' + itemData.text + \'</span>\' 
-                            : itemData.text;
-                    },
-                    maxHeight: 236,
-                    preventWindowScroll: false,
-                    onInit: function() {
-                        $(".selectric-dashboard_car_register1_country .selectric-scroll").mCustomScrollbar({
-                            scrollInertia: 700,
-                            theme: "minimal-dark",
-                            scrollbarPosition: "inside",
-                            alwaysShowScrollbar: 2,
-                            autoHideScrollbar: false,
-                            mouseWheel:{ deltaFactor: 200 },
-                            callbacks:{
-                                whileScrolling:function() {
-                                    scrollbarPositionPixel = this.mcs.top;
-                                    if (isScrollOpen) {
-                                        $(".dashboard_car_register1_country").selectric("open");
-                                    }
-                                }
-                            }
-                        });
-                    },
-                    onOpen: function() {
-                        if (!isScrollOpen) {
-                            $(".selectric-dashboard_car_register1_country .selectric-scroll").mCustomScrollbar("scrollTo", Math.abs(scrollbarPositionPixel));
-                            isScrollOpen = true;
-                        }
-                    }
-                })
-                .on("change", function() {
-                    var formData = new FormData();
-                    formData.append("op", "saveTeamTextField");
-                    formData.append("field", "car_register_country_id");
-                    formData.append("val", $(this).val());
-
-                    $.ajax({
-                        url: "/ajax/ajax.php",
-                        type: "POST",
-                        dataType: "json",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: formData,
-                        success: function(json) {
-                            if (json.country_lang) {
-                                var message = {
-                                    "op": "databaseCarRegisterUpdateCountry",
-                                    "parameters": {
-                                        "country_lang": json.country_lang,
-                                        "user_id": $("#section_game").length ? $("#section_game").attr("data-user-id") : 0,
-                                        "team_id": $("#section_game").length ? $("#section_game").attr("data-team-id") : 0
-                                    }
-                                };
-                                sendMessageSocket(JSON.stringify(message));
-                            }
-                        }
-                    });
-                    isScrollOpen = false;
-                });
-            });
-        </script>';
+        return renderAutocompleteSelectComponent([
+            'id' => 'dashboard-car-register-country-select',
+            'hidden_class' => 'dashboard_car_register1_country',
+            'wrapper_class' => 'dashboard_car_register1_country_autocomplete',
+            'placeholder' => $translation['text64'],
+            'selected_value' => $selectedValue,
+            'options' => $componentData,
+        ]);
     }
 
     /**

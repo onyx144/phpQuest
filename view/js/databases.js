@@ -56,6 +56,9 @@
 			$('.dashboard_tabs[data-dashboard="databases"] .dashboard_tab_content_item_wrapper').html(databasesCache.content);
 			$dashboardTabs.find('.dashboard_tabs_loading').hide();
 			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			if (step == 'databases_start_four_inner_first_car_register' && typeof initCarRegisterCountryAutocomplete === 'function') {
+				initCarRegisterCountryAutocomplete();
+			}
 			return;
 		}
 
@@ -114,7 +117,11 @@
 				}
 
 				// индивидуальные действия для отдельных блоков
-				if (step == 'databases_start_four_inner_second_car_register_huilov') { // если блок с результатами поиска car register1
+				if (step == 'databases_start_four_inner_first_car_register') {
+					if (typeof initCarRegisterCountryAutocomplete === 'function') {
+						initCarRegisterCountryAutocomplete();
+					}
+				} else if (step == 'databases_start_four_inner_second_car_register_huilov') { // если блок с результатами поиска car register1
 					// слайдер
 					if ($('.dashboard_car_register2_slider').length) {
 						$('.dashboard_car_register2_slider').slick({
