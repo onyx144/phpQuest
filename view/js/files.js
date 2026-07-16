@@ -26,6 +26,9 @@
 			$('.dashboard_tabs[data-dashboard="files"] .dashboard_tab_content_item_wrapper').html(filesCache.content);
 			$dashboardTabs.find('.dashboard_tabs_loading').hide();
 			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			if (typeof applyVoiceClipsAfterDynamicContent === 'function') {
+				applyVoiceClipsAfterDynamicContent();
+			}
 			return;
 		}
 		
@@ -58,6 +61,10 @@
 				// Скрываем лоадинг и показываем контент
 				$dashboardTabs.find('.dashboard_tabs_loading').hide();
 				$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+
+				if (typeof applyVoiceClipsAfterDynamicContent === 'function') {
+					applyVoiceClipsAfterDynamicContent();
+				}
 
 				// socket
 				if (isSocketSend) {

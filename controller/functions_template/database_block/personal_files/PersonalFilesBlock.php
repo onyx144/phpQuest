@@ -4,7 +4,7 @@ trait PersonalFilesBlock
 {
     private function uploadDatabasesPersonalFiles($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -67,7 +67,7 @@ trait PersonalFilesBlock
 
     private function uploadDatabasesPersonalFilesPrivateIndividual($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -81,7 +81,7 @@ trait PersonalFilesBlock
 
     private function uploadDatabasesPersonalFilesPrivateIndividualHuilov($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getUserPersonalFilesInfo($team_id, 'private_individuals_print_text_huilov');
 
@@ -100,7 +100,7 @@ trait PersonalFilesBlock
 
     private function uploadDatabasesPersonalFilesCeoDatabase($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -114,7 +114,7 @@ trait PersonalFilesBlock
 
     private function uploadDatabasesPersonalFilesCeoDatabaseRod($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getUserPersonalFilesInfo($team_id, 'ceo_database_print_text_rod');
 
@@ -206,22 +206,22 @@ trait PersonalFilesBlock
                         <div class="dashboard_personal_files2_private_individuals_img_wrapper">
                             <img src="/images/icons/icon_personal_files_private_individual.png" alt="">
                         </div>
-                        <div class="dashboard_personal_files2_private_individuals_title">' . $translation['text108'] . '</div>
-                        <div class="dashboard_personal_files2_private_individuals_text">' . $translation['text110'] . '</div>
+                        <div class="dashboard_personal_files2_private_individuals_title">' . $this->t($translation, 'text108') . '</div>
+                        <div class="dashboard_personal_files2_private_individuals_text">' . $this->t($translation, 'text110') . '</div>
                         <div class="dashboard_personal_files2_private_individuals_inputs">
                             <div class="dashboard_personal_files2_private_individuals_input_wrapper dashboard_personal_files2_private_individuals_input_wrapper_firstname">
                                 <div class="dashboard_personal_files2_private_individuals_input_border_left"></div>
-                                <input type="text" placeholder="' . $translation['text111'] . '" value="" autocomplete="off">
-                                <div class="dashboard_personal_files2_private_individuals_firstname_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                                <input type="text" placeholder="' . $this->t($translation, 'text111') . '" value="" autocomplete="off">
+                                <div class="dashboard_personal_files2_private_individuals_firstname_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                             </div>
                             <div class="dashboard_personal_files2_private_individuals_input_wrapper dashboard_personal_files2_private_individuals_input_wrapper_lastname">
                                 <div class="dashboard_personal_files2_private_individuals_input_border_right"></div>
-                                <input type="text" placeholder="' . $translation['text112'] . '" value="" autocomplete="off">
-                                <div class="dashboard_personal_files2_private_individuals_lastname_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                                <input type="text" placeholder="' . $this->t($translation, 'text112') . '" value="" autocomplete="off">
+                                <div class="dashboard_personal_files2_private_individuals_lastname_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                             </div>
                         </div>
                         <div class="btn_wrapper btn_wrapper_blue dashboard_personal_files2_private_individuals_search">
-                            <div class="btn btn_blue"><span>' . $translation['text66'] . '</span></div>
+                            <div class="btn btn_blue"><span>' . $this->t($translation, 'text66') . '</span></div>
                             <div class="btn_border_top"></div>
                             <div class="btn_border_bottom"></div>
                             <div class="btn_border_left"></div>
@@ -274,8 +274,11 @@ trait PersonalFilesBlock
                     <span class="dots_bottom_left"></span>
                     <span class="dots_bottom_right"></span>
                     <span class="private_individuals_huilov_text" data-bubble="' . $row['id'] . '">
-                        <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation[$row['text']]) . '</span>
-                    </span>
+                                               <!-- Дудик заменить -->
+
+                          <!--  <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation[$row['text']]) . '</span>-->
+                    <span> **** </span>
+                          </span>
                 </div>
             </div>';
         }
@@ -340,22 +343,22 @@ trait PersonalFilesBlock
                         <div class="dashboard_personal_files2_private_individuals_img_wrapper">
                             <img src="/images/icons/icon_personal_files_ceo_database.png" alt="">
                         </div>
-                        <div class="dashboard_personal_files2_private_individuals_title">' . $translation['text109'] . '</div>
-                        <div class="dashboard_personal_files2_private_individuals_text">' . $translation['text110'] . '</div>
+                        <div class="dashboard_personal_files2_private_individuals_title">' . $this->t($translation, 'text109') . '</div>
+                        <div class="dashboard_personal_files2_private_individuals_text">' . $this->t($translation, 'text110') . '</div>
                         <div class="dashboard_personal_files2_private_individuals_inputs">
                             <div class="dashboard_personal_files2_private_individuals_input_wrapper dashboard_personal_files2_private_individuals_input_wrapper_firstname">
                                 <div class="dashboard_personal_files2_private_individuals_input_border_left"></div>
-                                <input type="text" placeholder="' . $translation['text111'] . '" value="" autocomplete="off">
-                                <div class="dashboard_personal_files2_private_individuals_firstname_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                                <input type="text" placeholder="' . $this->t($translation, 'text111') . '" value="" autocomplete="off">
+                                <div class="dashboard_personal_files2_private_individuals_firstname_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                             </div>
                             <div class="dashboard_personal_files2_private_individuals_input_wrapper dashboard_personal_files2_private_individuals_input_wrapper_lastname">
                                 <div class="dashboard_personal_files2_private_individuals_input_border_right"></div>
-                                <input type="text" placeholder="' . $translation['text112'] . '" value="" autocomplete="off">
-                                <div class="dashboard_personal_files2_private_individuals_lastname_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                                <input type="text" placeholder="' . $this->t($translation, 'text112') . '" value="" autocomplete="off">
+                                <div class="dashboard_personal_files2_private_individuals_lastname_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                             </div>
                         </div>
                         <div class="btn_wrapper btn_wrapper_blue dashboard_personal_files2_ceo_database_search">
-                            <div class="btn btn_blue"><span>' . $translation['text66'] . '</span></div>
+                            <div class="btn btn_blue"><span>' . $this->t($translation, 'text66') . '</span></div>
                             <div class="btn_border_top"></div>
                             <div class="btn_border_bottom"></div>
                             <div class="btn_border_left"></div>
@@ -512,17 +515,17 @@ trait PersonalFilesBlock
 
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage(null, $lang_item['id']);
+                $translation = $this->getWordsByPage('game', $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
-                    'text116' => $translation['text116'],
-                    'text118' => $translation['text118'],
-                    'text120' => $translation['text120'],
-                    'text122' => $translation['text122'],
-                    'text124' => $translation['text124'],
-                    'text126' => $translation['text126'],
-                    'text128' => $translation['text128'],
-                    'text130' => $translation['text130'],
-                    'text131' => $translation['text131']
+                    'text116' => $this->t($translation, 'text116'),
+                    'text118' => $this->t($translation, 'text118'),
+                    'text120' => $this->t($translation, 'text120'),
+                    'text122' => $this->t($translation, 'text122'),
+                    'text124' => $this->t($translation, 'text124'),
+                    'text126' => $this->t($translation, 'text126'),
+                    'text128' => $this->t($translation, 'text128'),
+                    'text130' => $this->t($translation, 'text130'),
+                    'text131' => $this->t($translation, 'text131')
                 ];
             }
         }
@@ -538,13 +541,13 @@ trait PersonalFilesBlock
 
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage(null, $lang_item['id']);
+                $translation = $this->getWordsByPage('game', $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
-                    'text133' => $translation['text133'],
-                    'text134' => $translation['text134'],
-                    'text135' => $translation['text135'],
-                    'text137' => $translation['text137'],
-                    'text139' => $translation['text139']
+                    'text133' => $this->t($translation, 'text133'),
+                    'text134' => $this->t($translation, 'text134'),
+                    'text135' => $this->t($translation, 'text135'),
+                    'text137' => $this->t($translation, 'text137'),
+                    'text139' => $this->t($translation, 'text139')
                 ];
             }
         }

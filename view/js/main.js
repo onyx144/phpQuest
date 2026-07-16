@@ -204,6 +204,31 @@
 		return true;
 	}
 
+	function stopPopupVideoPhoneInline(eventNamespace) {
+		eventNamespace = eventNamespace || 'inlinePhone';
+
+		var $phonePopup = $('#popup_video_phone');
+		var $inlineVideo = $phonePopup.find('.popup_video_phone_inline_video');
+		var $previewImage = $phonePopup.find('.popup_video_phone_preview_img');
+		var $phoneButtons = $phonePopup.find('.popup_video_phone_btns');
+		var $mediaFrame = $phonePopup.find('.popup_video_phone_media_frame');
+		var inlineVideoEl = $inlineVideo.get(0);
+
+		if (!inlineVideoEl) {
+			return;
+		}
+
+		$inlineVideo.off('.' + eventNamespace);
+		inlineVideoEl.pause();
+		inlineVideoEl.currentTime = 0;
+		$inlineVideo.find('source').attr('src', '');
+		inlineVideoEl.load();
+		$inlineVideo.hide();
+		$previewImage.show();
+		$phoneButtons.show();
+		$mediaFrame.css({ width: '16rem', height: '24rem' });
+	}
+
 	// одновременное обновление действий команды
 	function uploadGameByActionName(op, parameters) {
 		// console.log('uploadGameByActionName');
@@ -511,7 +536,7 @@ $(function() {
 
         	$('body').addClass('body_desktop_scale').css('transform', 'scale(' + koef + ')');
 
-        	$('#popup_video, #popup_mobile_calls_messages, #popup_video_phone, #popup_video_phone_outgoing, #popup_search_processing, #popup_search_error, #popup_call_mobile, #popup_data_transfer, #popup_success, #popup_exit, #popup_end_video_question, .fancybox-container, #popup_video_phone_video, #popup_start_mission').css('height', ($('#main').outerHeight() * parseFloat((1920 / windowWidth).toFixed(2))) + 'px');
+        	$('#popup_video, #popup_mobile_calls_messages, #popup_video_phone, #popup_video_phone_outgoing, #popup_search_processing, #popup_search_error, #popup_call_mobile, #popup_data_transfer, #popup_success, #popup_exit, #popup_end_video_question, .fancybox-container, #popup_video_phone_video, #popup_start_mission, #popup_voice_correct_alison').css('height', ($('#main').outerHeight() * parseFloat((1920 / windowWidth).toFixed(2))) + 'px');
         }
 	}
 

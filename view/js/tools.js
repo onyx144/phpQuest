@@ -330,4 +330,14 @@ $(function() {
 	$('body').on('click', '.dashboard_tab_title_can_click_tools', function(e){
 		uploadTypeTabsToolsStep($(this).attr('data-step'), $(this).attr('data-tools'), true);
 	});
+
+	$('body').on('click', '.dashboard_tabs[data-dashboard="tools"] .cyber-breadcrumbs .breadcrumb-node:not(.active)', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		var step = $(this).attr('data-step');
+		var tools = $(this).attr('data-tools');
+		if (step) {
+			uploadTypeTabsToolsStep(step, tools || false, true);
+		}
+	});
 });

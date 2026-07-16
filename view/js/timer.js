@@ -1,6 +1,52 @@
 /* === ТАЙМЕР === */
+	var frontTimerClickCountdown = false; // локальный фронтовый таймер по клику
 
 /* ОБЩИЕ ФУНКЦИИ */
+	function renderFrontTimerCountdown($timer, totalSeconds) {
+		var safeSeconds = Math.max(0, parseInt(totalSeconds, 10) || 0);
+		var hours = Math.floor(safeSeconds / 3600);
+		var minute = Math.floor((safeSeconds % 3600) / 60);
+		var second = safeSeconds % 60;
+
+		$timer.find('.timer_hour').html(('0' + hours).slice(-2));
+		$timer.find('.timer_minute').html(('0' + minute).slice(-2));
+		$timer.find('.timer_second').html(('0' + second).slice(-2));
+		$timer.attr('data-timer', safeSeconds);
+	}
+
+	function stopFrontTimerCountdown() {
+		if (frontTimerClickCountdown !== false) {
+			clearInterval(frontTimerClickCountdown);
+			frontTimerClickCountdown = false;
+		}
+	}
+
+	function bindFrontTimerCountdownClick() {
+		if (!$('.timer').length) {
+			return;
+		}
+
+		$('.timer').off('click.frontTimerCountdown').on('click.frontTimerCountdown', function(e) {
+			e.preventDefault();
+
+			var $timer = $(this);
+			var localSeconds = 10;
+
+			stopFrontTimerCountdown();
+			$timer.addClass('timer_front_countdown_active');
+			renderFrontTimerCountdown($timer, localSeconds);
+
+			frontTimerClickCountdown = setInterval(function() {
+				localSeconds -= 1;
+				renderFrontTimerCountdown($timer, localSeconds);
+
+				if (localSeconds <= 0) {
+					stopFrontTimerCountdown();
+				}
+			}, 1000);
+		});
+	}
+
 	// скрыть основное поле с таймером
 	function hiddenMainTimer() {
 		$('.timer_wrapper').css('display', 'none');
@@ -202,4 +248,5 @@
 $(function() {
 	/*// запустить обновление таймера
 	updateTimerUploadPage();*/
+	bindFrontTimerCountdownClick();
 });

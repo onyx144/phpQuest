@@ -2,6 +2,18 @@
 
 trait Calls
 {
+public function getCallVideoInfo($call_id, $lang_id)
+{
+    $sql = "
+        SELECT c.id, c.type, cd.video, cd.name, cd.video_with_path
+        FROM calls c
+        JOIN calls_description cd ON c.id = cd.call_id
+        WHERE c.id = {?} AND cd.lang_id = {?}
+    ";
+
+    return $this->db->selectRow($sql, [(int) $call_id, (int) $lang_id]);
+}
+
 public function uploadTypeTabsCallsStep($step, $lang_id, $team_id)
 {
     switch ($step) {
@@ -56,7 +68,6 @@ private function uploadCallsList($team_id, $lang_id)
 {
 $translation = $this->getWordsByPage('game', $lang_id);
 $team_info   = $this->teamInfo($team_id);
-$lang_abbr   = $this->db->selectCell("SELECT `lang_abbr` FROM `langs` WHERE `id` = {?} LIMIT 1", [$lang_id]);
 
 $return = [];
 
@@ -77,28 +88,7 @@ if ($team_info) {
     $active_calls = json_decode($team_info['active_calls'], true);
 
     foreach ($active_calls as $call) {
-        $sql = "
-            SELECT c.type, cd.video, cd.name, cd.video_with_path
-            FROM calls c
-            JOIN calls_description cd ON c.id = cd.call_id
-            WHERE c.id = {?} AND cd.lang_id = {?}
-        ";
-        $call_info = $this->db->selectRow($sql, [$call['id'], $lang_id]);
-        if ($lang_abbr === 'uk' && (int) $call['id'] === 1) {
-            if (!$call_info) {
-                $call_info = [
-                    'type' => 'incoming',
-                    'video' => 'video/ua/first_cut.mp4',
-                    'name' => '',
-                    'video_with_path' => 'first_cut.mp4'
-                ];
-            } else {
-                $call_info['video'] = 'video/ua/first_cut.mp4';
-                if (empty($call_info['video_with_path'])) {
-                    $call_info['video_with_path'] = 'first_cut.mp4';
-                }
-            }
-        }
+        $call_info = $this->getCallVideoInfo($call['id'], $lang_id);
 
         // Иконка звонка
         $icon = '';

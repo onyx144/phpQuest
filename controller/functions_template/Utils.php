@@ -118,6 +118,11 @@ trait Utils
         if ($page === null || $page === '' || $page === false) {
             $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `language_id` = {?} ORDER BY `id`";
             $words = $this->db->select($sql, [$lang_id]);
+        } elseif ($page === 'game') {
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin`
+                WHERE `language_id` = {?} AND (`page` = '' OR `page` IS NULL OR `page` = 'game')
+                ORDER BY CASE WHEN `page` = 'game' THEN 1 ELSE 0 END, `id`";
+            $words = $this->db->select($sql, [$lang_id]);
         } else {
             $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
             $words = $this->db->select($sql, [$page, $lang_id]);
@@ -129,6 +134,11 @@ trait Utils
         }
 
         return $return;
+    }
+
+    private function t(array $translation, string $key): string
+    {
+        return $translation[$key] ?? '';
     }
 }
 

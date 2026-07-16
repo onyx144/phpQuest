@@ -920,6 +920,8 @@ class Adminadmin
             'accept_new_mission' => 'Accept New Mission',
             'company_name' => 'Company Name',
             'geo_coordinates' => 'Geo Coordinates',
+            'voice_decoder' => 'Voice Decoder',
+            'voice_correct' => 'Voice Correct',
             'african_partner' => 'African Partner',
             'metting_place' => 'Meeting Place',
             'room_name' => 'Room Name',

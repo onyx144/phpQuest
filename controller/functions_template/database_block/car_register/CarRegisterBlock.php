@@ -15,7 +15,7 @@ trait CarRegisterBlock
      */
     private function uploadDatabasesCarRegister($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
 
         $return = [];
@@ -34,7 +34,7 @@ trait CarRegisterBlock
      */
     private function uploadDatabasesCarRegisterHuilov($lang_id, $team_id)
     {
-        $translation = $this->getWordsByPage(null, $lang_id);
+        $translation = $this->getWordsByPage('game', $lang_id);
         $team_info = $this->teamInfo($team_id);
         $user_info = $this->getCurrentUserInfo($team_id);
 
@@ -64,7 +64,7 @@ trait CarRegisterBlock
     {
         return renderCyberBreadcrumbs([
             [
-                'text' => $translation['text13'],
+                'text' => $this->t($translation, 'text13'),
                 'url' => '#',
                 'data' => [
                     'tab' => 'tab1',
@@ -74,7 +74,7 @@ trait CarRegisterBlock
                 ],
             ],
             [
-                'text' => $translation['text171'],
+                'text' => $this->t($translation, 'text171'),
                 'data' => [
                     'tab' => 'car_register1',
                 ],
@@ -91,7 +91,7 @@ trait CarRegisterBlock
     {
         return '<div class="dashboard_back_btn" data-back="databases_start_four" data-action-id-back="28" data-database="false">
             <img src="/images/back_bg.png" class="back_btn_bg" alt="">
-            <div class="back_btn_text">' . $translation['text22'] . '</div>
+            <div class="back_btn_text">' . $this->t($translation, 'text22') . '</div>
         </div>';
     }
 
@@ -113,26 +113,26 @@ trait CarRegisterBlock
                 <div class="dashboard_car_register1_inner_image_wrapper">
                     ' . $this->getCarIcon(59, 59) . '
                 </div>
-                <div class="dashboard_car_register1_inner_title">' . $translation['text171'] . '</div>
-                <div class="dashboard_car_register1_inner_text">' . $translation['text62'] . '</div>
+                <div class="dashboard_car_register1_inner_title">' . $this->t($translation, 'text171') . '</div>
+                <div class="dashboard_car_register1_inner_text">' . $this->t($translation, 'text62') . '</div>
                 <div class="dashboard_car_register1_fields_top">
                     <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_license_plate">
                         <div class="dashboard_car_register1_input_border_left"></div>
-                        <input type="text" placeholder="' . $translation['text63'] . '" autocomplete="off" class="dashboard_car_register1_license_plate">
-                        <div class="dashboard_car_register1_license_plate_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                        <input type="text" placeholder="' . $this->t($translation, 'text63') . '" autocomplete="off" class="dashboard_car_register1_license_plate">
+                        <div class="dashboard_car_register1_license_plate_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                     </div>
                     <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_country">
                         <div class="dashboard_car_register1_input_border_right"></div>
                         ' . $countrySelect . '
-                        <div class="dashboard_car_register1_country_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                        <div class="dashboard_car_register1_country_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                     </div>
                 </div>
                 <div class="dashboard_car_register1_fields_bottom">
                     <div class="dashboard_car_register1_input_wrapper dashboard_car_register1_input_wrapper_date">
                         <div class="dashboard_car_register1_input_border_left"></div>
                         <div class="dashboard_car_register1_input_border_right"></div>
-                        <input type="text" placeholder="' . $translation['text65'] . '" autocomplete="off" class="dashboard_car_register1_date" value="' . $this->formatDate($team_info['car_register_date']) . '">
-                        <div class="dashboard_car_register1_date_error error_text_database_car_register">' . $translation['text86'] . '</div>
+                        <input type="text" placeholder="' . $this->t($translation, 'text65') . '" autocomplete="off" class="dashboard_car_register1_date" value="' . $this->formatDate($team_info['car_register_date']) . '">
+                        <div class="dashboard_car_register1_date_error error_text_database_car_register">' . $this->t($translation, 'text86') . '</div>
                     </div>
                 </div>
                 ' . $this->getSearchButton($translation) . '
@@ -181,7 +181,7 @@ trait CarRegisterBlock
             'id' => 'dashboard-car-register-country-select',
             'hidden_class' => 'dashboard_car_register1_country',
             'wrapper_class' => 'dashboard_car_register1_country_autocomplete',
-            'placeholder' => $translation['text64'],
+            'placeholder' => $this->t($translation, 'text64'),
             'selected_value' => $selectedValue,
             'options' => $componentData,
         ]);
@@ -195,11 +195,11 @@ trait CarRegisterBlock
      */
     private function generateDatePickerScript($translation, $team_info)
     {
-        $dayNames = [$translation['text67'], $translation['text68'], $translation['text69'], 
-                     $translation['text70'], $translation['text71'], $translation['text72'], $translation['text73']];
-        $monthNames = [$translation['text74'], $translation['text75'], $translation['text76'], $translation['text77'],
-                       $translation['text78'], $translation['text79'], $translation['text80'], $translation['text81'],
-                       $translation['text82'], $translation['text83'], $translation['text84'], $translation['text85']];
+        $dayNames = [$this->t($translation, 'text67'), $this->t($translation, 'text68'), $this->t($translation, 'text69'),
+                     $this->t($translation, 'text70'), $this->t($translation, 'text71'), $this->t($translation, 'text72'), $this->t($translation, 'text73')];
+        $monthNames = [$this->t($translation, 'text74'), $this->t($translation, 'text75'), $this->t($translation, 'text76'), $this->t($translation, 'text77'),
+                       $this->t($translation, 'text78'), $this->t($translation, 'text79'), $this->t($translation, 'text80'), $this->t($translation, 'text81'),
+                       $this->t($translation, 'text82'), $this->t($translation, 'text83'), $this->t($translation, 'text84'), $this->t($translation, 'text85')];
         
         return '<script>
             $(function() {
@@ -250,7 +250,7 @@ trait CarRegisterBlock
     private function getSearchButton($translation)
     {
         return '<div class="btn_wrapper btn_wrapper_blue dashboard_car_register1_search">
-            <div class="btn btn_blue"><span>' . $translation['text66'] . '</span></div>
+            <div class="btn btn_blue"><span>' . $this->t($translation, 'text66') . '</span></div>
             <div class="btn_border_top"></div>
             <div class="btn_border_bottom"></div>
             <div class="btn_border_left"></div>
@@ -394,20 +394,20 @@ trait CarRegisterBlock
         
         if ($langs) {
             foreach ($langs as $lang_item) {
-                $translation = $this->getWordsByPage(null, $lang_item['id']);
+                $translation = $this->getWordsByPage('game', $lang_item['id']);
                 $error_lang[$lang_item['lang_abbr']] = [
-                    'text92' => $translation['text92'],
-                    'text93' => $translation['text93'],
-                    'text94' => $translation['text94'],
-                    'text95' => $translation['text95'],
-                    'text97' => $translation['text97'],
-                    'text98' => $translation['text98'],
-                    'text99' => $translation['text99'],
-                    'text100' => $translation['text100'],
-                    'text101' => $translation['text101'],
-                    'text102' => $translation['text102'],
-                    'text103' => $translation['text103'],
-                    'text104' => $translation['text104']
+                    'text92' => $this->t($translation, 'text92'),
+                    'text93' => $this->t($translation, 'text93'),
+                    'text94' => $this->t($translation, 'text94'),
+                    'text95' => $this->t($translation, 'text95'),
+                    'text97' => $this->t($translation, 'text97'),
+                    'text98' => $this->t($translation, 'text98'),
+                    'text99' => $this->t($translation, 'text99'),
+                    'text100' => $this->t($translation, 'text100'),
+                    'text101' => $this->t($translation, 'text101'),
+                    'text102' => $this->t($translation, 'text102'),
+                    'text103' => $this->t($translation, 'text103'),
+                    'text104' => $this->t($translation, 'text104')
                 ];
             }
         }
@@ -425,7 +425,7 @@ trait CarRegisterBlock
         $items = [];
 
         $items[] = [
-            'text' => $translation['text13'],
+            'text' => $this->t($translation, 'text13'),
             'url' => '#',
             'data' => [
                 'tab' => 'tab1',
@@ -436,7 +436,7 @@ trait CarRegisterBlock
         ];
 
         $items[] = [
-            'text' => $translation['text171'],
+            'text' => $this->t($translation, 'text171'),
             'url' => '#',
             'data' => [
                 'tab' => 'car_register1',
@@ -444,7 +444,7 @@ trait CarRegisterBlock
         ];
 
         $items[] = [
-            'text' => $translation['text90'],
+            'text' => $this->t($translation, 'text90'),
             'data' => [
                 'tab' => 'car_register2',
             ],
@@ -464,6 +464,11 @@ trait CarRegisterBlock
     {
         $bubbleClass = empty($user_info['car_register_print_text_huilov']) ? ' dashboard_car_register2_inner_bubble' : '';
         $bubbleTeamClass = empty($team_info['car_register_print_text_huilov']) ? ' dashboard_car_register2_inner_bubble_team' : '';
+        $voiceClipId = 3;
+        $voiceClipPos = 'car_register';
+        ob_start();
+        require ROOT . '/view/template/game/voice_clip_widget.php';
+        $voiceClipWidget = ob_get_clean();
 
         $printed = !empty($user_info['car_register_print_text_huilov']);
         $bubbleTexts = [
@@ -483,7 +488,7 @@ trait CarRegisterBlock
 
         $bubbleHtml = [];
         foreach ($bubbleTexts as $idx => $key) {
-            $bubbleHtml[$idx] = '<span class="dashboard_car_register2_bubble" data-bubble="' . $idx . '">' . ($printed ? $translation[$key] : '') . '</span>';
+            $bubbleHtml[$idx] = '<span class="dashboard_car_register2_bubble" data-bubble="' . $idx . '">' . ($printed ? $this->t($translation, $key) : '') . '</span>';
         }
         $rows = [
             ['label' => 'text92', 'text' => 'text93', 'id' => 0],
@@ -497,13 +502,13 @@ trait CarRegisterBlock
         $rowsHtml = '';
         foreach ($rows as $row) {
             $rowsHtml .= '<div class="dashboard_personal_files2_private_individuals_huilov_data_row ' . ($row['class'] ?? '') . '">
-                <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $translation[$row['label']] . '</div>
+                <div class="dashboard_personal_files2_private_individuals_huilov_label">' . $this->t($translation, $row['label']) . '</div>
                 <div class="dashboard_personal_files2_private_individuals_huilov_input">
                     <span class="dots_top"></span>
                     <span class="dots_bottom_left"></span>
                     <span class="dots_bottom_right"></span>
                     <span class="private_individuals_huilov_text" data-bubble="' . $row['id'] . '">
-                        <span>' .$translation[$row['text']]. '</span>
+                        <span>' . $this->t($translation, $row['text']) . '</span>
                     </span>
                 </div>
             </div>';
@@ -511,32 +516,23 @@ trait CarRegisterBlock
         return '<div class="dashboard_tab_content_item dashboard_tab_content_item_car_register_huilov dashboard_tab_content_item_active" data-tab="car_register2">
             <div class="dashboard_car_register2_inner' . $bubbleClass . $bubbleTeamClass . '">
                 <div class="dashboard_car_register2_left">
-                    <div class="dashboard_car_register2_title">' . $translation['text90'] . '</div>
+                    <div class="dashboard_car_register2_title">' . $this->t($translation, 'text90') . '</div>
                    ' . $rowsHtml . '
                 </div>
                 
                      
                  
 
-                <div class="dashboard_car_register2_right">
+                <div class="dashboard_car_register2_right" style="position: relative;">
+                    <div style="position: absolute; right: 0; bottom: 0; z-index: 5;">
+                        ' . $voiceClipWidget . '
+                    </div>
                     <div class="dashboard_car_register2_slider_wrapper">
                         <div class="dashboard_car_register2_slider">
-                            <div><img src="/images/slider_stalin_car/1.png" alt=""></div>
-                            <div><img src="/images/slider_stalin_car/2.png" alt=""></div>
-                            <div><img src="/images/slider_stalin_car/3.png" alt=""></div>
+                            <div><img src="/images/car/car_dudick.png" alt=""></div>
                         </div>
-                        <div class="dashboard_car_register2_slider_arrows">
-                            <div class="dashboard_car_register2_slider_arrow_left">
-                                <img src="/images/slider_stalin_car/slider_arrow_left.png" alt="">
-                            </div>
+                        <div class="dashboard_car_register2_slider_arrows dashboard_car_register2_slider_arrows_single">
                             <div class="dashboard_car_register2_slider_arrow_number">1</div>
-                            <div class="dashboard_car_register2_slider_arrow_right">
-                                <img src="/images/slider_stalin_car/slider_arrow_right.png" alt="">
-                            </div>
-                        </div>
-                        <div class="dashboard_car_register2_slider_picture_counter">
-                            <img src="/images/slider_stalin_car/slider_counter_bg.png" class="dashboard_car_register2_slider_picture_counter_bg" alt="">
-                            <div class="dashboard_car_register2_slider_picture_text"><span>1</span>/3</div>
                         </div>
                         <div class="dashboard_car_register2_slider_border_right_bottom"></div>
                     </div>

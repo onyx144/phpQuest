@@ -70,6 +70,11 @@ if (!isset($svg) && isset($GLOBALS['svg'])) {
 						<span><?php if (isset($translation['text20'])) { echo $translation['text20']; } ?></span>
 					</div>
 				</div>
+				<?php
+					$voiceClipId = 4;
+					$voiceClipPos = 'chat';
+					require ROOT . '/view/template/game/voice_clip_widget.php';
+				?>
 			</div>
 		<?php } ?>
 	</div>

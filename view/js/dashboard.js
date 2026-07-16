@@ -8,6 +8,46 @@
 	};
 
 /* ОБЩИЕ ФУНКЦИИ */
+	// Сразу показать лоадер dashboard (контент скрывается до ответа AJAX).
+	function showDashboardTabsLoading() {
+		var $dashboardTabs = $('.dashboard_tabs[data-dashboard="dashboard"]');
+
+		if (!$dashboardTabs.length) {
+			return;
+		}
+
+		$dashboardTabs.addClass('dashboard_tabs_active');
+		$('.dashboard_item[data-dashboard="dashboard"]').addClass('dashboard_item_active');
+		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+		$dashboardTabs.find('.dashboard_tabs_loading').show();
+
+		var formData = new FormData();
+		formData.append('op', 'getDashboardTabsLoading');
+		formData.append('lang_abbr', $('html').attr('lang'));
+
+		$.ajax({
+			url: '/ajax/ajax_dashboard.php',
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(json) {
+				if (!json.loading_html || $dashboardTabs.find('.dashboard_tabs_content_wrapper').is(':visible')) {
+					return;
+				}
+
+				var $loadingMarkup = $('<div>').html(json.loading_html);
+				var loadingText = $loadingMarkup.find('.dashboard_loading_text').html();
+
+				if (loadingText) {
+					$dashboardTabs.find('.dashboard_loading_text').html(loadingText);
+				}
+			}
+		});
+	}
+
 	// Открыть тип табов: dashboard
 	function openTypeTabsDashboard(isSocketSend) {
 		$('.dashboard_tabs[data-dashboard="dashboard"]').addClass('dashboard_tabs_active');
@@ -33,12 +73,19 @@
 			$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_content_item_wrapper').html(dashboardCache.content);
 			$dashboardTabs.find('.dashboard_tabs_loading').hide();
 			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			if (step === 'voice_decoder') {
+				$('body').addClass('voice_decoder_stage_active');
+				if (typeof refreshVoiceDecoderState === 'function') {
+					refreshVoiceDecoderState(true);
+				}
+			} else {
+				$('body').removeClass('voice_decoder_stage_active');
+			}
 			return;
 		}
 		
 		// Показываем лоадинг и скрываем контент
-		$dashboardTabs.find('.dashboard_tabs_loading').show();
-		$dashboardTabs.find('.dashboard_tabs_content_wrapper').hide();
+		showDashboardTabsLoading();
 		
 		var formData = new FormData();
     	formData.append('op', 'uploadTypeTabsDashboardStep');
@@ -63,6 +110,15 @@
 					dashboardCache.content = json.content;
 				}
 				dashboardCache.step = step;
+
+				if (step === 'voice_decoder') {
+					$('body').addClass('voice_decoder_stage_active');
+					if (typeof refreshVoiceDecoderState === 'function') {
+						refreshVoiceDecoderState(true);
+					}
+				} else {
+					$('body').removeClass('voice_decoder_stage_active');
+				}
 
 				// Скрываем лоадинг и показываем контент
 				$dashboardTabs.find('.dashboard_tabs_loading').hide();

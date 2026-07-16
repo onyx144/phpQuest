@@ -284,6 +284,7 @@ $(function() {
 	// отправить данные из формы поиска
 	$('body').on('click', '.dashboard_room_name_search', function(e){
 		var err = false;
+		//можно сменить
 		var roomName = $.trim($('.dashboard_room_name_room_name').val());
 
 		if (roomName == '') {

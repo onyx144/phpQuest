@@ -20,6 +20,11 @@ if (!isset($svg) && isset($GLOBALS['svg'])) {
 						<div class="music_off<?php if ($this->userInfo['music'] == 'off') { echo ' music_active'; } ?>"><?php if (isset($translation['text3'])) { echo $translation['text3']; } ?></div>
 					</div>
 				</div>
+				<?php
+					$voiceClipId = 2;
+					$voiceClipPos = 'music';
+					require ROOT . '/view/template/game/voice_clip_widget.php';
+				?>
 			</div>
 
 			<div class="score_wrapper">

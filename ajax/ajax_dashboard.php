@@ -17,6 +17,17 @@ if (isset($_POST['op'])) {
 			print_r(json_encode($return));
 		    break;
 
+		// лоадер dashboard при переключении этапа
+		case 'getDashboardTabsLoading':
+			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
+
+			$return['success'] = 'ok';
+			$return['loading_html'] = $function->getDashboardTabsLoadingHtml($lang_id);
+
+			print_r(json_encode($return));
+		    break;
+
 		// dashboard - company investigate. Проверка правильности ввода данных
 		case 'validateDashboardCompanyInvestigateSearch':
 			$company_name = !empty($_POST['company_name']) ? strip_tags(trim($_POST['company_name'])) : false;
@@ -288,43 +299,268 @@ if (isset($_POST['op'])) {
 						}
 					}
 
-					// сохраняем обновленный список подсказок + запоминаем новый открытый dashboard
-					$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?}, `tools_advanced_search_engine_access` = {?} WHERE `id` = {?}";
-					$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'african_partner', 1, $userInfo['team_id']]);
+					// после geo переходим на этап voice_decoder
+					$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?} WHERE `id` = {?}";
+					$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'voice_decoder', $userInfo['team_id']]);
 
 					$return['success'] = 'ok';
-
-					/*// не в тему, но))) обновляем актуальный список доступных файлов
-					$list_files = json_decode($team_info['list_files'], true);
-
-					$list_files[] = 6;
-					$list_files[] = 7;
-
-					$list_files = array_unique($list_files);
-
-					$sql = "UPDATE `teams` SET `list_files` = {?} WHERE `id` = {?}";
-					$db->query($sql, [json_encode($list_files, JSON_UNESCAPED_UNICODE), $userInfo['team_id']]);*/
-					$function->updateTeamListFiles($userInfo['team_id'], 6);
-					$function->updateTeamListFiles($userInfo['team_id'], 7);
-
-					/*// аналогично обновляем актуальный список доступных tools
-					$list_tools = json_decode($team_info['list_tools'], true);
-
-					$list_tools[] = 'advanced_search_engine';
-					$list_tools[] = 'gps_coordinates';
-					// $list_tools[] = 'symbol_decoder';
-					// $list_tools[] = '3d_building_scan';
-
-					$list_tools = array_unique($list_tools);
-
-					$sql = "UPDATE `teams` SET `list_tools` = {?} WHERE `id` = {?}";
-					$db->query($sql, [json_encode($list_tools, JSON_UNESCAPED_UNICODE), $userInfo['team_id']]);*/
-					$function->updateTeamListTools($userInfo['team_id'], 'advanced_search_engine');
 				} else {
 					$return['error'] = $translation['text29'];
 				}
 			}
 
+			print_r(json_encode($return));
+		    break;
+
+		// voice decoder - получить текущее количество voice_message + audio_find
+		case 'getVoiceDecoderState':
+			if (!$userInfo || empty($userInfo['team_id'])) {
+				$return['error'] = 'not_authorized';
+				print_r(json_encode($return));
+				break;
+			}
+			$function->ensureVoiceDecoderColumns();
+			$team_info = $function->teamInfo($userInfo['team_id']);
+			$voice_count = 0;
+			$audio_find = [];
+			if ($team_info) {
+				if (isset($team_info['voice_message'])) {
+					$voice_count = (int) $team_info['voice_message'];
+				}
+				$rawFind = isset($team_info['audio_find']) ? trim((string) $team_info['audio_find']) : '';
+				if ($rawFind !== '') {
+					foreach (preg_split('/\s*,\s*/', $rawFind) as $part) {
+						$id = (int) $part;
+						if ($id >= 1 && $id <= 4 && !in_array($id, $audio_find, true)) {
+							$audio_find[] = $id;
+						}
+					}
+					sort($audio_find);
+				}
+			}
+			if ($voice_count < 0) {
+				$voice_count = 0;
+			} elseif ($voice_count > 4) {
+				$voice_count = 4;
+			}
+
+			$return['success'] = 'ok';
+			$return['voice_count'] = $voice_count;
+			$return['audio_find'] = $audio_find;
+			$return['can_decrypt'] = ($voice_count >= 4) ? 1 : 0;
+			$return['last_dashboard'] = $team_info ? ($team_info['last_dashboard'] ?? '') : '';
+			print_r(json_encode($return));
+		    break;
+
+		// voice decoder - добавить конкретный audio (1..4) в audio_find и +1 к voice_message
+		case 'addVoiceDecoderMessage':
+			if (!$userInfo || empty($userInfo['team_id'])) {
+				$return['error'] = 'not_authorized';
+				print_r(json_encode($return));
+				break;
+			}
+			$audio_id = isset($_POST['audio_id']) ? (int) $_POST['audio_id'] : 0;
+			$function->ensureVoiceDecoderColumns();
+			$team_info = $function->teamInfo($userInfo['team_id']);
+			if (!$team_info) {
+				$return['error'] = 'team_not_found';
+				print_r(json_encode($return));
+				break;
+			}
+			if (!array_key_exists('voice_message', $team_info) || !array_key_exists('audio_find', $team_info)) {
+				$return['error'] = 'voice_decoder_columns_missing';
+				print_r(json_encode($return));
+				break;
+			}
+			if ($audio_id < 1 || $audio_id > 4) {
+				$return['error'] = 'invalid_audio_id';
+				print_r(json_encode($return));
+				break;
+			}
+
+			$audio_find = [];
+			$rawFind = isset($team_info['audio_find']) ? trim((string) $team_info['audio_find']) : '';
+			if ($rawFind !== '') {
+				foreach (preg_split('/\s*,\s*/', $rawFind) as $part) {
+					$id = (int) $part;
+					if ($id >= 1 && $id <= 4 && !in_array($id, $audio_find, true)) {
+						$audio_find[] = $id;
+					}
+				}
+			}
+			if (in_array($audio_id, $audio_find, true)) {
+				$return['success'] = 'ok';
+				$return['already'] = 1;
+				$return['voice_count'] = (int) $team_info['voice_message'];
+				$return['audio_find'] = $audio_find;
+				$return['audio_id'] = $audio_id;
+				print_r(json_encode($return));
+				break;
+			}
+
+			$audio_find[] = $audio_id;
+			sort($audio_find);
+			$current = (int) $team_info['voice_message'];
+			$next = $current + 1;
+			if ($next > 4) {
+				$next = 4;
+			}
+
+			$updated = $db->query(
+				"UPDATE `teams` SET `voice_message` = {?}, `audio_find` = {?} WHERE `id` = {?}",
+				[$next, implode(',', $audio_find), $userInfo['team_id']]
+			);
+			if (!$updated) {
+				$return['error'] = 'db_update_failed';
+				print_r(json_encode($return));
+				break;
+			}
+
+			$return['success'] = 'ok';
+			$return['voice_count'] = $next;
+			$return['audio_find'] = $audio_find;
+			$return['audio_id'] = $audio_id;
+			print_r(json_encode($return));
+		    break;
+
+		// voice decoder - расшифровка количества voice_message и переход дальше
+		case 'voiceDecoderUpdateHint':
+			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
+			$translation = $lang->getWordsByPage('game', $lang_id);
+			if (!$function->isActiveVerifyCode($userInfo['team_id'])) {
+				$return['error_verify'] = $translation['text4'];
+			} else {
+				$team_info = $function->teamInfo($userInfo['team_id']);
+				if ($team_info && isset($team_info['voice_message']) && (int) $team_info['voice_message'] >= 4) {
+					$function->ensureVoiceDecoderColumns();
+					$active_hints = [];
+					$list_hints = [];
+					$hints_by_step = $function->getHintsByStep('geo_coordinates', $lang_id);
+					if ($hints_by_step) {
+						foreach ($hints_by_step as $hint) {
+							$list_hints[] = $hint['id'];
+						}
+					}
+
+					$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?}, `voice_correct_order` = {?} WHERE `id` = {?}";
+					$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'voice_correct', '3,1,4,2', $userInfo['team_id']]);
+
+					$return['success'] = 'ok';
+					$return['next_step'] = 'voice_correct';
+				} else {
+					$return['error'] = 'not_enough_voice';
+				}
+			}
+			print_r(json_encode($return));
+		    break;
+
+		// voice_correct - текущий порядок аудио
+		case 'getVoiceCorrectState':
+			if (!$userInfo || empty($userInfo['team_id'])) {
+				$return['error'] = 'not_authorized';
+				print_r(json_encode($return));
+				break;
+			}
+			$function->ensureVoiceDecoderColumns();
+			$team_info = $function->teamInfo($userInfo['team_id']);
+			$order = $function->parseVoiceCorrectOrder($team_info);
+			$return['success'] = 'ok';
+			$return['order'] = $order;
+			$return['last_dashboard'] = $team_info ? ($team_info['last_dashboard'] ?? '') : '';
+			print_r(json_encode($return));
+		    break;
+
+		// voice_correct - сохранить порядок (сдвиг влево/вправо)
+		case 'saveVoiceCorrectOrder':
+			if (!$userInfo || empty($userInfo['team_id'])) {
+				$return['error'] = 'not_authorized';
+				print_r(json_encode($return));
+				break;
+			}
+			$function->ensureVoiceDecoderColumns();
+			$orderRaw = isset($_POST['order']) ? $_POST['order'] : '';
+			if (is_string($orderRaw)) {
+				$orderRaw = json_decode($orderRaw, true);
+			}
+			$order = $function->normalizeVoiceCorrectOrder($orderRaw);
+			$updated = $db->query(
+				"UPDATE `teams` SET `voice_correct_order` = {?} WHERE `id` = {?}",
+				[implode(',', $order), $userInfo['team_id']]
+			);
+			if (!$updated) {
+				$return['error'] = 'db_update_failed';
+				print_r(json_encode($return));
+				break;
+			}
+			$return['success'] = 'ok';
+			$return['order'] = $order;
+			print_r(json_encode($return));
+		    break;
+
+		// voice_correct - проверка порядка и переход на african_partner
+		case 'validateVoiceCorrectOrder':
+			if (!$userInfo || empty($userInfo['team_id'])) {
+				$return['error'] = 'not_authorized';
+				print_r(json_encode($return));
+				break;
+			}
+			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
+			$translation = $lang->getWordsByPage('game', $lang_id);
+			if (!$function->isActiveVerifyCode($userInfo['team_id'])) {
+				$return['error_verify'] = $translation['text4'];
+				print_r(json_encode($return));
+				break;
+			}
+
+			$function->ensureVoiceDecoderColumns();
+			$orderRaw = isset($_POST['order']) ? $_POST['order'] : '';
+			if (is_string($orderRaw)) {
+				$orderRaw = json_decode($orderRaw, true);
+			}
+			$order = $function->normalizeVoiceCorrectOrder($orderRaw);
+			$isCorrect = ($order === [1, 2, 3, 4]);
+
+			$db->query(
+				"UPDATE `teams` SET `voice_correct_order` = {?} WHERE `id` = {?}",
+				[implode(',', $order), $userInfo['team_id']]
+			);
+
+			if (!$isCorrect) {
+				$return['error'] = 'wrong_order';
+				$return['error_text'] = 'помилка. Аудіофайл відтворено невірно';
+				$return['order'] = $order;
+				print_r(json_encode($return));
+				break;
+			}
+
+			$team_info = $function->teamInfo($userInfo['team_id']);
+			$active_hints = [];
+			$list_hints = [];
+			$hints_by_step = $function->getHintsByStep('geo_coordinates', $lang_id);
+			if ($hints_by_step) {
+				foreach ($hints_by_step as $hint) {
+					$list_hints[] = $hint['id'];
+				}
+			}
+
+			$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?}, `tools_advanced_search_engine_access` = {?} WHERE `id` = {?}";
+			$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'african_partner', 1, $userInfo['team_id']]);
+
+			$function->updateTeamListFiles($userInfo['team_id'], 6);
+			$function->updateTeamListFiles($userInfo['team_id'], 7);
+			$function->updateTeamListTools($userInfo['team_id'], 'advanced_search_engine');
+
+			$return['success'] = 'ok';
+			$return['order'] = $order;
+			$return['next_step'] = 'african_partner';
+			$return['full_audio'] = [
+				'/music/deshefrator_correct/vika_3_out_1.mp3',
+				'/music/deshefrator_correct/vika_3_out_2.mp3',
+				'/music/deshefrator_correct/vika_3_out_3.mp3',
+				'/music/deshefrator_correct/vika_3_out_4.mp3',
+			];
 			print_r(json_encode($return));
 		    break;
 

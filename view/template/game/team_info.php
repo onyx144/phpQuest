@@ -10,6 +10,7 @@
 		<div class="agent_face">
 			<!-- <img src="/images/agent_face.png" alt=""> -->
 			<img src="/images/agent_face3.jpg" alt="">
+			 
 		</div>
 		<div class="agent_name"><?php echo $translation['text8']; ?></div>
 	</div>

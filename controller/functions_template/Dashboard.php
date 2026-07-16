@@ -2,12 +2,25 @@
 
 trait Dashboard
 {
+public function getDashboardTabsLoadingHtml($lang_id)
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
+    $loadingText = !empty($translation['text299']) ? $translation['text299'] : 'Loading';
+
+    return '<div class="dashboard_tabs_loading" style="display: flex; align-items: center; justify-content: center; min-height: 400px; flex-direction: column;">
+        <div class="dashboard_loading_spinner" style="width: 60px; height: 60px; border: 4px solid rgba(0, 116, 176, 0.2); border-top-color: #0074b0; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+        <div class="dashboard_loading_text" style="color: #0074b0; font-weight: bold; font-size: 16px;">' . htmlspecialchars($loadingText, ENT_QUOTES, 'UTF-8') . '</div>
+    </div>';
+}
+
 public function uploadTypeTabsDashboardStep($step, $lang_id, $team_id)
 {
     switch ($step) {
         case 'accept_new_mission': $return = $this->uploadDashboardNewMission($lang_id); break;
         case 'company_name': $return = $this->uploadDashboardCompanyName($lang_id); break;
         case 'geo_coordinates': $return = $this->uploadDashboardGeoCoordinates($lang_id); break;
+        case 'voice_decoder': $return = $this->uploadDashboardVoiceDecoder($lang_id, $team_id); break;
+        case 'voice_correct': $return = $this->uploadDashboardVoiceCorrect($lang_id, $team_id); break;
         case 'african_partner': $return = $this->uploadDashboardAfricanPartner($lang_id, $team_id); break;
         case 'metting_place': $return = $this->uploadDashboardMettingPlace($lang_id, $team_id); break;
         case 'room_name': $return = $this->uploadDashboardRoomName($lang_id, $team_id); break;
@@ -267,6 +280,161 @@ private function uploadDashboardGeoCoordinates($lang_id)
     return $return;
 }
 
+// dashboard - Voice Decoder
+private function uploadDashboardVoiceDecoder($lang_id, $team_id)
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
+    $team_info = $this->teamInfo($team_id);
+
+    $voiceCount = 0;
+    if (isset($team_info['voice_message'])) {
+        $voiceCount = (int) $team_info['voice_message'];
+    }
+    if ($voiceCount < 0) {
+        $voiceCount = 0;
+    } elseif ($voiceCount > 4) {
+        $voiceCount = 4;
+    }
+
+    $return = [];
+
+    $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+            <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+            </div>
+            <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+        </div>';
+
+    $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_voice_decoder dashboard_tab_content_item_active" data-tab="tab1">
+                            <div class="dashboard_tab_content_item_company_name_inner dashboard_tab_content_item_voice_decoder_inner">
+                                <img src="/images/dashboard_tab_content_item_company_name_inner_bg.png" class="dashboard_tab_content_item_company_name_inner_bg" alt="">
+                                <div class="dashboard_voice_decoder_title">ДЕШЕФРУВАТИ ГОЛОСОВІ ПОВІДОМЛЕННЯ</div>
+                                <div class="dashboard_voice_decoder_progress">забрано voice <span class="dashboard_voice_decoder_count">' . $voiceCount . '</span>/4</div>
+                                <div class="dashboard_voice_decoder_dots" data-count="' . $voiceCount . '">';
+
+    for ($i = 1; $i <= 4; $i++) {
+        $activeClass = ($voiceCount >= $i) ? ' dashboard_voice_decoder_dot_active' : '';
+        $return['content'] .= '<div class="dashboard_voice_decoder_dot' . $activeClass . '" data-index="' . $i . '"></div>';
+    }
+
+    $return['content'] .= '         </div>
+                                <div class="btn_wrapper btn_wrapper_blue dashboard_voice_decoder_decrypt_btn' . ($voiceCount >= 4 ? '' : ' dashboard_voice_decoder_btn_hidden') . '">
+                                    <div class="btn btn_blue">
+                                        <span>Дешефрувати</span>
+                                    </div>
+                                    <div class="btn_border_top"></div>
+                                    <div class="btn_border_bottom"></div>
+                                    <div class="btn_border_left"></div>
+                                    <div class="btn_border_left_arcle"></div>
+                                    <div class="btn_border_right"></div>
+                                    <div class="btn_border_right_arcle"></div>
+                                    <div class="btn_bg_top_line"></div>
+                                    <div class="btn_bg_bottom_line"></div>
+                                    <div class="btn_bg_triangle_left"></div>
+                                    <div class="btn_bg_triangle_right"></div>
+                                    <div class="btn_circles_top">
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                    </div>
+                                    <div class="btn_circles_bottom">
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+
+    return $return;
+}
+
+// dashboard - Voice Correct (порядок аудио Элисон)
+private function uploadDashboardVoiceCorrect($lang_id, $team_id)
+{
+    $translation = $this->getWordsByPage('game', $lang_id);
+    $this->ensureVoiceDecoderColumns();
+    $team_info = $this->teamInfo($team_id);
+    $order = $this->parseVoiceCorrectOrder($team_info);
+
+    $return = [];
+
+    $return['titles'] = '<div class="flex items-center gap-3 mb-6">
+            <div class="p-2 rounded-lg bg-primary/20 border border-primary/30">
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.75 0H21V2L19.25 4H0V2L1.75 0Z" fill="#00F0FF"></path><path d="M1.75 6H7.25V19L5.5 21H0V8L1.75 6Z" fill="#00F0FF"></path><path d="M11.75 10H21V13L19.25 15H10V12L11.75 10Z" fill="#00F0FF"></path><path d="M10.75 6H21V8L20.25 9H10V7L10.75 6Z" fill="#00F0FF"></path><path d="M11.75 16H21V19L19.25 21H10V18L11.75 16Z" fill="#00F0FF"></path></svg>
+            </div>
+            <h2 class="text-3xl font-bold neon-text">' . $translation['text11'] . '</h2>
+        </div>';
+
+    $return['content'] = '<div class="dashboard_tab_content_item dashboard_tab_content_item_voice_correct dashboard_tab_content_item_active" data-tab="tab1">
+                            <div class="dashboard_tab_content_item_company_name_inner dashboard_tab_content_item_voice_correct_inner">
+                                <img src="/images/dashboard_tab_content_item_company_name_inner_bg.png" class="dashboard_tab_content_item_company_name_inner_bg" alt="">
+                                <div class="dashboard_voice_correct_title">Відтворіть повідомленя Елісон</div>
+                                <div class="dashboard_voice_correct_list" data-order="' . htmlspecialchars(implode(',', $order), ENT_QUOTES, 'UTF-8') . '">';
+
+    $total = count($order);
+    foreach ($order as $index => $audioId) {
+        $isFirst = ($index === 0);
+        $isLast = ($index === $total - 1);
+        $src = '/music/deshefrator_correct/vika_3_out_' . (int) $audioId . '.mp3';
+
+        $return['content'] .= '<div class="dashboard_voice_correct_item" data-audio-id="' . (int) $audioId . '" data-index="' . $index . '">
+            <button type="button" class="dashboard_voice_correct_arrow dashboard_voice_correct_arrow_left' . ($isFirst ? ' is-disabled' : '') . '" ' . ($isFirst ? 'disabled' : '') . ' aria-label="Move left">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 3.5L6 9L11.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="dashboard_voice_correct_center">
+                <button type="button" class="dashboard_voice_correct_play" aria-label="Play">
+                    <span class="dashboard_voice_correct_play_icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5V14.5L14.5 9L6 3.5Z" fill="currentColor"/></svg>
+                    </span>
+                    <span class="dashboard_voice_correct_pause_icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="3.5" width="2.8" height="11" fill="currentColor"/><rect x="10.2" y="3.5" width="2.8" height="11" fill="currentColor"/></svg>
+                    </span>
+                </button>
+                <audio preload="none" src="' . $src . '"></audio>
+            </div>
+            <button type="button" class="dashboard_voice_correct_arrow dashboard_voice_correct_arrow_right' . ($isLast ? ' is-disabled' : '') . '" ' . ($isLast ? 'disabled' : '') . ' aria-label="Move right">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 3.5L12 9L6.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>';
+    }
+
+    $return['content'] .= '         </div>
+                                <div class="btn_wrapper btn_wrapper_blue dashboard_voice_correct_build_btn">
+                                    <div class="btn btn_blue">
+                                        <span>Збудувати повне аудіо</span>
+                                    </div>
+                                    <div class="btn_border_top"></div>
+                                    <div class="btn_border_bottom"></div>
+                                    <div class="btn_border_left"></div>
+                                    <div class="btn_border_left_arcle"></div>
+                                    <div class="btn_border_right"></div>
+                                    <div class="btn_border_right_arcle"></div>
+                                    <div class="btn_bg_top_line"></div>
+                                    <div class="btn_bg_bottom_line"></div>
+                                    <div class="btn_bg_triangle_left"></div>
+                                    <div class="btn_bg_triangle_right"></div>
+                                    <div class="btn_circles_top">
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                    </div>
+                                    <div class="btn_circles_bottom">
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                        <div class="btn_circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+
+    return $return;
+}
+
 // dashboard - african partner
 private function uploadDashboardAfricanPartner($lang_id, $team_id)
 {
@@ -310,14 +478,20 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                     <div class="dashboard_african_partner_input_wrapper dashboard_african_partner_input_wrapper_country">
                                         <div class="dashboard_african_partner_input_border_right"></div>';
 
+    $english_lang_id = Language::getLang()->getLangIdByHtmlAttr('en');
+
     $sql = "
-        SELECT c.code, c.pos, cd.name, c.id
+        SELECT c.code, c.pos, COALESCE(cd_current.name, cd_en.name) AS name, c.id
         FROM countries c
-        JOIN countries_description cd ON c.id = cd.country_id
-        WHERE cd.lang_id = {?}
-        ORDER BY cd.name
+        LEFT JOIN countries_description cd_current ON c.id = cd_current.country_id AND cd_current.lang_id = {?}
+        LEFT JOIN countries_description cd_en ON c.id = cd_en.country_id AND cd_en.lang_id = {?}
+        WHERE COALESCE(cd_current.name, cd_en.name) IS NOT NULL
+        ORDER BY COALESCE(cd_current.name, cd_en.name)
     ";
-    $countries = $this->db->select($sql, [$lang_id]);
+    $countries = $this->db->select($sql, [$lang_id, $english_lang_id]);
+    if (!$countries && (int) $lang_id !== 3) {
+        $countries = $this->db->select($sql, [3]);
+    }
     if ($countries) {
         $return['content'] .= '<select class="dashboard_african_partner_country"><option disabled="disabled"' . (empty($team_info['african_partner_country_id']) ? ' selected="selected"' : '') . '>' . $translation['text200'] . '</option>';
         foreach ($countries as $country) {
@@ -408,6 +582,38 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                         });
 
                                         // datepicker
+                                        if (!window.dashboardAfricanPartnerDatepickerHidePatched) {
+                                            window.dashboardAfricanPartnerDatepickerHidePatched = true;
+                                            var hideAfricanPartnerDatepicker = $.datepicker._hideDatepicker;
+
+                                            $.datepicker._hideDatepicker = function(input) {
+                                                var inst = this._curInst;
+
+                                                if (
+                                                    inst &&
+                                                    inst.input &&
+                                                    inst.input.hasClass("dashboard_african_partner_date") &&
+                                                    this._datepickerShowing &&
+                                                    inst.dpDiv.hasClass("dashboard-african-partner-datepicker") &&
+                                                    inst.dpDiv.hasClass("is-visible")
+                                                ) {
+                                                    var self = this;
+                                                    var $dp = inst.dpDiv;
+
+                                                    $dp.removeClass("is-visible");
+
+                                                    setTimeout(function() {
+                                                        hideAfricanPartnerDatepicker.call(self, input);
+                                                        $dp.removeClass("dashboard-african-partner-datepicker");
+                                                    }, 220);
+
+                                                    return;
+                                                }
+
+                                                hideAfricanPartnerDatepicker.call(this, input);
+                                            };
+                                        }
+
                                         $(".dashboard_african_partner_date").datepicker({
                                             dateFormat: "dd.mm.yy",
                                             dayNamesShort: ["' . $translation['text67'] . '", "' . $translation['text68'] . '", "' . $translation['text69'] . '", "' . $translation['text70'] . '", "' . $translation['text71'] . '", "' . $translation['text72'] . '", "' . $translation['text73'] . '"],
@@ -449,28 +655,26 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                                     }
                                                 });
                                             },
-                                            beforeShow: function() {
-                                                if (!is_touch_device()) {
-                                                    var pageSize = getPageSize();
-                                                    var windowWidth = pageSize[2];
-                                                    if (windowWidth < 1800) {
-                                                        $("body").removeClass("body_desktop_scale").css("transform", "scale(1)");
+                                            beforeShow: function(input, inst) {
+                                                var $wrap = $(input).siblings(".dashboard_african_partner_datepicker_wrap");
 
-                                                        setTimeout(function() {
-                                                            var pageSize = getPageSize();
-                                                            var windowWidth = pageSize[0];
+                                                $wrap.append(inst.dpDiv);
+                                                inst.dpDiv.addClass("dashboard-african-partner-datepicker");
 
-                                                            var koef = parseFloat((windowWidth / 1920).toFixed(2)) + 0.01;
+                                                setTimeout(function() {
+                                                    var $dp = inst.dpDiv;
 
-                                                            $("body").addClass("body_desktop_scale").css("transform", "scale(" + koef + ")");
-                                                            //$("body").css("transform", "scale(" + koef + ")");
+                                                    $dp.css({
+                                                        position: "relative",
+                                                        top: "auto",
+                                                        left: "auto",
+                                                        zIndex: 9999
+                                                    });
 
-                                                            var curDatepickerPosition = parseFloat($(".ui-datepicker").css("left"));
-                                                            var differentDatepickerPosition = (1920 - windowWidth) / 2;
-                                                            $(".ui-datepicker").css("left", (curDatepickerPosition + differentDatepickerPosition + 7) + "px");
-                                                        }, 1);
-                                                    }
-                                                }
+                                                    $dp.removeClass("is-visible");
+                                                    void $dp[0].offsetHeight;
+                                                    $dp.addClass("is-visible");
+                                                }, 0);
                                             }
                                         });
                                     });
@@ -485,6 +689,7 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                         <div class="dashboard_african_partner_input_border_left"></div>
                                         <div class="dashboard_african_partner_input_border_right"></div>
                                         <input type="text" placeholder="' . $translation['text201'] . '" autocomplete="off" class="dashboard_african_partner_date" value="' . ((!empty($team_info['african_partner_date']) && $team_info['african_partner_date'] != '0000-00-00' && !is_null($team_info['african_partner_date'])) ? $this->fromEngDatetimeToRus($team_info['african_partner_date']) : '') . '">
+                                        <div class="dashboard_african_partner_datepicker_wrap"></div>
                                         <div class="dashboard_african_partner_date_error error_text_database_car_register">' . $translation['text86'] . '</div>
                                     </div>
                                 </div>

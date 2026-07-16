@@ -18,6 +18,109 @@ trait Team
         return $this->db->selectRow($sql, [$team_id]);
     }
 
+    // voice_decoder: гарантируем наличие колонок voice_message и audio_find
+    public function ensureVoiceDecoderColumns()
+    {
+        static $ready = false;
+        if ($ready) {
+            return true;
+        }
+
+        $voiceMessageCol = $this->db->select("SHOW COLUMNS FROM `teams` LIKE 'voice_message'");
+        if (!$voiceMessageCol) {
+            $this->db->query("ALTER TABLE `teams` ADD COLUMN `voice_message` INT NOT NULL DEFAULT 0");
+        }
+
+        $audioFindCol = $this->db->select("SHOW COLUMNS FROM `teams` LIKE 'audio_find'");
+        if (!$audioFindCol) {
+            $this->db->query("ALTER TABLE `teams` ADD COLUMN `audio_find` VARCHAR(50) NOT NULL DEFAULT ''");
+        }
+
+        $voiceCorrectOrderCol = $this->db->select("SHOW COLUMNS FROM `teams` LIKE 'voice_correct_order'");
+        if (!$voiceCorrectOrderCol) {
+            $this->db->query("ALTER TABLE `teams` ADD COLUMN `voice_correct_order` VARCHAR(50) NOT NULL DEFAULT '3,1,4,2'");
+        }
+
+        $ready = true;
+        return true;
+    }
+
+    public function parseVoiceCorrectOrder($team_info)
+    {
+        $default = [3, 1, 4, 2];
+        if (!is_array($team_info) || !array_key_exists('voice_correct_order', $team_info)) {
+            return $default;
+        }
+
+        $raw = trim((string) $team_info['voice_correct_order']);
+        if ($raw === '') {
+            return $default;
+        }
+
+        $order = [];
+        foreach (preg_split('/\s*,\s*/', $raw) as $part) {
+            $id = (int) $part;
+            if ($id >= 1 && $id <= 4 && !in_array($id, $order, true)) {
+                $order[] = $id;
+            }
+        }
+
+        if (count($order) !== 4) {
+            return $default;
+        }
+
+        return $order;
+    }
+
+    public function normalizeVoiceCorrectOrder($order)
+    {
+        $normalized = [];
+        if (!is_array($order)) {
+            return [3, 1, 4, 2];
+        }
+
+        foreach ($order as $part) {
+            $id = (int) $part;
+            if ($id >= 1 && $id <= 4 && !in_array($id, $normalized, true)) {
+                $normalized[] = $id;
+            }
+        }
+
+        if (count($normalized) !== 4) {
+            return [3, 1, 4, 2];
+        }
+
+        return $normalized;
+    }
+
+    public function isVoiceDecoderStage($team_info)
+    {
+        return is_array($team_info) && ($team_info['last_dashboard'] ?? '') === 'voice_decoder';
+    }
+
+    public function parseTeamAudioFind($team_info)
+    {
+        $audio_find = [];
+        if (!is_array($team_info) || !array_key_exists('audio_find', $team_info)) {
+            return $audio_find;
+        }
+
+        $rawFind = trim((string) $team_info['audio_find']);
+        if ($rawFind === '') {
+            return $audio_find;
+        }
+
+        foreach (preg_split('/\s*,\s*/', $rawFind) as $part) {
+            $id = (int) $part;
+            if ($id >= 1 && $id <= 4 && !in_array($id, $audio_find, true)) {
+                $audio_find[] = $id;
+            }
+        }
+
+        sort($audio_find);
+        return $audio_find;
+    }
+
     // пишем действие в историю действий команды
     public function addTeamActionHistory($team_id, $action_id, $user_id)
     {

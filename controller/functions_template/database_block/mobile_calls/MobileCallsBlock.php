@@ -41,7 +41,7 @@ trait MobileCallsBlock
 
         $return = [];
 
-        $return['titles'] = $this->getMobileCallsMessagesTitles($translation);
+        $return['titles'] = $this->getMobileCallsTitles($translation);
         $return['back_btn'] = $this->getMobileCallsBackButton($translation);
         $return['content'] = $this->getMobileCallsMessagesContent($translation, $user_info, $team_info);
         $return['popup'] = $this->getMobileCallsMessagesPopup($translation);

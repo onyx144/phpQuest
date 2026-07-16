@@ -36,6 +36,8 @@
 	            if (callback != null){
 	                callback();
 	            }
+	        } else if (socket.readyState === 3) {
+	            console.warn('WebSocket disconnected. Start server: php server_game.php (port 8090)');
 	        } else {
 	            waitForSocketConnection(socket, callback);
 	        }
@@ -48,12 +50,12 @@ $(function() {
 
 		// Соединение установлено
 		socket.onopen = function() {
-			// console.log('socket.onopen');
+			console.log('WebSocket connected:', wsUrl);
 		}
 
 		// Ошибка при соединении
 		socket.onerror = function(error) {
-			// console.log('socket.onerror ' + (error.message ? error.message : ""));
+			console.warn('WebSocket error. For localhost run: php server_game.php', error);
 
 			// перезапускаем сервер
 			if (socket.readyState !== 1) {
@@ -703,56 +705,25 @@ $(function() {
 							$('#popup_video_phone').attr('class','');
 						}, 210);
 					}
+				} else if (op == 'acceptMissionSwitchStage') { // переключить этап миссии для всей команды
+					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
+					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+
+					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
+						acceptMissionOnCallAccepted();
+					}
 				} else if (op == 'acceptMissionIncomingCallAccept') { // название миссии ввели верно. Принять входящий звонок
-					// Проверяем, что сообщение для нашей команды
 					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
 					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
 					var currentUserId = $('#section_game').length ? parseInt($('#section_game').attr('data-user-id')) : 0;
 					var messageUserId = parameters.user_id ? parseInt(parameters.user_id) : 0;
 					
-					// Обрабатываем только если это сообщение для нашей команды
 					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId === messageTeamId) {
-						// Для инициатора принятия звонка локальная логика уже отрабатывает в 1_accept_mission.js.
-						// Не запускаем здесь старый popup-поток повторно, чтобы не сбивать inline-видео.
-						if (currentUserId > 0 && messageUserId > 0 && currentUserId === messageUserId) {
-							return;
+						var isInitiator = currentUserId > 0 && messageUserId > 0 && currentUserId === messageUserId;
+
+						if (!isInitiator) {
+							acceptMissionHandleIncomingCallAccept(false);
 						}
-
-						// запускаем фоновую музыку, если была
-						/*if (music_before) {
-							playMusic();
-						}*/
-						if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
-							playMusic();
-						}
-						// music_before = false;
-
-						// останавливаем звук звонка
-						clearInterval(incomingMusicTimer);
-						incomingMusicTimer = false;
-
-						if (incomingAudio && isPlaying(incomingAudio)) {
-							incomingAudio.pause();
-						}
-
-						// останавливаем обновление времени
-						clearInterval(incomingCallTimer);
-						incomingCallTimer = false;
-
-						// скрываем блок с телефоном
-						$('#popup_video_phone').fadeOut(200);
-
-						// очищаем данные в блоке с телефоном
-						setTimeout(function(){
-							$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-							$('#popup_video_phone .popup_video_phone_name').html('');
-							$('#popup_video_phone').attr('class','');
-						}, 210);
-
-						// открыть видео и сразу запустить его
-						playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-						openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call');
-						playVideo('call');
 					}
 					// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_1.mp4', '', 'new_mission_answer_incoming_video', 'call_jane');
 					// playVideoCall();
@@ -779,62 +750,46 @@ $(function() {
 					});*/
 				} else if (op == 'stopVideoAndClosePopupVideoAndAcceptMission') { // приняли миссию путем закрытия видео
 					stopVideo();
+					stopVideoCall();
 					closePopupVideo();
-					// stopVideoCall();
-					// closePopupVideoCall();
+					closePopupVideoCall();
+					stopPopupVideoPhoneInline('inlineIncoming');
+
+					var currentUserId = $('#section_game').length ? parseInt($('#section_game').attr('data-user-id')) : 0;
+					var messageUserId = parameters.user_id ? parseInt(parameters.user_id) : 0;
+
+					if (currentUserId > 0 && messageUserId > 0 && currentUserId === messageUserId) {
+						return;
+					}
 
 					if (questionEndVideo) {
 						$('#popup_end_video_question').css('display','block').attr('video-url', '/video/' + $('html').attr('lang') + '/video_jane_1.mp4');
 					}
 
-					// пишем игроку первые 100 баллов
-					incrementScoreWithoutSaveDb(100, 'main', 0);
-
-					// запускаем таймер
-					updateTimerUploadPage();
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых баз данных
-					updateDontOpenDatabasesQt();
-
-			    	// отображаем блок Mission name GEM
-					$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
-					setTeamTabsTextInfo('view_gem', 1);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('company_name', false);
-
-					// отображаем блок Call Jane
-					$('.call_jane').addClass('call_jane_active');
+					acceptMissionCallAccepted = true;
+					acceptMissionApplyVisualSync();
 				} else if (op == 'closePopupVideoAndAcceptMission') { // приняли миссию, видео доиграло до конца
-					// stopVideo();
-					// closePopupVideo();
+					var currentTeamId = $('#section_game').length ? parseInt($('#section_game').attr('data-team-id')) : 0;
+					var messageTeamId = parameters.team_id ? parseInt(parameters.team_id) : 0;
+					var currentUserId = $('#section_game').length ? parseInt($('#section_game').attr('data-user-id')) : 0;
+					var messageUserId = parameters.user_id ? parseInt(parameters.user_id) : 0;
+
+					if (currentTeamId > 0 && messageTeamId > 0 && currentTeamId !== messageTeamId) {
+						return;
+					}
+
+					if (currentUserId > 0 && messageUserId > 0 && currentUserId === messageUserId) {
+						return;
+					}
+
+					stopVideo();
 					stopVideoCall();
+					closePopupVideo();
 					closePopupVideoCall();
+					stopPopupVideoPhoneInline('inlineIncoming');
 
-					// пишем игроку первые 100 баллов
-					incrementScoreWithoutSaveDb(100, 'main', 0);
-
-					// запускаем таймер
-					updateTimerUploadPage();
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых баз данных
-					updateDontOpenDatabasesQt();
-
-			    	// отображаем блок Mission name GEM
-					$('.dashboard_gem_wrapper').addClass('dashboard_gem_wrapper_active');
-					setTeamTabsTextInfo('view_gem', 1);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('company_name', false);
-
-					// отображаем блок Call Jane
-					$('.call_jane').addClass('call_jane_active');
+					acceptMissionCallAccepted = true;
+					acceptMissionApplyVisualSync();
 				} else if (op == 'callJane') { // звоним Jane. Страница Calls
 					// запускаем отображение времени
 					updateOutgoingTime();
@@ -1308,6 +1263,41 @@ $(function() {
 
 					// событие уже сработало
 					geoCoordinatesFromSocket();
+				} else if (op == 'voiceDecoderUpdateCount') { // dashboard - voice decoder, +1 и скрыть найденный audio у всей команды
+					if (parameters.audio_find) {
+						voiceDecoderLastAudioFind = parameters.audio_find;
+					} else if (parameters.audio_id) {
+						voiceDecoderLastAudioFind = [parameters.audio_id];
+					}
+					if (parameters.audio_find && typeof hideFoundVoiceClips === 'function') {
+						hideFoundVoiceClips(parameters.audio_find);
+					} else if (parameters.audio_id && typeof hideFoundVoiceClips === 'function') {
+						hideFoundVoiceClips([parameters.audio_id]);
+					}
+					if (typeof filesCache !== 'undefined') {
+						filesCache.content = null;
+						filesCache.titles = null;
+					}
+					if (typeof parameters.voice_count !== 'undefined' && typeof applyVoiceDecoderState === 'function') {
+						applyVoiceDecoderState(parameters.voice_count);
+					} else if (typeof refreshVoiceDecoderState === 'function') {
+						refreshVoiceDecoderState(true);
+					}
+				} else if (op == 'voiceDecoderDecryptSuccess') { // dashboard - voice decoder, переход на voice_correct
+					$('body').removeClass('voice_decoder_stage_active');
+					uploadTypeTabsDashboardStep('voice_correct', false);
+				} else if (op == 'voiceCorrectUpdateOrder') { // dashboard - voice_correct, синхрон порядка аудио
+					if (parameters.order && typeof renderVoiceCorrectOrder === 'function') {
+						renderVoiceCorrectOrder(parameters.order);
+					}
+				} else if (op == 'voiceCorrectSuccess') { // dashboard - voice_correct, успех и переход дальше
+					if (typeof stopVoiceCorrectFullAudio === 'function') {
+						stopVoiceCorrectFullAudio();
+					}
+					$('#popup_voice_correct_alison').fadeOut(200);
+					uploadTypeTabsDashboardStep('african_partner', false);
+					updateDontOpenFilesQt();
+					updateDontOpenToolsQt();
 				} else if (op == 'dashboardAfricanPartnerKeyupCompanyName') { // ввод символов при вводе dashboard - african partner
 					if ($('.dashboard_african_partner_company_name').length) {
 						$('.dashboard_african_partner_company_name').val(parameters.company_name);

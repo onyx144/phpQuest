@@ -283,6 +283,45 @@
             </div>
         </div>
 
+        <!-- popup voice correct alison -->
+        <div id="popup_voice_correct_alison">
+            <div class="popup_voice_correct_alison_bg"></div>
+            <div class="popup_voice_correct_alison_inner">
+                <div class="popup_voice_correct_alison_photo">
+                    <img src="/images/agent_face3.jpg" alt="Elison">
+                </div>
+                <div class="popup_voice_correct_alison_title">VOICE MESSAGE — ELISON</div>
+                <div class="popup_voice_correct_alison_status">PLAYING FULL AUDIO...</div>
+                <div class="btn_wrapper btn_wrapper_blue popup_voice_correct_alison_close">
+                    <div class="btn btn_blue">
+                        <span>OK</span>
+                    </div>
+                    <div class="btn_border_top"></div>
+                    <div class="btn_border_bottom"></div>
+                    <div class="btn_border_left"></div>
+                    <div class="btn_border_left_arcle"></div>
+                    <div class="btn_border_right"></div>
+                    <div class="btn_border_right_arcle"></div>
+                    <div class="btn_bg_top_line"></div>
+                    <div class="btn_bg_bottom_line"></div>
+                    <div class="btn_bg_triangle_left"></div>
+                    <div class="btn_bg_triangle_right"></div>
+                    <div class="btn_circles_top">
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                    </div>
+                    <div class="btn_circles_bottom">
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                        <div class="btn_circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- popup success -->
         <div id="popup_success">
             <div class="popup_success_bg"></div>

@@ -80,7 +80,7 @@
 					incrementProgressMission(10);
 
 					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('african_partner', false);
+					uploadTypeTabsDashboardStep('voice_decoder', false);
 
 					// Обновить к-во непрочитанных файлов
 					updateDontOpenFilesQt();
@@ -103,7 +103,7 @@
 		incrementProgressMissionWithoutSaveDb(10);
 
 		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('african_partner', false);
+		uploadTypeTabsDashboardStep('voice_decoder', false);
 
 		// Обновить к-во непрочитанных файлов
 		updateDontOpenFilesQt();

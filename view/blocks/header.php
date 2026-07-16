@@ -93,6 +93,8 @@
 		<script src="/view/js/12_dashboard_room_name.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/13_minigame.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/14_dashboard_password.js?v=<?php echo $random; ?>"></script>
+		<script src="/view/js/15_dashboard_voice_decoder.js?v=<?php echo $random; ?>"></script>
+		<script src="/view/js/16_dashboard_voice_correct.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/hint.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/interpol.js?v=<?php echo $random; ?>"></script>
 		<script src="/view/js/score.js?v=<?php echo $random; ?>"></script>

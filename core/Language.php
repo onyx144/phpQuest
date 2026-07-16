@@ -178,6 +178,12 @@ class Language
         if ($page === null || $page === '' || $page === false) {
             $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `language_id` = {?} ORDER BY `id`";
             $words = $this->db->select($sql, [$check_lang_id]);
+        } elseif ($page === 'game') {
+            // page=game: сначала глобальные, затем game — game перекрывает дубли (EN без game-записей получает fallback)
+            $sql = "SELECT `val`, `field` FROM `lang_words_admin`
+                WHERE `language_id` = {?} AND (`page` = '' OR `page` IS NULL OR `page` = 'game')
+                ORDER BY CASE WHEN `page` = 'game' THEN 1 ELSE 0 END, `id`";
+            $words = $this->db->select($sql, [$check_lang_id]);
         } else {
             $sql = "SELECT `val`, `field` FROM `lang_words_admin` WHERE `page` = {?} AND `language_id` = {?} ORDER BY `id`";
             $words = $this->db->select($sql, [$page, $check_lang_id]);

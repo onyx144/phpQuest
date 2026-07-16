@@ -275,6 +275,13 @@ input:active, textarea:active, select:active, a:active {
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: 'Neuropol';
+    src: url('/view/fonts/Neuropol_Medium.TTF') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
 
 html {
     background: linear-gradient(234.56deg, #011425 16.66%, #00101D 84.21%);
@@ -2038,9 +2045,14 @@ a.language_hidden_item {
     font-size: 24px;
     line-height: 24px;
     margin: 2px 0 0;
+    cursor: pointer;
 }
 .timer > * {
     float: left;
+}
+.timer.timer_front_countdown_active {
+    color: #ff2a2a;
+    text-shadow: 0 0 8px rgba(255, 42, 42, 0.8);
 }
 .btn_wrapper_view_chat {
     position: absolute;
@@ -3068,7 +3080,9 @@ a.language_hidden_item {
     line-height: 98px;
 }
 .popup_video_play img {
-    margin: -3px 0 0 4px;
+    margin: 0;
+    margin-top: 30px;
+    margin-left: 32px;
 }
 .popup_video_stop img {
     margin: -3px 0 0 4px;
@@ -3430,7 +3444,7 @@ a.language_hidden_item {
     width: 100%;
     float: left;
     text-align: center;
-    line-height: 50px;
+    line-height: 25px;
 }
 .dashboard_tab_content_item_company_name_top_text svg {
     position: relative;
@@ -3820,7 +3834,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     right: 378px;
 }
 .dashboard_african_partner_input_wrapper_company_name:after {
-    width: 60px;
+    width: 36px;
 }
 .dashboard_car_register1_input_wrapper_country:after,
 .dashboard_african_partner_input_wrapper_country:after,
@@ -3834,7 +3848,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     left: 378px;
 }
 .dashboard_african_partner_input_wrapper_country:after {
-    width: 60px;
+    width: 38px;
 }
 .dashboard_car_register1_license_plate,
 .dashboard_african_partner_company_name,
@@ -3928,13 +3942,20 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     float: left;
     margin: 0 0 0 25px;
 }
-.dashboard_car_register1_fields_top,
-.dashboard_african_partner_fields_top {
+.dashboard_car_register1_fields_top {
     width: 862px;
     float: left;
     position: relative;
     left: 50%;
     margin: 26px 0 0 -431px;
+}
+.dashboard_african_partner_fields_top {
+    width: 862px;
+    max-width: calc(100% - 40px);
+    margin: 60px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 .dashboard_dashboard_bank_transactions1_fields_top {
     margin: 16px 0 0 -431px;
@@ -3946,18 +3967,15 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     left: 50%;
     margin: 26px 0 0 -207px;
 }
-.dashboard_african_partner_fields_top,
 .dashboard_metting_place_fields_top {
     margin-top: 60px;
 }
 .dashboard_car_register1_fields_top .dashboard_car_register1_input_wrapper,
-.dashboard_african_partner_fields_top .dashboard_african_partner_input_wrapper,
 .dashboard_metting_place_fields_top .dashboard_metting_place_input_wrapper,
 .dashboard_metting_place_fields_bottom .dashboard_metting_place_input_wrapper_city {
     float: left;
 }
 .dashboard_car_register1_fields_top .dashboard_car_register1_input_wrapper:last-child,
-.dashboard_african_partner_fields_top .dashboard_african_partner_input_wrapper:last-child,
 .dashboard_metting_place_fields_top .dashboard_metting_place_input_wrapper:last-child,
 .dashboard_metting_place_fields_bottom .dashboard_metting_place_input_wrapper:last-child {
     float: right;
@@ -3979,6 +3997,32 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     text-align: center;
     margin: 27px 0 0;
 }
+.dashboard_african_partner_fields_bottom {
+    display: flex;
+    justify-content: center;
+    float: none;
+}
+.dashboard_african_partner_fields_bottom .dashboard_african_partner_input_wrapper_date {
+    float: none;
+    left: auto;
+    margin: 0;
+    overflow: visible;
+}
+.dashboard_african_partner_datepicker_wrap {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 4px);
+    width: 100%;
+    z-index: 20;
+    pointer-events: none;
+}
+.dashboard_african_partner_datepicker_wrap .ui-datepicker {
+    pointer-events: auto;
+}
+.dashboard_tab_content_item_african_partner_inner,
+.dashboard_african_partner_fields_bottom {
+    overflow: visible;
+}
 .dashboard_metting_place_fields_bottom {
     width: 640px;
     float: left;
@@ -3989,7 +4033,6 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     clear: left;
 }
 .dashboard_car_register1_search,
-.dashboard_african_partner_search,
 .dashboard_metting_place_search,
 .dashboard_bank_transactions1_search,
 .dashboard_room_name_search,
@@ -3998,7 +4041,13 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     left: 50%;
     margin: 32px 0 0 -120px;
 }
-.dashboard_african_partner_search,
+.dashboard_african_partner_search {
+    float: none;
+    left: auto;
+    clear: both;
+    margin: 32px auto 0;
+    text-transform: uppercase;
+}
 .dashboard_metting_place_search,
 .dashboard_room_name_search,
 .dashboard_password_search {
@@ -4101,6 +4150,21 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
     width: 310px;
     padding: 10px .2em 0;
+}
+.ui-datepicker.dashboard-african-partner-datepicker {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    display: block;
+    margin: 0;
+    transform: scale(0);
+    opacity: 0;
+    transform-origin: center bottom;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.ui-datepicker.dashboard-african-partner-datepicker.is-visible {
+    transform: scale(1);
+    opacity: 1;
 }
 .ui-datepicker .ui-datepicker-prev span,
 .ui-datepicker .ui-datepicker-next span {
@@ -4696,6 +4760,10 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     color: #00F0FF;
     line-height: 28px;
 }
+.dashboard_car_register2_slider_arrows_single .dashboard_car_register2_slider_arrow_number {
+    float: none;
+    width: 100%;
+}
 .dashboard_car_register2_slider_arrow_right {
     float: left;
     width: 20px;
@@ -4989,7 +5057,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 .dashboard_personal_files2_private_individuals_huilov_right {
     float: left;
     width: 525px;
-    margin: 30px 0 0 52px;
+    margin: 30px 0 0 5px;
     position: relative;
     height: 371px;
 }
@@ -5257,6 +5325,9 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
 .dashboard_car_register1_country_autocomplete .autocomplete_select_input::placeholder {
     color: #00F0FF;
     opacity: 0.7;
+}
+span.private_individuals_huilov_text {
+    font-family: monospace;
 }
 .dashboard_car_register1_country_autocomplete .autocomplete_select_dropdown {
     display: none;
@@ -5972,14 +6043,316 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     width: 18px;
 }
 .dashboard_tab_content_item_geo_coordinates,
+.dashboard_tab_content_item_voice_decoder,
 .dashboard_tab_content_item_african_partner,
 .dashboard_tab_content_item_metting_place,
 .dashboard_tab_content_item_room_name {
     /*left: 23px;*/
     padding: 0 0 0 23px;
 }
+.dashboard_tab_content_item_company_name_inner.dashboard_tab_content_item_voice_decoder_inner .dashboard_tab_content_item_company_name_inner_bg {
+    height: 460px;
+}
+.dashboard_tab_content_item_voice_decoder_inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+.dashboard_voice_decoder_title {
+    color: #00f0ff;
+    font-size: 32px;
+    line-height: 36px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+.dashboard_voice_decoder_progress {
+    color: #fff;
+    font-size: 22px;
+    line-height: 26px;
+    margin-bottom: 22px;
+}
+.dashboard_voice_decoder_count {
+    color: #00f0ff;
+}
+.dashboard_voice_decoder_dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 26px;
+}
+.dashboard_voice_decoder_dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 240, 255, 0.45);
+    background: rgba(0, 240, 255, 0.12);
+    box-shadow: 0 0 0 rgba(0, 240, 255, 0);
+    transition: all .2s ease;
+}
+.dashboard_voice_decoder_dot_active {
+    background: #00f0ff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.45);
+}
+.dashboard_voice_decoder_btn_hidden {
+    display: none !important;
+}
+.dashboard_voice_decoder_actions {
+    margin-top: 16px;
+}
+.dashboard_voice_decoder_add_btn .btn span {
+    font-size: 14px;
+}
+
+/* Voice clip findables — только на стадии voice_decoder */
+.voice_clip_widget {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 40;
+}
+body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found) {
+    display: flex;
+}
+.voice_clip_btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #00f0ff;
+    background: rgba(16, 35, 72, 0.85);
+    color: #00f0ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+    transition: background .15s ease, box-shadow .15s ease;
+    padding: 0;
+}
+.voice_clip_btn:hover {
+    background: rgba(0, 240, 255, 0.18);
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.55);
+}
+.voice_clip_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}
+.voice_clip_icon_pause {
+    display: none;
+}
+.voice_clip_btn.is-playing .voice_clip_icon_play {
+    display: none;
+}
+.voice_clip_btn.is-playing .voice_clip_icon_pause {
+    display: flex;
+}
+.voice_clip_add_btn {
+    border: 1px solid rgba(0, 240, 255, 0.55);
+    background: rgba(16, 35, 72, 0.92);
+    color: #00f0ff;
+    font-size: 11px;
+    line-height: 1.2;
+    padding: 6px 8px;
+    cursor: pointer;
+    text-transform: none;
+    white-space: nowrap;
+    max-width: 140px;
+}
+.voice_clip_add_btn:hover {
+    background: rgba(0, 240, 255, 0.15);
+}
+.voice_clip_widget audio {
+    display: none;
+}
+.agent_face {
+    position: relative;
+}
+.voice_clip_pos_agent {
+    position: absolute;
+    right: -18px;
+    bottom: 8px;
+}
+.voice_clip_pos_music {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 6px);
+    transform: translateX(-50%);
+}
+.dashboard_list {
+    position: relative;
+}
+.voice_clip_pos_nav {
+    position: absolute;
+    right: -10px;
+    bottom: -8px;
+}
+.voice_clip_pos_chat {
+    position: absolute;
+    left: 50%;
+    top: -78px;
+    transform: translateX(-50%);
+}
+
+/* Voice Correct stage */
+.dashboard_tab_content_item_voice_correct_inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 475px;
+}
+.dashboard_voice_correct_title {
+    color: #00f0ff;
+    font-size: 28px;
+    line-height: 34px;
+    text-transform: none;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    text-align: center;
+}
+.dashboard_voice_correct_list {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    width: 100%;
+    z-index: 9999;
+}
+.dashboard_voice_correct_item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    padding: 14px 10px;
+    border: 1px solid rgba(0, 240, 255, 0.45);
+    background: rgba(16, 35, 72, 0.55);
+}
+.dashboard_voice_correct_center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 70px;
+}
+.dashboard_voice_correct_play {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #00f0ff;
+    background: rgba(16, 35, 72, 0.85);
+    color: #00f0ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+.dashboard_voice_correct_pause_icon {
+    display: none;
+}
+.dashboard_voice_correct_play.is-playing .dashboard_voice_correct_play_icon {
+    display: none;
+}
+.dashboard_voice_correct_play.is-playing .dashboard_voice_correct_pause_icon {
+    display: flex;
+}
+.dashboard_voice_correct_arrow {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(0, 240, 255, 0.55);
+    background: rgba(0, 240, 255, 0.08);
+    color: #00f0ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+.dashboard_voice_correct_arrow.is-disabled,
+.dashboard_voice_correct_arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+.dashboard_voice_correct_item audio {
+    display: none;
+}
+.dashboard_voice_correct_build_btn .btn span {
+    font-size: 14px;
+}
+
+#popup_voice_correct_alison {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 120;
+}
+.popup_voice_correct_alison_bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.78);
+}
+.popup_voice_correct_alison_inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    max-width: 90%;
+    text-align: center;
+    color: #fff;
+}
+.popup_voice_correct_alison_photo {
+    width: 220px;
+    height: 280px;
+    margin: 0 auto 18px;
+    border: 2px solid #00f0ff;
+    overflow: hidden;
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.35);
+}
+.popup_voice_correct_alison_photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.popup_voice_correct_alison_title {
+    color: #00f0ff;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.popup_voice_correct_alison_status {
+    margin-bottom: 18px;
+    color: #fff;
+    font-size: 14px;
+}
+.popup_voice_correct_alison_close {
+    margin: 0 auto;
+}
+
 .dashboard_tab_content_item_african_partner_inner {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .dashboard_africa_partners_bg {
     position: absolute;
@@ -6247,7 +6620,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     right: -327px;
 }
 .dashboard_tools_3d_scan_inner_main_left {
-    width: 498px;
+    width: 54%;
     height: 349px;
     background: url(/images/3d_scan_left_bg.png) center center no-repeat;
     float: left;
@@ -6437,7 +6810,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     color: rgb(255 255 255 / 30%) !important;
 }
 .dashboard_tools_3d_scan_inner_main_right {
-    width: 456px;
+    width: 43%;
     float: right;
     position: relative;
     margin: 0 -10px 0 0;

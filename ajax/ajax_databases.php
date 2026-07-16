@@ -95,8 +95,8 @@ if (isset($_POST['op'])) {
 						foreach ($langs as $lang2) {
 							$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 						}
 					}
 				}
@@ -110,8 +110,8 @@ if (isset($_POST['op'])) {
 					foreach ($langs as $lang2) {
 						$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 					}
 				}
 			}
@@ -126,10 +126,29 @@ if (isset($_POST['op'])) {
 			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : 'en';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
-			$translation = $lang->getWordsByPage('game', $lang_id);
 
 			if (!empty($firstname) && !empty($lastname)) {
-				if (mb_strtolower($firstname, 'UTF-8') == 'vladimir' && mb_strtolower($lastname, 'UTF-8') == 'pupkin') {
+				$inputFirst = mb_strtolower(trim($firstname), 'UTF-8');
+				$inputLast = mb_strtolower(trim($lastname), 'UTF-8');
+				$isCorrect = false;
+
+				$sql = "SELECT `id` FROM `langs` WHERE `status` = {?}";
+				$langs = $db->select($sql, [1]);
+				if ($langs) {
+					foreach ($langs as $lang2) {
+						$translation = $lang->getWordsByPage('game', $lang2['id']);
+						$correctFirst = mb_strtolower(trim($translation['text116'] ?? ''), 'UTF-8');
+						$correctLast = mb_strtolower(trim($translation['text118'] ?? ''), 'UTF-8');
+
+						if ($correctFirst !== '' && $correctLast !== ''
+							&& $inputFirst === $correctFirst && $inputLast === $correctLast) {
+							$isCorrect = true;
+							break;
+						}
+					}
+				}
+
+				if ($isCorrect) {
 					$return['success'] = 'ok';
 				} else {
 					// переводы для всех языков. Для синхронизации
@@ -141,8 +160,8 @@ if (isset($_POST['op'])) {
 						foreach ($langs as $lang2) {
 							$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 						}
 					}
 				}
@@ -156,11 +175,13 @@ if (isset($_POST['op'])) {
 					foreach ($langs as $lang2) {
 						$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 					}
 				}
 			}
+
+			$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang'] ?? []);
 
 			print_r(json_encode($return));
 		    break;
@@ -176,7 +197,7 @@ if (isset($_POST['op'])) {
 
 			//Возможно поменять (номер телефона Дудика)
 			if (!empty($country_code) && !empty($number)) {
-				if (($country_code == '167' || $country_code == 167 || $country_code == '102' || $country_code == 102) && ($number == '94054421337' || $number == '794054421337' || $number == '+794054421337' || $number == '+94054421337')) {
+				if (($country_code == '167' || $country_code == 167 || $country_code == '102' || $country_code == 102) && ($number == '94054421332' || $number == '794054421337' || $number == '+794054421337' || $number == '+94054421337')) {
 					$return['success'] = 'ok';
 				} else {
 					// переводы для всех языков. Для синхронизации
@@ -219,7 +240,6 @@ if (isset($_POST['op'])) {
 			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : 'en';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
-			$translation = $lang->getWordsByPage('game', $lang_id);
 
 			if (!empty($firstname) && !empty($lastname)) {
 				//Robert Engel Возможно поменять 
@@ -235,8 +255,8 @@ if (isset($_POST['op'])) {
 						foreach ($langs as $lang2) {
 							$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+							$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+							$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 						}
 					}
 				}
@@ -250,11 +270,13 @@ if (isset($_POST['op'])) {
 					foreach ($langs as $lang2) {
 						$translation = $lang->getWordsByPage('game', $lang2['id']);
 
-						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'];
-						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'];
+						$return['error_lang'][$lang2['lang_abbr']]['error_input'] = $translation['text89'] ?? '';
+						$return['error_lang'][$lang2['lang_abbr']]['error_text'] = $translation['text88'] ?? '';
 					}
 				}
 			}
+
+			$return['error_lang'] = $lang->mirrorUkUaByLang($return['error_lang'] ?? []);
 
 			print_r(json_encode($return));
 		    break;

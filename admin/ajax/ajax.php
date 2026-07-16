@@ -631,7 +631,7 @@ if (isset($_POST['op'])) {
 
 				if ($team_id > 0 && !empty($stage)) {
 					// Валидация стадии
-					$valid_stages = ['accept_new_mission', 'company_name', 'geo_coordinates', 'african_partner', 'metting_place', 'room_name', 'password'];
+					$valid_stages = ['accept_new_mission', 'company_name', 'geo_coordinates', 'voice_decoder', 'voice_correct', 'african_partner', 'metting_place', 'room_name', 'password'];
 					if (!in_array($stage, $valid_stages)) {
 						$return['error'] = 'Invalid stage';
 					} else {
@@ -692,6 +692,28 @@ if (isset($_POST['op'])) {
 								$stage_state['view_call_jane_btn'] = 1;
 							} elseif ($stage == 'geo_coordinates') {
 								$stage_state['list_hints'] = $getHintIdsByStep('company_investigate');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates'];
+								$stage_state['last_tools'] = 'tools_start_four';
+							} elseif ($stage == 'voice_decoder') {
+								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
+								$stage_state['list_hints_title_lang_var'] = 'text44';
+								$stage_state['list_hints_text_lang_var'] = 'text45';
+								$stage_state['list_files'] = [1, 2, 3, 4, 5];
+								$stage_state['list_databases'] = ['personal_files', 'car_register', 'mobile_calls'];
+								$stage_state['last_databases'] = 'databases_start_four';
+								$stage_state['last_calls'] = 'call_list';
+								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['list_tools'] = ['gps_coordinates'];
+								$stage_state['last_tools'] = 'tools_start_four';
+							} elseif ($stage == 'voice_correct') {
+								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
 								$stage_state['list_hints_text_lang_var'] = 'text45';
 								$stage_state['list_files'] = [1, 2, 3, 4, 5];

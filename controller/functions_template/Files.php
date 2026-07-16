@@ -15,13 +15,13 @@ $return['titles'] = '
         <div class="icon-container p-2 rounded-lg bg-primary/20 border border-primary/30">
             '.$svg['dashboard_files'].'
         </div>
-        <h2 class="text-3xl font-bold neon-text">'.$translation['text15'].' Архив досье</h2>
+        <h2 class="text-3xl font-bold neon-text">'.$translation['text15'].'</h2>
     </div>
 ';
 
 // Контент
 $return['content'] = '
-<div class="mt-6 ">
+<div class="mt-6 relative pb-24">
     <div class="flex items-center gap-2 mb-4">
         <svg class="h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path d="M4 4h16v16H4z"/>
@@ -75,20 +75,35 @@ foreach ($list_files as $file_id) {
 </div>
 
 <div class="mt-auto">
-    <a href="'.$file_info['path'].'" target="_blank"
-       class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-cyan-500/40 
-              text-cyan-200 hover:text-cyan-50 hover:bg-cyan-800/40 transition-all duration-300 w-fit">
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-cyan-500/40 
+              text-cyan-200 hover:text-cyan-50 hover:bg-cyan-800/40 transition-all duration-300 w-fit cursor-pointer">
         '.$button_icon.'
         <span>'.$button_text.'</span>
-    </a>
+    </span>
 </div>
 </div>
+
 ';
     }
 }
 }
 
+$voiceClipWidget = '';
+if ($team_info && $this->isVoiceDecoderStage($team_info)) {
+    $audio_find = $this->parseTeamAudioFind($team_info);
+    if (!in_array(1, $audio_find, true)) {
+        $voiceClipId = 1;
+        $voiceClipPos = 'files';
+        ob_start();
+        require ROOT . '/view/template/game/voice_clip_widget.php';
+        $voiceClipWidget = ob_get_clean();
+    }
+}
+
 $return['content'] .= '
+    </div>
+    <div class="absolute bottom-0 right-0">
+        '.$voiceClipWidget.'
     </div>
 </div>
 ';

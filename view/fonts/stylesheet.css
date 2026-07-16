@@ -87,3 +87,11 @@
     font-weight: 300;
     font-style: normal;
 }
+
+@font-face {
+    font-family: 'Neuropol';
+    src: url('Neuropol_Medium.TTF') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}

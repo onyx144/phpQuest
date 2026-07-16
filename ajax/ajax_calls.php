@@ -17,6 +17,31 @@ if (isset($_POST['op'])) {
 			print_r(json_encode($return));
 		    break;
 
+		// получить видео звонка по call_id и lang_id
+		case 'getCallVideo':
+			$call_id = isset($_POST['call_id']) ? (int) $_POST['call_id'] : 0;
+			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+
+			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
+			$translation = $lang->getWordsByPage('game', $lang_id);
+
+			if ($call_id <= 0) {
+				$return['error'] = $translation['text29'];
+			} else {
+				$call_info = $function->getCallVideoInfo($call_id, $lang_id);
+
+				if ($call_info && !empty($call_info['video'])) {
+					$return['success'] = 'ok';
+					$return['path'] = $call_info['video'];
+					$return['video_with_path'] = $call_info['video_with_path'] ?? '';
+				} else {
+					$return['error'] = $translation['text29'];
+				}
+			}
+
+			print_r(json_encode($return));
+		    break;
+
 		// сохранить время просмотра видео в списке звонков команды
 		case 'updateDatetimeCall':
 			$call_id = isset($_POST['call_id']) ? (int) $_POST['call_id'] : 0;
@@ -93,24 +118,12 @@ if (isset($_POST['op'])) {
 								}
 							}*/
 						} else {
-							$sql = "
-								SELECT c.type, cd.video, cd.name, c.id, cd.video_with_path
-			                    FROM calls c
-			                    JOIN calls_description cd ON c.id = cd.call_id
-			                    WHERE c.id = {?}
-			                    AND cd.lang_id = {?}
-							";
-							$call_info = $db->selectRow($sql, [$team_info['calls_outgoing_id'], $lang_id]);
+							$call_info = $function->getCallVideoInfo($team_info['calls_outgoing_id'], $lang_id);
 							if ($call_info) {
 								$return['path'] = $call_info['video'];
-
-								// For the first call in Ukrainian, override video path.
-								if ($lang_abbr === 'ua' && (int) $call_info['id'] === 1) {
-									$return['path'] = 'video/ua/first_cut.mp4';
-								}
 								$return['video_with_path'] = $call_info['video_with_path'];
 								// $return['type'] = $call_info['type'];
-								$return['call_id'] = $call_info['id'];
+								$return['call_id'] = $team_info['calls_outgoing_id'];
 
 								// если не Fake Call 3, то пишем в список осуществленных
 								if ($call_info['id'] != 4) {

@@ -38,6 +38,8 @@ if (!defined('GD_ACCESS')) {
 		<script src="<?= BASE_URI ?>/views/js/12_dashboard_room_name.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/13_minigame.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/14_dashboard_password.js?v=1.1"></script>
+		<script src="<?= BASE_URI ?>/views/js/15_dashboard_voice_decoder.js?v=1.1"></script>
+		<script src="<?= BASE_URI ?>/views/js/16_dashboard_voice_correct.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/hint.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/interpol.js?v=1.1"></script>
 		<script src="<?= BASE_URI ?>/views/js/score.js?v=1.1"></script>
