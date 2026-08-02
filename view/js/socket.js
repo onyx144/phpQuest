@@ -1303,8 +1303,15 @@ $(function() {
 						$('.dashboard_african_partner_company_name').val(parameters.company_name);
 					}
 				} else if (op == 'dashboardAfricanPartnerUpdateCountry') { // dashboard - african partner - выбираем значение в Country
-					if ($('.dashboard_african_partner_country').length && $('.dashboard_african_partner_country').val() != parameters.country_lang[$('html').attr('lang')]) {
-						$('.dashboard_african_partner_country').val(parameters.country_lang[$('html').attr('lang')]).change().selectric('refresh');
+					var countryName = parameters.country_lang[$('html').attr('lang')];
+					if ($('.dashboard_african_partner_country').length && $('.dashboard_african_partner_country').val() != countryName) {
+						if (typeof setAfricanPartnerCountryValue === 'function') {
+							setAfricanPartnerCountryValue(countryName);
+						} else {
+							var $hidden = $('.dashboard_african_partner_country');
+							$hidden.val(countryName).trigger('change');
+							$hidden.closest('.autocomplete_select_component').find('.autocomplete_select_input').val(countryName);
+						}
 					}
 				} else if (op == 'dashboardAfricanPartnerUpdateDate') { // dashboard - african partner - выбираем дату
 					if ($('.dashboard_african_partner_date').length && $('.dashboard_african_partner_date').val() != parameters.date) {
@@ -1449,8 +1456,15 @@ $(function() {
 				} else if (op == 'viewChatFormMessageHidden') { // скрыть поле для ввода данных в переписке с ботом
 					$('.chat_form').css('display', 'none');
 				} else if (op == 'dashboardMettingPlaceUpdateCountry') { // dashhboard - metting place - выбираем значение в Country
-					if ($('.dashboard_metting_place_country').length && $('.dashboard_metting_place_country').val() != parameters.country_lang[$('html').attr('lang')]) {
-						$('.dashboard_metting_place_country').val(parameters.country_lang[$('html').attr('lang')]).change().selectric('refresh');
+					var countryName = parameters.country_lang[$('html').attr('lang')];
+					if ($('.dashboard_metting_place_country').length && $('.dashboard_metting_place_country').val() != countryName) {
+						if (typeof setMettingPlaceCountryValue === 'function') {
+							setMettingPlaceCountryValue(countryName);
+						} else {
+							var $hidden = $('.dashboard_metting_place_country');
+							$hidden.val(countryName).trigger('change');
+							$hidden.closest('.autocomplete_select_component').find('.autocomplete_select_input').val(countryName);
+						}
 					}
 				} else if (op == 'dashboardMettingPlaceKeyupStreet') { // ввод символов при вводе dashboard - metting place - street
 					if ($('.dashboard_metting_place_street_name').length) {

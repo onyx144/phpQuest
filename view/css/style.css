@@ -3871,11 +3871,15 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     height: 100%;
 }
 .dashboard_car_register1_input_wrapper_country,
+.dashboard_car_register1_input_wrapper_country,
 .dashboard_african_partner_input_wrapper_country,
 .dashboard_bank_transactions1_input_wrapper_amount {
     width: 372px;
     height: 60px;
     position: relative;
+}
+.dashboard_african_partner_input_wrapper_country {
+    overflow: visible;
 }
 .dashboard_metting_place_input_wrapper_country {
     width: 280px;
@@ -3956,6 +3960,7 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    overflow: visible;
 }
 .dashboard_dashboard_bank_transactions1_fields_top {
     margin: 16px 0 0 -431px;
@@ -5353,6 +5358,112 @@ span.private_individuals_huilov_text {
     cursor: pointer;
 }
 .dashboard_car_register1_country_autocomplete .autocomplete_select_option:hover {
+    background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
+}
+.dashboard_african_partner_country_autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_input {
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 27px;
+    color: #00F0FF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_input::placeholder {
+    color: #00F0FF;
+    opacity: 0.7;
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 236px;
+    overflow-y: auto;
+    z-index: 15;
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_option {
+    font-size: 24px;
+    color: #00F0FF;
+    padding: 10px 22px;
+    line-height: 26px;
+    cursor: pointer;
+}
+.dashboard_african_partner_country_autocomplete .autocomplete_select_option:hover {
+    background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
+}
+.dashboard_metting_place_country_autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_input {
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 27px;
+    color: #00F0FF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_input::placeholder {
+    color: #00F0FF;
+    opacity: 0.7;
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 236px;
+    overflow-y: auto;
+    z-index: 15;
+    background: linear-gradient(90.15deg, #011225 1.24%, #05203D 79.69%, #011225 99.39%);
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_option {
+    font-size: 24px;
+    color: #00F0FF;
+    padding: 10px 22px;
+    line-height: 26px;
+    cursor: pointer;
+}
+.dashboard_metting_place_country_autocomplete .autocomplete_select_option:hover {
     background: radial-gradient(39.85% 50% at 48.42% 50%, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0) 100%);
 }
 .selectric-dashboard_mobile_calls1_country_code .selectric-items li {

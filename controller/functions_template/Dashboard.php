@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROOT . '/admin/view/template/component/autocomplete_select.php');
+
 trait Dashboard
 {
 public function getDashboardTabsLoadingHtml($lang_id)
@@ -479,6 +481,9 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                         <div class="dashboard_african_partner_input_border_right"></div>';
 
     $english_lang_id = Language::getLang()->getLangIdByHtmlAttr('en');
+    if (!$english_lang_id) {
+        $english_lang_id = 3;
+    }
 
     $sql = "
         SELECT c.code, c.pos, COALESCE(cd_current.name, cd_en.name) AS name, c.id
@@ -489,98 +494,33 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
         ORDER BY COALESCE(cd_current.name, cd_en.name)
     ";
     $countries = $this->db->select($sql, [$lang_id, $english_lang_id]);
-    if (!$countries && (int) $lang_id !== 3) {
-        $countries = $this->db->select($sql, [3]);
-    }
     if ($countries) {
-        $return['content'] .= '<select class="dashboard_african_partner_country"><option disabled="disabled"' . (empty($team_info['african_partner_country_id']) ? ' selected="selected"' : '') . '>' . $translation['text200'] . '</option>';
+        $componentData = [];
+        $selectedValue = '';
+
         foreach ($countries as $country) {
-            $return['content'] .= '<option value="' . htmlspecialchars($country['name'], ENT_QUOTES) . '" data-pos="' . $country['pos'] . '"' . ($team_info['african_partner_country_id'] == $country['id'] ? ' selected="selected"' : '') . '>' . $country['name'] . '</option>';
+            $componentData[] = [
+                'value' => $country['name'],
+                'label' => $country['name'],
+            ];
+
+            if (!empty($team_info['african_partner_country_id']) && (int) $team_info['african_partner_country_id'] === (int) $country['id']) {
+                $selectedValue = $country['name'];
+            }
         }
-        $return['content'] .= '</select>
-                                <script>
+
+        $return['content'] .= renderAutocompleteSelectComponent([
+            'id' => 'dashboard-african-partner-country-select',
+            'hidden_class' => 'dashboard_african_partner_country',
+            'wrapper_class' => 'dashboard_african_partner_country_autocomplete',
+            'placeholder' => !empty($translation['text200']) ? $translation['text200'] : '',
+            'selected_value' => $selectedValue,
+            'options' => $componentData,
+        ]);
+    }
+
+    $return['content'] .= '<script>
                                     $(function() {
-                                        // select country
-                                        var scrollbarPositionPixel = 0;
-                                        var isScrollOpen = false;
-
-                                        $(".dashboard_african_partner_country").selectric({
-                                            optionsItemBuilder: function(itemData, element, index) {
-                                                return (!itemData.disabled) ? \'<span class="select_country_flag" style="display:inline-block;width:16px;height:11px;background:url(/images/flags.png) no-repeat;background-position:\' + itemData.element[0].attributes[\'data-pos\'].value + \';margin: 0 15px 0 5px;"></span><span class="select_country_name" style="display:inline-block;max-width: 87%;">\' + itemData.text + \'</span>\' : itemData.text;
-                                            },
-                                            maxHeight: 236,
-                                            preventWindowScroll: false,
-                                            onInit: function() {
-                                                // стилизация полосы прокрутки
-                                                $(".selectric-dashboard_african_partner_country .selectric-scroll").mCustomScrollbar({
-                                                    scrollInertia: 700,
-                                                    theme: "minimal-dark",
-                                                    scrollbarPosition: "inside",
-                                                    alwaysShowScrollbar: 2,
-                                                    autoHideScrollbar: false,
-                                                    mouseWheel:{ deltaFactor: 200 },
-                                                    callbacks:{
-                                                        onScroll: function(){
-                                                        },
-                                                        whileScrolling:function() {
-                                                            scrollbarPositionPixel = this.mcs.top;
-                                                            if (isScrollOpen) {
-                                                                $(".dashboard_african_partner_country").selectric("open");
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                            },
-                                            onOpen: function() {
-                                                if (!isScrollOpen) {
-                                                    $(".selectric-dashboard_african_partner_country .selectric-scroll").mCustomScrollbar("scrollTo", Math.abs(scrollbarPositionPixel));
-                                                    isScrollOpen = true;
-                                                }
-                                            }
-                                        })
-                                        .on("change", function() {
-                                            // сохраняем выбор
-                                            var formData = new FormData();
-                                            formData.append("op", "saveTeamTextField");
-                                            formData.append("field", "african_partner_country_id");
-                                            formData.append("val", $(this).val());
-
-                                            $.ajax({
-                                                url: "/ajax/ajax.php",
-                                                type: "POST",
-                                                dataType: "json",
-                                                cache: false,
-                                                contentType: false,
-                                                processData: false,
-                                                data: formData,
-                                                success: function(json) {
-                                                    if (json.country_lang) {
-                                                        // socket
-                                                        var message = {
-                                                            "op": "dashboardAfricanPartnerUpdateCountry",
-                                                            "parameters": {
-                                                                "country_lang": json.country_lang,
-                                                                "user_id": $("#section_game").length ? $("#section_game").attr("data-user-id") : 0,
-                                                                "team_id": $("#section_game").length ? $("#section_game").attr("data-team-id") : 0
-                                                            }
-                                                        };
-                                                        sendMessageSocket(JSON.stringify(message));
-                                                    }
-                                                },
-                                                error: function(xhr, ajaxOptions, thrownError) {    
-                                                    console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-                                                }
-                                            });
-
-                                            isScrollOpen = false;
-                                        });
-
-                                        $(".dashboard_tabs[data-dashboard=\'databases\']").on("click", ".dashboard_african_partner_input_wrapper_country .mCSB_scrollTools_vertical", function(e){
-                                            if (isScrollOpen) {
-                                                $(".dashboard_african_partner_country").selectric("open");
-                                            }
-                                        });
-
                                         // datepicker
                                         if (!window.dashboardAfricanPartnerDatepickerHidePatched) {
                                             window.dashboardAfricanPartnerDatepickerHidePatched = true;
@@ -621,10 +561,8 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                             monthNames: ["' . $translation['text74'] . '", "' . $translation['text75'] . '", "' . $translation['text76'] . '", "' . $translation['text77'] . '", "' . $translation['text78'] . '", "' . $translation['text79'] . '", "' . $translation['text80'] . '", "' . $translation['text81'] . '", "' . $translation['text82'] . '", "' . $translation['text83'] . '", "' . $translation['text84'] . '", "' . $translation['text85'] . '"],
                                             changeMonth: false,
                                             changeYear: false,
-                                            //showAnim: "clip",
                                             showAnim: "",
                                             onSelect: function(dateText) {
-                                                // сохраняем выбор
                                                 var formData = new FormData();
                                                 formData.append("op", "saveTeamTextField");
                                                 formData.append("field", "african_partner_date");
@@ -639,7 +577,6 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                                     processData: false,
                                                     data: formData,
                                                     success: function(json) {
-                                                        // socket
                                                         var message = {
                                                             "op": "dashboardAfricanPartnerUpdateDate",
                                                             "parameters": {
@@ -650,7 +587,7 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                                         };
                                                         sendMessageSocket(JSON.stringify(message));
                                                     },
-                                                    error: function(xhr, ajaxOptions, thrownError) {    
+                                                    error: function(xhr, ajaxOptions, thrownError) {
                                                         console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                                                     }
                                                 });
@@ -679,7 +616,6 @@ private function uploadDashboardAfricanPartner($lang_id, $team_id)
                                         });
                                     });
                                 </script>';
-    }
 
     $return['content'] .= '             <div class="dashboard_african_partner_country_error error_text_database_car_register">' . $translation['text86'] . '</div>
                                     </div>
@@ -772,104 +708,43 @@ private function uploadDashboardMettingPlace($lang_id, $team_id)
                                         <div class="dashboard_metting_place_input_border_left"></div>
                                         <div class="dashboard_metting_place_input_border_right"></div>';
 
+    $english_lang_id = Language::getLang()->getLangIdByHtmlAttr('en');
+    if (!$english_lang_id) {
+        $english_lang_id = 3;
+    }
+
     $sql = "
-        SELECT c.code, c.pos, cd.name, c.id
+        SELECT c.code, c.pos, COALESCE(cd_current.name, cd_en.name) AS name, c.id
         FROM countries c
-        JOIN countries_description cd ON c.id = cd.country_id
-        WHERE cd.lang_id = {?}
-        ORDER BY cd.name
+        LEFT JOIN countries_description cd_current ON c.id = cd_current.country_id AND cd_current.lang_id = {?}
+        LEFT JOIN countries_description cd_en ON c.id = cd_en.country_id AND cd_en.lang_id = {?}
+        WHERE COALESCE(cd_current.name, cd_en.name) IS NOT NULL
+        ORDER BY COALESCE(cd_current.name, cd_en.name)
     ";
-    $countries = $this->db->select($sql, [$lang_id]);
+    $countries = $this->db->select($sql, [$lang_id, $english_lang_id]);
     if ($countries) {
-        $return['content'] .= '<select class="dashboard_metting_place_country"><option disabled="disabled"' . (empty($team_info['metting_place_country_id']) ? ' selected="selected"' : '') . '>' . $translation['text64'] . '</option>';
+        $componentData = [];
+        $selectedValue = '';
+
         foreach ($countries as $country) {
-            $return['content'] .= '<option value="' . htmlspecialchars($country['name'], ENT_QUOTES) . '" data-pos="' . $country['pos'] . '"' . ($team_info['metting_place_country_id'] == $country['id'] ? ' selected="selected"' : '') . '>' . $country['name'] . '</option>';
+            $componentData[] = [
+                'value' => $country['name'],
+                'label' => $country['name'],
+            ];
+
+            if (!empty($team_info['metting_place_country_id']) && (int) $team_info['metting_place_country_id'] === (int) $country['id']) {
+                $selectedValue = $country['name'];
+            }
         }
-        $return['content'] .= '</select>
-                                <script>
-                                    $(function() {
-                                        // select country
-                                        var scrollbarPositionPixel = 0;
-                                        var isScrollOpen = false;
 
-                                        $(".dashboard_metting_place_country").selectric({
-                                            optionsItemBuilder: function(itemData, element, index) {
-                                                return (!itemData.disabled) ? \'<span class="select_country_flag" style="display:inline-block;width:16px;height:11px;background:url(/images/flags.png) no-repeat;background-position:\' + itemData.element[0].attributes[\'data-pos\'].value + \';margin: 0 15px 0 5px;"></span><span class="select_country_name" style="display:inline-block;max-width: 87%;">\' + itemData.text + \'</span>\' : itemData.text;
-                                            },
-                                            maxHeight: 236,
-                                            preventWindowScroll: false,
-                                            onInit: function() {
-                                                // стилизация полосы прокрутки
-                                                $(".selectric-dashboard_metting_place_country .selectric-scroll").mCustomScrollbar({
-                                                    scrollInertia: 700,
-                                                    theme: "minimal-dark",
-                                                    scrollbarPosition: "inside",
-                                                    alwaysShowScrollbar: 2,
-                                                    autoHideScrollbar: false,
-                                                    mouseWheel:{ deltaFactor: 200 },
-                                                    callbacks:{
-                                                        onScroll: function(){
-                                                        },
-                                                        whileScrolling:function() {
-                                                            scrollbarPositionPixel = this.mcs.top;
-                                                            if (isScrollOpen) {
-                                                                $(".dashboard_metting_place_country").selectric("open");
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                            },
-                                            onOpen: function() {
-                                                if (!isScrollOpen) {
-                                                    $(".selectric-dashboard_metting_place_country .selectric-scroll").mCustomScrollbar("scrollTo", Math.abs(scrollbarPositionPixel));
-                                                    isScrollOpen = true;
-                                                }
-                                            }
-                                        })
-                                        .on("change", function() {
-                                            // сохраняем выбор
-                                            var formData = new FormData();
-                                            formData.append("op", "saveTeamTextField");
-                                            formData.append("field", "metting_place_country_id");
-                                            formData.append("val", $(this).val());
-
-                                            $.ajax({
-                                                url: "/ajax/ajax.php",
-                                                type: "POST",
-                                                dataType: "json",
-                                                cache: false,
-                                                contentType: false,
-                                                processData: false,
-                                                data: formData,
-                                                success: function(json) {
-                                                    if (json.country_lang) {
-                                                        // socket
-                                                        var message = {
-                                                            "op": "dashboardMettingPlaceUpdateCountry",
-                                                            "parameters": {
-                                                                "country_lang": json.country_lang,
-                                                                "user_id": $("#section_game").length ? $("#section_game").attr("data-user-id") : 0,
-                                                                "team_id": $("#section_game").length ? $("#section_game").attr("data-team-id") : 0
-                                                            }
-                                                        };
-                                                        sendMessageSocket(JSON.stringify(message));
-                                                    }
-                                                },
-                                                error: function(xhr, ajaxOptions, thrownError) {    
-                                                    console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-                                                }
-                                            });
-
-                                            isScrollOpen = false;
-                                        });
-
-                                        $(".dashboard_tabs[data-dashboard=\'databases\']").on("click", ".dashboard_metting_place_input_wrapper_country .mCSB_scrollTools_vertical", function(e){
-                                            if (isScrollOpen) {
-                                                $(".dashboard_metting_place_country").selectric("open");
-                                            }
-                                        });
-                                    });
-                                </script>';
+        $return['content'] .= renderAutocompleteSelectComponent([
+            'id' => 'dashboard-metting-place-country-select',
+            'hidden_class' => 'dashboard_metting_place_country',
+            'wrapper_class' => 'dashboard_metting_place_country_autocomplete',
+            'placeholder' => !empty($translation['text64']) ? $translation['text64'] : '',
+            'selected_value' => $selectedValue,
+            'options' => $componentData,
+        ]);
     }
 
     $return['content'] .= '             <div class="dashboard_metting_place_country_error error_text_database_car_register">' . $translation['text86'] . '</div>

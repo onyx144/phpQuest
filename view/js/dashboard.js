@@ -73,6 +73,12 @@
 			$('.dashboard_tabs[data-dashboard="dashboard"] .dashboard_tab_content_item_wrapper').html(dashboardCache.content);
 			$dashboardTabs.find('.dashboard_tabs_loading').hide();
 			$dashboardTabs.find('.dashboard_tabs_content_wrapper').show();
+			if (step === 'african_partner' && typeof initAfricanPartnerCountryAutocomplete === 'function') {
+				initAfricanPartnerCountryAutocomplete();
+			}
+			if (step === 'metting_place' && typeof initMettingPlaceCountryAutocomplete === 'function') {
+				initMettingPlaceCountryAutocomplete();
+			}
 			if (step === 'voice_decoder') {
 				$('body').addClass('voice_decoder_stage_active');
 				if (typeof refreshVoiceDecoderState === 'function') {
@@ -110,6 +116,13 @@
 					dashboardCache.content = json.content;
 				}
 				dashboardCache.step = step;
+
+				if (step === 'african_partner' && typeof initAfricanPartnerCountryAutocomplete === 'function') {
+					initAfricanPartnerCountryAutocomplete();
+				}
+				if (step === 'metting_place' && typeof initMettingPlaceCountryAutocomplete === 'function') {
+					initMettingPlaceCountryAutocomplete();
+				}
 
 				if (step === 'voice_decoder') {
 					$('body').addClass('voice_decoder_stage_active');

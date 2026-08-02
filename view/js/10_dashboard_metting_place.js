@@ -1,6 +1,60 @@
 /* === DASHBOARD - METTING PLACE === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	function initMettingPlaceCountryAutocomplete() {
+		var $root = $('#dashboard-metting-place-country-select');
+		if (!$root.length) {
+			return;
+		}
+
+		$root.removeData('autocomplete-initialized');
+
+		if (window.initAutocompleteSelectComponent) {
+			window.initAutocompleteSelectComponent($root);
+		}
+
+		$('.dashboard_metting_place_country').off('change.mettingPlaceCountry').on('change.mettingPlaceCountry', function() {
+			var formData = new FormData();
+			formData.append('op', 'saveTeamTextField');
+			formData.append('field', 'metting_place_country_id');
+			formData.append('val', $(this).val());
+
+			$.ajax({
+				url: '/ajax/ajax.php',
+				type: 'POST',
+				dataType: 'json',
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: formData,
+				success: function(json) {
+					if (json.country_lang) {
+						var message = {
+							'op': 'dashboardMettingPlaceUpdateCountry',
+							'parameters': {
+								'country_lang': json.country_lang,
+								'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+								'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+							}
+						};
+						sendMessageSocket(JSON.stringify(message));
+					}
+				}
+			});
+		});
+	}
+
+	function setMettingPlaceCountryValue(countryName) {
+		var $hidden = $('.dashboard_metting_place_country');
+		if (!$hidden.length) {
+			return;
+		}
+
+		var $root = $hidden.closest('.autocomplete_select_component');
+		$hidden.val(countryName).trigger('change');
+		$root.find('.autocomplete_select_input').val(countryName);
+	}
+
 	// ввели верно, открываем попап исходящего звонка
 	function mettingPlaceOpenOutgoingCall() {
 		// запускаем отображение времени
@@ -370,7 +424,7 @@ $(function() {
 		var streetName = $.trim($('.dashboard_metting_place_street_name').val());
 		var houseNumber = $.trim($('.dashboard_metting_place_house_number').val());
 		var city = $.trim($('.dashboard_metting_place_city').val());
-		var country = $('.dashboard_metting_place_country').val();
+		var country = $.trim($('.dashboard_metting_place_country').val() || '');
 
 		if (streetName == '') {
 			$('.dashboard_metting_place_street_name_error').addClass('error_text_database_car_register_active');
@@ -393,7 +447,7 @@ $(function() {
 			$('.dashboard_metting_place_city_error').removeClass('error_text_database_car_register_active');
 		}
 
-		if ($.type(country) === "null") {
+		if (country == '') {
 			$('.dashboard_metting_place_country_error').addClass('error_text_database_car_register_active');
 			err = true;
 		} else {
@@ -425,7 +479,7 @@ $(function() {
 					'street_name_error': (streetName == '') ? true : false,
 					'house_number_error': (houseNumber == '') ? true : false,
 					'city_error': (city == '') ? true : false,
-					'country_error': (country == '' || $.type(country) === "null") ? true : false,
+					'country_error': (country == '') ? true : false,
 					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
 					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
 				}

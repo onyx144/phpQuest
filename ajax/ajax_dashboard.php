@@ -576,8 +576,8 @@ if (isset($_POST['op'])) {
 
 			if (!empty($company_name) && !empty($country) && !empty($date)) {
 				$company_name = str_replace(' ', '', $company_name);
-
-				if (mb_strtolower($company_name, 'UTF-8') == 'gigaconsulting' && $country == 'Nigeria' && ($date == '04.11.1997' || $date == '4.11.1997' || $date == '04.11.97' || $date == '4.11.97')) {
+//ответ Амеріканський партнер
+				if (mb_strtolower($company_name, 'UTF-8') == 'Royal Wolf' && $country == 'Egypt' && ($date == '20.09.2001' || $date == '20.09.01' || $date == '20.09.01' || $date == '20.09.01')) {
 					$return['success'] = 'ok';
 
 					// переводы для всех языков. Для синхронизации

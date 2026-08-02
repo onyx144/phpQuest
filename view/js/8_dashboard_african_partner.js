@@ -1,6 +1,60 @@
 /* === DASHBOARD - AFRICAN PARTNER === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	function initAfricanPartnerCountryAutocomplete() {
+		var $root = $('#dashboard-african-partner-country-select');
+		if (!$root.length) {
+			return;
+		}
+
+		$root.removeData('autocomplete-initialized');
+
+		if (window.initAutocompleteSelectComponent) {
+			window.initAutocompleteSelectComponent($root);
+		}
+
+		$('.dashboard_african_partner_country').off('change.africanPartnerCountry').on('change.africanPartnerCountry', function() {
+			var formData = new FormData();
+			formData.append('op', 'saveTeamTextField');
+			formData.append('field', 'african_partner_country_id');
+			formData.append('val', $(this).val());
+
+			$.ajax({
+				url: '/ajax/ajax.php',
+				type: 'POST',
+				dataType: 'json',
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: formData,
+				success: function(json) {
+					if (json.country_lang) {
+						var message = {
+							'op': 'dashboardAfricanPartnerUpdateCountry',
+							'parameters': {
+								'country_lang': json.country_lang,
+								'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+								'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+							}
+						};
+						sendMessageSocket(JSON.stringify(message));
+					}
+				}
+			});
+		});
+	}
+
+	function setAfricanPartnerCountryValue(countryName) {
+		var $hidden = $('.dashboard_african_partner_country');
+		if (!$hidden.length) {
+			return;
+		}
+
+		var $root = $hidden.closest('.autocomplete_select_component');
+		$hidden.val(countryName).trigger('change');
+		$root.find('.autocomplete_select_input').val(countryName);
+	}
+
 	// african partner ввели верно, открываем попап исходящего звонка
 	function africanPartnerOpenOutgoingCall() {
 		// запускаем отображение времени

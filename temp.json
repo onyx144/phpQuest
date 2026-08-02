@@ -1,0 +1,1398 @@
+[
+    {
+      "services": [
+        {
+          "booking_title": "Афро-накрутка Майстер/Стиліст",
+          "id": 6338569,
+          "duration": 7200,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "Укладання без миття  1,2 довжина Майстер/Стиліст",
+          "id": 6338573,
+          "duration": 3600,
+          "price_max": 900
+        },
+        {
+          "booking_title": "Масаж голови",
+          "id": 6338584,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Морской пилинг кожи головы (S/7) ТОП Стилист",
+          "id": 6338634,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Чутлива шкіра - лупа / підвищення імунітету шкіри СТИЛІСТ",
+          "id": 6338635,
+          "duration": 5400,
+          "price_max": 1850
+        },
+        {
+          "booking_title": "Стимуляция роста волос (Т/00)",
+          "id": 6338638,
+          "duration": 3600,
+          "price_max": 1900
+        },
+        {
+          "booking_title": "Камуфлювання бороди",
+          "id": 6555187,
+          "duration": 3600,
+          "price_max": 1000
+        },
+        {
+          "booking_title": "Мытье перед наращиванием",
+          "id": 6557571,
+          "duration": 900,
+          "price_max": 150
+        },
+        {
+          "booking_title": "Нарощування пір'я, каміння",
+          "id": 6557572,
+          "duration": 300,
+          "price_max": 100
+        },
+        {
+          "booking_title": "ДОП Napura ампула T0, Т1 Pre, T1 Post, T2 Post, T3 Post, T3 Cleans Pre, T3 Cleans Post, T5.6 Pre, T5.6 Post",
+          "id": 6558051,
+          "duration": 900,
+          "price_max": 520
+        },
+        {
+          "booking_title": "B3 в краску 3.5 г",
+          "id": 6558053,
+          "duration": 900,
+          "price_max": 850
+        },
+        {
+          "booking_title": "B3 в краску 7г",
+          "id": 6558054,
+          "duration": 900,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Краситель Glynt 10 г",
+          "id": 6558058,
+          "duration": 900,
+          "price_max": 180
+        },
+        {
+          "booking_title": "Glynt Окислитель  10 г",
+          "id": 6558059,
+          "duration": 900,
+          "price_max": 35
+        },
+        {
+          "booking_title": "GLYNT Пудра  PLATINUM BLOND 10 г",
+          "id": 6558062,
+          "duration": 900,
+          "price_max": 95
+        },
+        {
+          "booking_title": "Шампунь napura трихология S00  - S11 (30 г)",
+          "id": 6558063,
+          "duration": 600,
+          "price_max": 120
+        },
+        {
+          "booking_title": "",
+          "id": 6558066,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Keratin Fix (3) 400 ml - флюид реконструктор белковой структуры волос 10 г",
+          "id": 6558068,
+          "duration": 3600,
+          "price_max": 300
+        },
+        {
+          "booking_title": "Keratin Flex (5) 300 ml - спрей реконструктор для белковой структуры волос 10 г",
+          "id": 6558069,
+          "duration": 900,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Миття нарощеного волосся/тресів",
+          "id": 6562751,
+          "duration": 900,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Чаевые от клиентов",
+          "id": 6687967,
+          "duration": 3600,
+          "price_max": 50
+        },
+        {
+          "booking_title": "Ампули Рідкий шовк",
+          "id": 7209585,
+          "duration": 3600,
+          "price_max": 350
+        },
+        {
+          "booking_title": "Tokio 2M/ 2S / 2  ( 10 ml)",
+          "id": 7277547,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Tokio 3M/ 3S / 3  ( 10 ml)",
+          "id": 7277555,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Tokio 4M/  4   ( 10 ml)",
+          "id": 7277627,
+          "duration": 3600,
+          "price_max": 400
+        },
+        {
+          "booking_title": "Tokio  Premium shampoo (10ml) ДОП",
+          "id": 7277744,
+          "duration": 3600,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Tokio  Premium Кондиционер (20ml) ДОП",
+          "id": 7278058,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Експрес-догляд Tokio  1 складності Топ Стилист",
+          "id": 7279074,
+          "duration": 3600,
+          "price_max": 960
+        },
+        {
+          "booking_title": "Укладання без миття ТОП СТИЛІСТ",
+          "id": 7598940,
+          "duration": 3600,
+          "price_max": 600
+        },
+        {
+          "booking_title": "Укладання 1,2 дл ТОП СТИЛІСТ",
+          "id": 7599071,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Укладання нарощене волосся ТОП СТИЛІСТ",
+          "id": 7599110,
+          "duration": 3600,
+          "price_max": 1500
+        },
+        {
+          "booking_title": "Вечірня Укладка/Вечірня зачіска ТОП СТИЛІСТ",
+          "id": 7599187,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "Стрижка корекція ТОП СТИЛІСТ",
+          "id": 7599236,
+          "duration": 3600,
+          "price_max": 1050
+        },
+        {
+          "booking_title": "Фарбування Кореня ТОП СТИЛІСТ",
+          "id": 7662565,
+          "duration": 3600,
+          "price_max": 2700
+        },
+        {
+          "booking_title": "Забарвлення в 1 тон 1 довжина ТОП СТИЛІСТ",
+          "id": 7662705,
+          "duration": 3600,
+          "price_max": 2900
+        },
+        {
+          "booking_title": "Забарвлення в 1 тон 2 довжина ТОП СТИЛІСТ",
+          "id": 7663006,
+          "duration": 3600,
+          "price_max": 3800
+        },
+        {
+          "booking_title": "Забарвлення в 2 етапи 1 довжина ТОП СТИЛІСТ",
+          "id": 7663085,
+          "duration": 3600,
+          "price_max": 3500
+        },
+        {
+          "booking_title": "Забарвлення в 1 тон 3 довжина ТОП СТИЛІСТ",
+          "id": 7666541,
+          "duration": 3600,
+          "price_max": 4400
+        },
+        {
+          "booking_title": "Забарвлення в 2 етапи 2 Довжина ТОП СТИЛІСТ",
+          "id": 7666594,
+          "duration": 3600,
+          "price_max": 4200
+        },
+        {
+          "booking_title": "Забарвлення в 2 етапи 3 Довжина ТОП СТИЛІСТ",
+          "id": 7666663,
+          "duration": 3600,
+          "price_max": 4900
+        },
+        {
+          "booking_title": "Тренд Фарбування 1 довжина ТОП СТИЛІСТ",
+          "id": 7666788,
+          "duration": 3600,
+          "price_max": 3200
+        },
+        {
+          "booking_title": "Тренд Фарбування 2 довжина ТОП СТИЛІСТ",
+          "id": 7666802,
+          "duration": 3600,
+          "price_max": 3800
+        },
+        {
+          "booking_title": "Тренд Фарбування 3 довжина ТОП СТИЛІСТ",
+          "id": 7666853,
+          "duration": 3600,
+          "price_max": 4300
+        },
+        {
+          "booking_title": "Зміна кольору 1 довжина ТОП СТИЛІСТ",
+          "id": 7666871,
+          "duration": 3600,
+          "price_max": 9250
+        },
+        {
+          "booking_title": "Зміна кольору 2 довжина ТОП СТИЛІСТ",
+          "id": 7666897,
+          "duration": 3600,
+          "price_max": 10150
+        },
+        {
+          "booking_title": "Зміна кольору 3 довжина ТОП СТИЛІСТ",
+          "id": 7666908,
+          "duration": 3600,
+          "price_max": 11150
+        },
+        {
+          "booking_title": "Голлівудське нарощування (1 трес) ТОП СТИЛІСТ",
+          "id": 7666945,
+          "duration": 3600,
+          "price_max": 1900
+        },
+        {
+          "booking_title": "Голлівудське нарощування (2 треси) ТОП СТИЛІСТ",
+          "id": 7667018,
+          "duration": 3600,
+          "price_max": 2900
+        },
+        {
+          "booking_title": "Голлівудське нарощування (3 треси) ТОП СТИЛІСТ",
+          "id": 7667080,
+          "duration": 3600,
+          "price_max": 3780
+        },
+        {
+          "booking_title": "Окрашивание Balmain  Корень ТОП Стилист",
+          "id": 7731957,
+          "duration": 3600,
+          "price_max": 3660
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 1 тон  ТОП Стилист 1 длина",
+          "id": 7731993,
+          "duration": 3600,
+          "price_max": 3900
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 1 тон  ТОП Стилист 2 длина",
+          "id": 7732045,
+          "duration": 3600,
+          "price_max": 4150
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 1 тон ТОП Стилист 3 длина",
+          "id": 7732065,
+          "duration": 3600,
+          "price_max": 5700
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 2 этапа ТОП Стилист 1 длина",
+          "id": 7732075,
+          "duration": 3600,
+          "price_max": 4140
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 2 этапа ТОП Стилист 2 длина",
+          "id": 7732124,
+          "duration": 3600,
+          "price_max": 4620
+        },
+        {
+          "booking_title": "Окрашивание Balmain  в 2 этапа ТОП Стилист 3 длина",
+          "id": 7732236,
+          "duration": 3600,
+          "price_max": 6160
+        },
+        {
+          "booking_title": "Окрашивание Balmain  ТРЕНД  ТОП Стилист 2 длина",
+          "id": 7732445,
+          "duration": 3600,
+          "price_max": 4080
+        },
+        {
+          "booking_title": "Airtouch Bamain 1длина ТОП СТИЛИСТ",
+          "id": 7732489,
+          "duration": 3600,
+          "price_max": 3440
+        },
+        {
+          "booking_title": "Airtouch Bamain 2 длина ТОП СТИЛИСТ",
+          "id": 7732521,
+          "duration": 3600,
+          "price_max": 4520
+        },
+        {
+          "booking_title": "Airtouch Bamain 3 длина ТОП СТИЛИСТ",
+          "id": 7732544,
+          "duration": 3600,
+          "price_max": 5750
+        },
+        {
+          "booking_title": "Смена цвета Bamain 1длина ТОП СТИЛИСТ",
+          "id": 7732670,
+          "duration": 3600,
+          "price_max": 5040
+        },
+        {
+          "booking_title": "Смена цвета  Bamain 3 длина ТОП СТИЛИСТ",
+          "id": 7732747,
+          "duration": 3600,
+          "price_max": 10560
+        },
+        {
+          "booking_title": "Окрашивание Balmain  ТРЕНД  ТОП Стилист 1 длина",
+          "id": 7795483,
+          "duration": 3600,
+          "price_max": 2960
+        },
+        {
+          "booking_title": "Смена цвета  Bamain 2 длина ТОП СТИЛИСТ",
+          "id": 7795514,
+          "duration": 3600,
+          "price_max": 7280
+        },
+        {
+          "booking_title": "",
+          "id": 8172370,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Протокол 1",
+          "id": 8294420,
+          "duration": 3600,
+          "price_max": 0
+        },
+        {
+          "booking_title": "Протокол 2",
+          "id": 8294555,
+          "duration": 3600,
+          "price_max": 0
+        },
+        {
+          "booking_title": "Протокол 3",
+          "id": 8294624,
+          "duration": 3600,
+          "price_max": 0
+        },
+        {
+          "booking_title": "Napura О8 oil mask 10 ml",
+          "id": 8527481,
+          "duration": 3600,
+          "price_max": 180
+        },
+        {
+          "booking_title": "Окрашивание REDKEN 10 мин.",
+          "id": 9032560,
+          "duration": 3600,
+          "price_max": 1050
+        },
+        {
+          "booking_title": "Консультація експерта зі здоров'я волосся, Основная",
+          "id": 9076117,
+          "duration": 3600,
+          "price_max": 1500
+        },
+        {
+          "booking_title": "Стрижка дитяча ТОП СИЛІСТ",
+          "id": 9335066,
+          "duration": 3600,
+          "price_max": 400
+        },
+        {
+          "booking_title": "Експрес-догляд Tokio 2 сложности Стилист",
+          "id": 9339613,
+          "duration": 3600,
+          "price_max": 1150
+        },
+        {
+          "booking_title": "Білдер 1 довжина ТОП Стиліст",
+          "id": 9340028,
+          "duration": 3600,
+          "price_max": 1800
+        },
+        {
+          "booking_title": "Білдер 2 довжина ТОП Стиліст",
+          "id": 9340037,
+          "duration": 3600,
+          "price_max": 2250
+        },
+        {
+          "booking_title": "Білдер 3 довжина ТОП Стиліст",
+          "id": 9340043,
+          "duration": 3600,
+          "price_max": 2600
+        },
+        {
+          "booking_title": "Ліпідне  (S/8)ТОП Стиліст",
+          "id": 9340067,
+          "duration": 3600,
+          "price_max": 1750
+        },
+        {
+          "booking_title": "Кератинове повстань-реконструк. (S/9)ТОП Стиліст",
+          "id": 9340076,
+          "duration": 3600,
+          "price_max": 1600
+        },
+        {
+          "booking_title": "Збільшення діаметру волосся Aluron 1 довжина ТОП СТИЛІСТ",
+          "id": 9340119,
+          "duration": 3600,
+          "price_max": 1800
+        },
+        {
+          "booking_title": "Збільшення діаметру волосся Aluron 2 довжина ТОП СТИЛІСТ",
+          "id": 9340142,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Збільшення діаметру волосся Aluron 3 довжина ТОП СТИЛІСТ",
+          "id": 9340223,
+          "duration": 3600,
+          "price_max": 2900
+        },
+        {
+          "booking_title": "Стимуляция роста волос (Т/00) Эксперт",
+          "id": 9345808,
+          "duration": 3600,
+          "price_max": 2000
+        },
+        {
+          "booking_title": "Чутлива шкіра - лупа / підвищення імунітету шкіри ТОП СТИЛІСТ",
+          "id": 9345819,
+          "duration": 3600,
+          "price_max": 2200
+        },
+        {
+          "booking_title": "Волосы есть Эксперт",
+          "id": 9346004,
+          "duration": 3600,
+          "price_max": 1200
+        },
+        {
+          "booking_title": "Біологічне очищення ТОП СТИЛІСТ",
+          "id": 9346395,
+          "duration": 3600,
+          "price_max": 1950
+        },
+        {
+          "booking_title": "Фарбування Fab Pro 1 довжина",
+          "id": 9429256,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "Фарбування Fab Pro 2 довжина",
+          "id": 9429270,
+          "duration": 3600,
+          "price_max": 1600
+        },
+        {
+          "booking_title": "Фарбування Fab Pro 3довжина",
+          "id": 9429347,
+          "duration": 3600,
+          "price_max": 2100
+        },
+        {
+          "booking_title": "Фарбування Fab Pro домашній догляд",
+          "id": 9430021,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Доп Fab Pro Пигмент-гель 10г",
+          "id": 9516964,
+          "duration": 3600,
+          "price_max": 280
+        },
+        {
+          "booking_title": "Стрижка чоловіча 1 дл ТОП СТИЛІСТ",
+          "id": 10260661,
+          "duration": 3600,
+          "price_max": 800
+        },
+        {
+          "booking_title": "Стрижка чоловіча 2 дл ТОП СТИЛІСТ",
+          "id": 10260664,
+          "duration": 3600,
+          "price_max": 950
+        },
+        {
+          "booking_title": "Стрижка дитяча з миттям",
+          "id": 10260752,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Плетіння дитяче ТОП Стиліст",
+          "id": 10260799,
+          "duration": 3600,
+          "price_max": 800
+        },
+        {
+          "booking_title": "Дитяча накрутка до 10-ти років (без миття)",
+          "id": 10260830,
+          "duration": 3600,
+          "price_max": 550
+        },
+        {
+          "booking_title": "Стрижка форм 1,2 дл ТОП СТИЛІСТ",
+          "id": 10260999,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "Стрижка за формою 3,4 дл ТОП Стиліст",
+          "id": 10261000,
+          "duration": 3600,
+          "price_max": 1600
+        },
+        {
+          "booking_title": "Укладання 3,4 дл ТОП СТИЛІСТ",
+          "id": 10261031,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Стрижка нарощеного волосся ТОП СТИЛІСТ",
+          "id": 10261434,
+          "duration": 3600,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "Контуринг 1 складність ТОП СТИЛІСТ",
+          "id": 10261505,
+          "duration": 3600,
+          "price_max": 4950
+        },
+        {
+          "booking_title": "Складне фарбування 1 складність ТОП СТИЛІСТ",
+          "id": 10261530,
+          "duration": 3600,
+          "price_max": 8600
+        },
+        {
+          "booking_title": "Складне фарбування 2 складність ТОП СТИЛІСТ",
+          "id": 10261534,
+          "duration": 3600,
+          "price_max": 11200
+        },
+        {
+          "booking_title": "Забарвлення топової зони 1 складність ТОП СТИЛІСТ",
+          "id": 10261639,
+          "duration": 3600,
+          "price_max": 7100
+        },
+        {
+          "booking_title": "Забарвлення топової зони 2 складність ТОП СТИЛІСТ",
+          "id": 10261645,
+          "duration": 3600,
+          "price_max": 8900
+        },
+        {
+          "booking_title": "Зняття кольору",
+          "id": 10261655,
+          "duration": 3600,
+          "price_max": 0
+        },
+        {
+          "booking_title": "Зняття кольору на 1-2 рівня 1-2 складність ТОП СТИЛІСТ",
+          "id": 10261684,
+          "duration": 3600,
+          "price_max": 7600
+        },
+        {
+          "booking_title": "Total Blonde (прикоренева зона 2 см) ТОП СТИЛІСТ",
+          "id": 10262947,
+          "duration": 3600,
+          "price_max": 6900
+        },
+        {
+          "booking_title": "Total Blonde 1,2 довжина ТОП СТИЛІСТ",
+          "id": 10262955,
+          "duration": 3600,
+          "price_max": 8000
+        },
+        {
+          "booking_title": "Total Blonde 3,4 дл ТОП СТИЛІСТ",
+          "id": 10262959,
+          "duration": 3600,
+          "price_max": 9300
+        },
+        {
+          "booking_title": "Корінь Blonde(спец Blonde)+ тонір 1 дл ТОП СТИЛІСТ",
+          "id": 10262966,
+          "duration": 3600,
+          "price_max": 3400
+        },
+        {
+          "booking_title": "Корінь Blonde (спец Blonde) + тонір 2 дл МАЙСТЕР",
+          "id": 10262967,
+          "duration": 3600,
+          "price_max": 2700
+        },
+        {
+          "booking_title": "Корінь Blonde(спец Blonde)+ тонір 2 дл ТОП СТИЛІСТ",
+          "id": 10262970,
+          "duration": 3600,
+          "price_max": 3800
+        },
+        {
+          "booking_title": "Корінь Blonde(спец Blonde)+ тонір 3 дл ТОП СТИЛІСТ",
+          "id": 10262979,
+          "duration": 3600,
+          "price_max": 4600
+        },
+        {
+          "booking_title": "Весільна зачіска",
+          "id": 10265239,
+          "duration": 3600,
+          "price_max": 2300
+        },
+        {
+          "booking_title": "Весільна зачіска з виїздом",
+          "id": 10265241,
+          "duration": 3600,
+          "price_max": 7000
+        },
+        {
+          "booking_title": "Airtouch ТОП СТИЛІСТ (зачистка полотна,реконст,техніка,реконст,тонір,догляд,укладання)",
+          "id": 10274104,
+          "duration": 3600,
+          "price_max": 9000
+        },
+        {
+          "booking_title": "Укладання без миття ТОП Стиліст",
+          "id": 10279962,
+          "duration": 3600,
+          "price_max": 600
+        },
+        {
+          "booking_title": "Стрижка Чолки ТОП Стиліст",
+          "id": 10279965,
+          "duration": 3600,
+          "price_max": 550
+        },
+        {
+          "booking_title": "Миття голови без сушіння Майстер/Стиліст",
+          "id": 10279969,
+          "duration": 3600,
+          "price_max": 600
+        },
+        {
+          "booking_title": "Tokio Inkarami - ТОП Стиліст 2 дов",
+          "id": 10280160,
+          "duration": 3600,
+          "price_max": 3550
+        },
+        {
+          "booking_title": "Tokio Inkarami - ТОП Стиліст 3 дл",
+          "id": 10280167,
+          "duration": 3600,
+          "price_max": 4100
+        },
+        {
+          "booking_title": "Wow Зволоження Abril 3 дл ТОП Cтиліст",
+          "id": 10280245,
+          "duration": 3600,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "Догляд B3 1 довжина ТОП Стиліст",
+          "id": 10280417,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Догляд B3 2 довжина ТОП Стиліст",
+          "id": 10280424,
+          "duration": 3600,
+          "price_max": 2850
+        },
+        {
+          "booking_title": "Догляд B3 3 довжина ТОП Стиліст",
+          "id": 10280427,
+          "duration": 3600,
+          "price_max": 3000
+        },
+        {
+          "booking_title": "Плетіння ТОП Стиліст",
+          "id": 10282780,
+          "duration": 3600,
+          "price_max": 1500
+        },
+        {
+          "booking_title": "Афро-накрутка ТОП Стиліст",
+          "id": 10282782,
+          "duration": 3600,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "Тонування волосся 1 довжина (тонування, миття, сушіння) ТОП СТИЛІСТ",
+          "id": 10300321,
+          "duration": 3600,
+          "price_max": 2450
+        },
+        {
+          "booking_title": "Тонування волосся 2 довжина (тонування, миття, сушіння) ТОП СТИЛІСТ",
+          "id": 10300343,
+          "duration": 3600,
+          "price_max": 2700
+        },
+        {
+          "booking_title": "Тонування волосся 3 довжина (тонування, миття, сушіння) ТОП СТИЛІСТ",
+          "id": 10300353,
+          "duration": 3600,
+          "price_max": 2900
+        },
+        {
+          "booking_title": "Тонування волосся 4 довжина (тонування, миття, сушіння) ТОП СТИЛІСТ",
+          "id": 10300372,
+          "duration": 3600,
+          "price_max": 3250
+        },
+        {
+          "booking_title": "Tokio Inkarami - ТОП Стиліст 1 дов",
+          "id": 10305222,
+          "duration": 3600,
+          "price_max": 3000
+        },
+        {
+          "booking_title": "Догляд B3 4 довжина ТОП Стиліст",
+          "id": 10429432,
+          "duration": 3600,
+          "price_max": 3600
+        },
+        {
+          "booking_title": "ДОП Napura  М8, М9  10 мл",
+          "id": 10652718,
+          "duration": 3600,
+          "price_max": 420
+        },
+        {
+          "booking_title": "Зняття кольору на 1-2 рівні 3-4 складність ТОП СТИЛИСТ",
+          "id": 10730388,
+          "duration": 3600,
+          "price_max": 9900
+        },
+        {
+          "booking_title": "ДОП R11 Aluron",
+          "id": 10791486,
+          "duration": 3600,
+          "price_max": 250
+        },
+        {
+          "booking_title": "ДОП Keratin Fit (5) 400 ml",
+          "id": 10791665,
+          "duration": 3600,
+          "price_max": 120
+        },
+        {
+          "booking_title": "Tokio Inkarami - ТОП Стиліст 4 дл",
+          "id": 10842166,
+          "duration": 3600,
+          "price_max": 4600
+        },
+        {
+          "booking_title": "Пілінг для шкіри голови \"Full Acid/ Enzim Peel\"1 Длина ТОП Стилист",
+          "id": 10904368,
+          "duration": 3600,
+          "price_max": 1250
+        },
+        {
+          "booking_title": "Пілінг для шкіри голови \"Full Acid/ Enzim Peel\" 2 Длина ТОП Стилист",
+          "id": 10904421,
+          "duration": 3600,
+          "price_max": 1250
+        },
+        {
+          "booking_title": "Пілінг для шкіри голови \"Full Acid/ Enzim Peel\" 3 Длина ТОП Стилист",
+          "id": 10904447,
+          "duration": 3600,
+          "price_max": 1250
+        },
+        {
+          "booking_title": "Скраб для шкіри голови \"Full Scrub Peel \" 1 Длина ТОП Стилист",
+          "id": 10904495,
+          "duration": 3600,
+          "price_max": 900
+        },
+        {
+          "booking_title": "Скраб для шкіри голови \"Full Scrub Peel \" 2 Длина ТОП Стилист",
+          "id": 10904503,
+          "duration": 3600,
+          "price_max": 1000
+        },
+        {
+          "booking_title": "Скраб для шкіри голови \"Full Scrub Peel \" 3 Длина ТОП Стилист",
+          "id": 10904506,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Миття голови \"Full Force\" 1 Длина ТОП Стилист",
+          "id": 10904606,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Миття голови \"Full Force\" 2 Длина ТОП Стилист",
+          "id": 10904618,
+          "duration": 3600,
+          "price_max": 800
+        },
+        {
+          "booking_title": "Миття голови \"Full Force\" 3 Длина ТОП Стилист",
+          "id": 10904629,
+          "duration": 3600,
+          "price_max": 900
+        },
+        {
+          "booking_title": "ДОП \"Full Force\" Маска Баттер 1 Длина",
+          "id": 10904635,
+          "duration": 3600,
+          "price_max": 100
+        },
+        {
+          "booking_title": "Плетіння з кільцями Стиліст/ТОП Стиліст",
+          "id": 10911885,
+          "duration": 3600,
+          "price_max": 500
+        },
+        {
+          "booking_title": "Стрижка бороди ТОП Стиліст",
+          "id": 10911891,
+          "duration": 3600,
+          "price_max": 750
+        },
+        {
+          "booking_title": "Стрижка дитяча хлопчик ТОП Стиліст",
+          "id": 10911902,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Дитяча накрутка без/з миттям ТОП Стиліст",
+          "id": 10911913,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Свіжість для волосся FullForce",
+          "id": 11261318,
+          "duration": 3600,
+          "price_max": 900
+        },
+        {
+          "booking_title": "Зняття тресу",
+          "id": 11521749,
+          "duration": 3600,
+          "price_max": 450
+        },
+        {
+          "booking_title": "Забарвлення в 1 тон 4 довжина ТОП СТИЛІСТ",
+          "id": 12029997,
+          "duration": 3600,
+          "price_max": 5200
+        },
+        {
+          "booking_title": "Забарвлення в 2 етапи 4 Довжина ТОП СТИЛІСТ",
+          "id": 12030237,
+          "duration": 3600,
+          "price_max": 5400
+        },
+        {
+          "booking_title": "Контуринг 2 складність ТОП СТИЛІСТ",
+          "id": 12030367,
+          "duration": 3600,
+          "price_max": 5750
+        },
+        {
+          "booking_title": "Контуринг 3 складність ТОП СТИЛІСТ",
+          "id": 12030370,
+          "duration": 3600,
+          "price_max": 6200
+        },
+        {
+          "booking_title": "Складне фарбування 3 складність ТОП СТИЛІСТ",
+          "id": 12030384,
+          "duration": 3600,
+          "price_max": 13200
+        },
+        {
+          "booking_title": "Складне фарбування 4 складність ТОП СТИЛІСТ",
+          "id": 12030389,
+          "duration": 3600,
+          "price_max": 15750
+        },
+        {
+          "booking_title": "Зміна кольору 4 довжина ТОП СТИЛІСТ",
+          "id": 12030583,
+          "duration": 3600,
+          "price_max": 14050
+        },
+        {
+          "booking_title": "Догляд для волосся VIART 1 довжина ТОП Стилист",
+          "id": 12230329,
+          "duration": 3600,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "Догляд для волосся VIART 2 довжина ТОП Стилист",
+          "id": 12230352,
+          "duration": 3600,
+          "price_max": 1800
+        },
+        {
+          "booking_title": "Догляд для волосся VIART 3 довжина ТОП Стилист",
+          "id": 12230377,
+          "duration": 3600,
+          "price_max": 2200
+        },
+        {
+          "booking_title": "Швидке відновлення (маска 5 хв.) від Framesi",
+          "id": 12256339,
+          "duration": 3600,
+          "price_max": 500
+        },
+        {
+          "booking_title": "Глибока реконструкція для пошкожденного волося від Framesi 1 Длина Стилист",
+          "id": 12256395,
+          "duration": 3600,
+          "price_max": 700
+        },
+        {
+          "booking_title": "Глибока реконструкція для пошкожденного волося від Framesi 1 Длина ТОП  Стилист",
+          "id": 12258994,
+          "duration": 3600,
+          "price_max": 900
+        },
+        {
+          "booking_title": "Глибока реконструкція для пошкожденного волося від Framesi 2 Длина ТОП Стилист",
+          "id": 12259009,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Глибока реконструкція для пошкожденного волося від Framesi 3 Длина ТОП Стилист",
+          "id": 12259020,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "LAV Відновлення 1 Довжина",
+          "id": 12293820,
+          "duration": 3600,
+          "price_max": 1750
+        },
+        {
+          "booking_title": "LAV Відновлення 2 Довжина",
+          "id": 12293833,
+          "duration": 3600,
+          "price_max": 2000
+        },
+        {
+          "booking_title": "LAV Відновлення 3 Довжина",
+          "id": 12293835,
+          "duration": 3600,
+          "price_max": 2200
+        },
+        {
+          "booking_title": "LAV Відновлення 4 Довжина",
+          "id": 12293837,
+          "duration": 3600,
+          "price_max": 2400
+        },
+        {
+          "booking_title": "Укладання без миття 3,4 довжина ТОП Стиліст",
+          "id": 12337513,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "ДОП Пілінг Viart",
+          "id": 12414550,
+          "duration": 3600,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Natua Глибоке очищення ТОП Стилист",
+          "id": 12414629,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Natua Боротьба з Лупою ТОП Стиліст",
+          "id": 12414634,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Natua Лікування усіх видів алопецій ТОП Стиліст",
+          "id": 12414646,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "Natua Ritual Kera Repair Відновлення білкової структури ТОП Стиліст",
+          "id": 12419228,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "ДОП Viart Elastic",
+          "id": 12508081,
+          "duration": 3600,
+          "price_max": 470
+        },
+        {
+          "booking_title": "ДОП Маска Viart Lipidik/Silk/Visual",
+          "id": 12508087,
+          "duration": 3600,
+          "price_max": 270
+        },
+        {
+          "booking_title": "Пілінг від Viart",
+          "id": 12517050,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "Пілінг від Viart 3-4 длина",
+          "id": 12517067,
+          "duration": 3600,
+          "price_max": 1250
+        },
+        {
+          "booking_title": "B3 шампунь ДОП 1 довжина",
+          "id": 12586979,
+          "duration": 3600,
+          "price_max": 150
+        },
+        {
+          "booking_title": "B3 кондиціонер ДОП 1 довжина",
+          "id": 12587049,
+          "duration": 3600,
+          "price_max": 150
+        },
+        {
+          "booking_title": "ДОП Viart Protein Serum",
+          "id": 12633978,
+          "duration": 3600,
+          "price_max": 165
+        },
+        {
+          "booking_title": "Складне укладання/зачіска/хвіст ТОП Стиліст",
+          "id": 12782012,
+          "duration": 3600,
+          "price_max": 2000
+        },
+        {
+          "booking_title": "Exspress догляд LavHair",
+          "id": 12789546,
+          "duration": 3600,
+          "price_max": 350
+        },
+        {
+          "booking_title": "Тонуюча маска-догляд для волосся Color Bloom Mask(Ice Brunette )2х40 мл",
+          "id": 12833453,
+          "duration": 3600,
+          "price_max": 600
+        },
+        {
+          "booking_title": "Тонуюча маска-догляд для волосся 250 мл. Color Bloom Mask (Platinum Ice)",
+          "id": 12833474,
+          "duration": 3600,
+          "price_max": 600
+        },
+        {
+          "booking_title": "Mais - Hair уход",
+          "id": 12949187,
+          "duration": 3600,
+          "price_max": 850
+        },
+        {
+          "booking_title": "Догляд MAIS",
+          "id": 12952953,
+          "duration": 1200,
+          "price_max": 550
+        },
+        {
+          "booking_title": "TRUSS Infusion Реконструкція волосся з ефектом розгладження 1 довжина",
+          "id": 13054949,
+          "duration": 3600,
+          "price_max": 1600
+        },
+        {
+          "booking_title": "TRUSS Infusion Реконструкція волосся з ефектом розгладження 2 довжина",
+          "id": 13056438,
+          "duration": 3600,
+          "price_max": 1900
+        },
+        {
+          "booking_title": "TRUSS Infusion Реконструкція волосся з ефектом розгладження 3 довжина",
+          "id": 13056471,
+          "duration": 3600,
+          "price_max": 2200
+        },
+        {
+          "booking_title": "TRUSS Infusion Реконструкція волосся з ефектом розгладження 4 довжина",
+          "id": 13056486,
+          "duration": 3600,
+          "price_max": 2500
+        },
+        {
+          "booking_title": "TRUSS FAST REPAIR «МИТТЄВЕ» ВІДНОВЛЕННЯ ВОЛОССЯ 1 Довжина",
+          "id": 13059853,
+          "duration": 3600,
+          "price_max": 1100
+        },
+        {
+          "booking_title": "TRUSS FAST REPAIR «МИТТЄВЕ» ВІДНОВЛЕННЯ ВОЛОССЯ 2 Довжина",
+          "id": 13059907,
+          "duration": 3600,
+          "price_max": 1200
+        },
+        {
+          "booking_title": "TRUSS FAST REPAIR «МИТТЄВЕ» ВІДНОВЛЕННЯ ВОЛОССЯ 3 Довжина",
+          "id": 13059922,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "TRUSS FAST REPAIR «МИТТЄВЕ» ВІДНОВЛЕННЯ ВОЛОССЯ 4 Довжина",
+          "id": 13060084,
+          "duration": 3600,
+          "price_max": 1400
+        },
+        {
+          "booking_title": "TRUSS ІНТЕНС. ВІДНОВ. ВОЛОССЯ З КОМПЛЕКСОМ АМІНОКИСЛОТ 1 Довжина",
+          "id": 13060102,
+          "duration": 3600,
+          "price_max": 1300
+        },
+        {
+          "booking_title": "TRUSS ІНТЕНС. ВІДНОВ. ВОЛОССЯ З КОМПЛЕКСОМ АМІНОКИСЛОТ 2 Довжина",
+          "id": 13060128,
+          "duration": 3600,
+          "price_max": 1400
+        },
+        {
+          "booking_title": "TRUSS ІНТЕНС. ВІДНОВ. ВОЛОССЯ З КОМПЛЕКСОМ АМІНОКИСЛОТ 3 Довжина",
+          "id": 13060151,
+          "duration": 3600,
+          "price_max": 1500
+        },
+        {
+          "booking_title": "TRUSS ІНТЕНС. ВІДНОВ. ВОЛОССЯ З КОМПЛЕКСОМ АМІНОКИСЛОТ 4 Довжина",
+          "id": 13060158,
+          "duration": 3600,
+          "price_max": 1700
+        },
+        {
+          "booking_title": "TRUSS ГЛИБОКА РЕКОНСТРУКЦІЯ ВОЛОССЯ З ПЕПТИДАМИ ТА АМІНОКИСЛ. 1 Довжина",
+          "id": 13060269,
+          "duration": 3600,
+          "price_max": 1400
+        },
+        {
+          "booking_title": "TRUSS ГЛИБОКА РЕКОНСТРУКЦІЯ ВОЛОССЯ З ПЕПТИД. ТА АМІНОКИСЛ. 2 Довжина",
+          "id": 13060386,
+          "duration": 3600,
+          "price_max": 1600
+        },
+        {
+          "booking_title": "TRUSS ГЛИБОКА РЕКОНСТРУКЦІЯ ВОЛОССЯ З ПЕПТИД. ТА АМІНОКИСЛ. 3 Довжина",
+          "id": 13060400,
+          "duration": 3600,
+          "price_max": 1800
+        },
+        {
+          "booking_title": "TRUSS ГЛИБОКА РЕКОНСТРУКЦІЯ ВОЛОССЯ З ПЕПТИД. ТА АМІНОКИСЛ. 4 Довжина",
+          "id": 13060419,
+          "duration": 3600,
+          "price_max": 2000
+        },
+        {
+          "booking_title": "Уход Lendan",
+          "id": 13124565,
+          "duration": 3600,
+          "price_max": 1200
+        },
+        {
+          "booking_title": "Зволожуючий спрей для волосся TRUSS AMINO MIRACLE 225 мл.",
+          "id": 13126101,
+          "duration": 3600,
+          "price_max": 150
+        },
+        {
+          "booking_title": "Зволожуючий шампунь TRUSS SHAMPOO MIRACLE BIDIMENSIONAL",
+          "id": 13126151,
+          "duration": 3600,
+          "price_max": 90
+        },
+        {
+          "booking_title": "Маска для відновлення волМаска для відновлення волосся з волокнистим ефектом TRUSS NET MASKосся з волокнистим ефектом TRUSS NET MASK",
+          "id": 13126158,
+          "duration": 3600,
+          "price_max": 125
+        },
+        {
+          "booking_title": "ДОП Шампунь MAIS (в ассортименте)-10 мл",
+          "id": 13303628,
+          "duration": 3600,
+          "price_max": 90
+        },
+        {
+          "booking_title": "ДОП Маска для тонування волосся Vanil, Perl 10 мл",
+          "id": 13303710,
+          "duration": 3600,
+          "price_max": 180
+        },
+        {
+          "booking_title": "ДОП Olorshe Маска для інтенсивного зволоження",
+          "id": 13346095,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "ДОП Olorshe Маска для глибокого відновлення волосся",
+          "id": 13346116,
+          "duration": 3600,
+          "price_max": 200
+        },
+        {
+          "booking_title": "Догляд MAIS 2 Довжина Стиліст, ТОП, АРТ",
+          "id": 13359822,
+          "duration": 3600,
+          "price_max": 750
+        },
+        {
+          "booking_title": "Natua Протеінова маска",
+          "id": 13359900,
+          "duration": 3600,
+          "price_max": 450
+        },
+        {
+          "booking_title": "Укладання нарощеного волосся- ЛОКОНИ",
+          "id": 13360305,
+          "duration": 3600,
+          "price_max": 1900
+        },
+        {
+          "booking_title": "Tokio Inkarami 4 дов ТОП Стиліст/АРТ",
+          "id": 13367622,
+          "duration": 3600,
+          "price_max": 4600
+        },
+        {
+          "booking_title": "Консультація з нарощуання ТОП Стиліст / АРТ",
+          "id": 13369281,
+          "duration": 3600,
+          "price_max": 500
+        },
+        {
+          "booking_title": "Lendan Маска с ампулой 10 ml",
+          "id": 13688752,
+          "duration": 3600,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Маска MAIS - 500ml (в ассортименте) ДОП 10мл",
+          "id": 13688810,
+          "duration": 3600,
+          "price_max": 220
+        },
+        {
+          "booking_title": "Маска Hadat ДОП",
+          "id": 13690261,
+          "duration": 3600,
+          "price_max": 290
+        },
+        {
+          "booking_title": "Viart Helatic ДОП",
+          "id": 13690280,
+          "duration": 3600,
+          "price_max": 250
+        },
+        {
+          "booking_title": "Краситель Viart Shine 10 г",
+          "id": 13696132,
+          "duration": 3600,
+          "price_max": 210
+        },
+        {
+          "booking_title": "Краситель Optima 10 г",
+          "id": 13696154,
+          "duration": 3600,
+          "price_max": 190
+        },
+        {
+          "booking_title": "ДОП Сироватка Napura 3 мл",
+          "id": 13699590,
+          "duration": 3600,
+          "price_max": 690
+        },
+        {
+          "booking_title": "ДОП Пілінг \"Full Force\"",
+          "id": 13699603,
+          "duration": 3600,
+          "price_max": 300
+        },
+        {
+          "booking_title": "Пілінг Framesi",
+          "id": 13699607,
+          "duration": 3600,
+          "price_max": 225
+        },
+        {
+          "booking_title": "ДОП LavHair Пілінг",
+          "id": 13699612,
+          "duration": 3600,
+          "price_max": 350
+        },
+        {
+          "booking_title": "Ампула TRUSS",
+          "id": 13699624,
+          "duration": 3600,
+          "price_max": 550
+        }
+      ]
+    }
+  ]

@@ -159,15 +159,25 @@ if (isset($_POST['op'])) {
 					$sql = "SELECT `lang_abbr`, `id` FROM `langs` WHERE `status` = {?}";
 					$langs = $db->select($sql, [1]);
 					if ($langs) {
+						$english_lang_id = $lang->getLangIdByHtmlAttr('en');
+						if (!$english_lang_id) {
+							$english_lang_id = 3;
+						}
+						$sql = "SELECT `name` FROM `countries_description` WHERE `country_id` = {?} AND `lang_id` = {?}";
+						$english_country_name = $db->selectCell($sql, [$val, $english_lang_id]);
+
 						$return['country_lang'] = [];
 
 						foreach ($langs as $lang2) {
-							$sql = "SELECT `name` FROM `countries_description` WHERE `country_id` = {?} AND `lang_id` = {?}";
 							$country_name = $db->selectCell($sql, [$val, $lang2['id']]);
+							if (empty($country_name)) {
+								$country_name = $english_country_name;
+							}
 							if (!empty($country_name)) {
 								$return['country_lang'][$lang2['lang_abbr']] = $country_name;
 							}
 						}
+						$return['country_lang'] = $lang->mirrorUkUaByLang($return['country_lang']);
 					}
 				} elseif ($field == 'car_register_date' || $field == 'african_partner_date' || $field == 'bank_transactions_date') {
 					$val = $function->fromRusDatetimeToEng($val);
