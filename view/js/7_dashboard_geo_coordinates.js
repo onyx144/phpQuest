@@ -1,6 +1,160 @@
 /* === DASHBOARD - GEO COORDINATES === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	var geoCoordinatesJaneVideoSrc = '';
+	var geoCoordinatesStageSwitched = false;
+	var geoCoordinatesStagePersisted = false;
+	var geoCoordinatesHackedPopupShown = false;
+
+	function getGeoCoordinatesJaneVideoSrc() {
+		if (geoCoordinatesJaneVideoSrc) {
+			return geoCoordinatesJaneVideoSrc;
+		}
+		return '/video/' + $('html').attr('lang') + '/video_jane_3.mp4';
+	}
+
+	function geoCoordinatesClearPollutionPopup() {
+		$('#popup_success_pollution')
+			.removeClass('popup_success_pollution_geo_coordinates')
+			.stop(true, true)
+			.hide();
+	}
+
+	function geoCoordinatesPrepareDashboardSwitch() {
+		if (typeof dashboardCache !== 'undefined') {
+			dashboardCache.step = null;
+			dashboardCache.titles = null;
+			dashboardCache.content = null;
+		}
+		showDashboardTabsLoading();
+	}
+
+	function geoCoordinatesShowVoiceDecoderDashboard() {
+		geoCoordinatesPrepareDashboardSwitch();
+		uploadTypeTabsDashboardStep('voice_decoder', false);
+	}
+
+	function showGeoCoordinatesCallHackedPopup() {
+		if (geoCoordinatesHackedPopupShown) {
+			return;
+		}
+		geoCoordinatesHackedPopupShown = true;
+		$('#popup_call_hacked').stop(true, true).css('display', 'block').hide().fadeIn(200);
+	}
+
+	function hideGeoCoordinatesCallHackedPopup() {
+		$('#popup_call_hacked').fadeOut(200);
+	}
+
+	// После видео только попап; этап уже переключён на Answer.
+	function geoCoordinatesOnJaneVideoEnded() {
+		var message = {
+			'op': 'closePopupVideoAndCoordinatesSuccess',
+			'parameters': {
+				'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
+		showGeoCoordinatesCallHackedPopup();
+	}
+
+	function geoCoordinatesPlayJaneInlineVideo() {
+		// call_id=6 — geo coordinates; путь из calls_description (uk: video_elison_3 и т.п.)
+		getCallVideoSrc(6, function(videoSrc) {
+			if (!videoSrc) {
+				videoSrc = getGeoCoordinatesJaneVideoSrc();
+			} else {
+				geoCoordinatesJaneVideoSrc = videoSrc;
+			}
+
+			playPopupVideoPhoneInline(videoSrc, {
+				eventNamespace: 'geoCoordinatesJane',
+				onEnded: geoCoordinatesOnJaneVideoEnded
+			});
+		});
+	}
+
+	function geoCoordinatesBroadcastStageSwitch() {
+		var message = {
+			'op': 'dashboardCoordinatesSwitchStage',
+			'parameters': {
+				'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
+	}
+
+	function geoCoordinatesPersistStage() {
+		if (geoCoordinatesStagePersisted) {
+			return;
+		}
+		geoCoordinatesStagePersisted = true;
+
+		var formData = new FormData();
+		formData.append('op', 'geoCoordinatesUpdateHint');
+		formData.append('lang_abbr', $('html').attr('lang'));
+
+		$.ajax({
+			url: '/ajax/ajax_dashboard.php',
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(json) {
+				if (json.error_verify) {
+					window.location.href = json.error_verify;
+					return;
+				}
+
+				if (!json.success) {
+					geoCoordinatesStagePersisted = false;
+					return;
+				}
+
+				$.when(getTeamInfo()).done(function(teamResponse){
+					var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+					if (teamInfo) {
+						incrementScore(parseInt(teamInfo.score, 10) + 200, 'main', teamInfo.score);
+					}
+				});
+
+				incrementProgressMission(10);
+				updateDontOpenFilesQt();
+				updateDontOpenToolsQt();
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				geoCoordinatesStagePersisted = false;
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	function geoCoordinatesStartStageWithVideo() {
+		geoCoordinatesClearPollutionPopup();
+		geoCoordinatesPlayJaneInlineVideo();
+
+		if (!geoCoordinatesStageSwitched) {
+			geoCoordinatesStageSwitched = true;
+			geoCoordinatesShowVoiceDecoderDashboard();
+		}
+
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+			scoreBeforeDashboardCoordinates = teamInfo ? (parseInt(teamInfo.score, 10) || 0) : 0;
+
+			geoCoordinatesBroadcastStageSwitch();
+			geoCoordinatesPersistStage();
+		}).fail(function(){
+			geoCoordinatesPersistStage();
+		});
+	}
+
 	// geo coordinates ввели верно, открываем попап исходящего звонка
 	function geoCoordinatesOpenOutgoingCall() {
 		// запускаем отображение времени
@@ -51,64 +205,30 @@
 		$('#popup_video_phone').fadeIn(200);
 	}
 
-	// geo coordinates ввели верно - просмотрели incoming video либо закрыли попап входящего звонка
+	// geo coordinates ввели верно — сразу UI этапа, затем persist в БД
 	function geoCoordinates() {
-		var formData = new FormData();
-    	formData.append('op', 'geoCoordinatesUpdateHint');
-    	formData.append('lang_abbr', $('html').attr('lang'));
+		geoCoordinatesClearPollutionPopup();
 
-    	$.ajax({
-			url: '/ajax/ajax_dashboard.php',
-	        type: "POST",
-	        dataType: "json",
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: formData,
-			success: function(json) {
-				if (json.error_verify) {
-					window.location.href = json.error_verify;
-				} else {
-					$.when(getTeamInfo()).done(function(teamResponse){
-						var teamInfo = teamResponse.success;
+		if (!geoCoordinatesStageSwitched) {
+			geoCoordinatesStageSwitched = true;
+			geoCoordinatesShowVoiceDecoderDashboard();
+		}
 
-						// добавляем очки
-						incrementScore(parseInt(teamInfo.score, 10) + 200, 'main', teamInfo.score);
-					});
-
-					// обновляем mission progress
-					incrementProgressMission(10);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('voice_decoder', false);
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых tools
-					updateDontOpenToolsQt();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {	
-				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
+		geoCoordinatesPersistStage();
 	}
 	// если запуск из сокета дубляж (не увеличиваем значения в бд)
 	function geoCoordinatesFromSocket() {
-		// добавляем очки
+		geoCoordinatesClearPollutionPopup();
+
+		if (geoCoordinatesStageSwitched) {
+			return;
+		}
+		geoCoordinatesStageSwitched = true;
+		geoCoordinatesShowVoiceDecoderDashboard();
+
 		incrementScoreWithoutSaveDb(scoreBeforeDashboardCoordinates + 200, 'main', scoreBeforeDashboardCoordinates);
-
-		// обновляем mission progress
 		incrementProgressMissionWithoutSaveDb(10);
-
-		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('voice_decoder', false);
-
-		// Обновить к-во непрочитанных файлов
 		updateDontOpenFilesQt();
-
-		// Обновить к-во неоткрытых tools
 		updateDontOpenToolsQt();
 	}
 
@@ -505,7 +625,9 @@ $(function() {
 
 	// geo coordinates ввели верно - принять входящий звонок
 	$('body').on('click', '.popup_video_phone_outgoing_geo_coordinates .popup_video_phone_btn_answer_wrapper', function(e){
-		// socket
+		geoCoordinatesClearPollutionPopup();
+
+		// socket — видео у остальных участников команды
 		var message = {
 			'op': 'dashboardCoordinatesCallAnswer',
 			'parameters': {
@@ -534,30 +656,8 @@ $(function() {
 		clearInterval(incomingCallTimer);
 		incomingCallTimer = false;
 
-		// скрываем блок с телефоном
-		$('#popup_video_phone').fadeOut(200);
-
-		// очищаем данные в блоке с телефоном
-		setTimeout(function(){
-			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-			$('#popup_video_phone .popup_video_phone_name').html('');
-			$('#popup_video_phone').attr('class','');
-		}, 210);
-
-		// открыть видео и сразу запустить его
-		playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-		openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_3.mp4', '', 'geo_coordinates_answer_incoming_video', 'call');
-		playVideo('call');
-		// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_3.mp4', '', 'geo_coordinates_answer_incoming_video', 'call_jane');
-		// playVideoCall();
-
-		/*// когда видео доиграло до конца, то закрываем и производим нужные действия
-		$('.geo_coordinates_answer_incoming_video video').on('ended', function() {
-			closePopupVideo();
-
-			// запускаем обновление данных
-			geoCoordinates();
-		});*/
+		// сразу voice_decoder + спиннер, параллельно стартует видео
+		geoCoordinatesStartStageWithVideo();
 
 		// сохранить время просмотра видео в списке звонков команды
 		var formData = new FormData();
@@ -608,6 +708,11 @@ $(function() {
 
 	// geo coordinates - закрыть попап входящего звонка
 	$('body').on('click', '.popup_video_phone_outgoing_geo_coordinates .popup_video_phone_bg, .popup_video_phone_outgoing_geo_coordinates .popup_video_phone_btn_decline_wrapper', function(e){
+		// во время inline-видео не считаем это decline звонка
+		if ($('#popup_video_phone .popup_video_phone_inline_video').is(':visible')) {
+			return;
+		}
+
 		// socket
 		var message = {
 			'op': 'dashboardCoordinatesCloseIncomingCall',
@@ -621,33 +726,27 @@ $(function() {
 		dashboardCoordinatesCloseIncomingCall();
 	});
 
-	// geo coordinates - закрыть попап с видео
+	// geo coordinates - закрыть попап с видео (legacy fullscreen)
 	$('body').on('click', '.geo_coordinates_answer_incoming_video .popup_video_phone_video_bg, .geo_coordinates_answer_incoming_video .popup_video_close', function(e){
-		// function
 		stopVideo();
 		closePopupVideo();
-		// stopVideoCall();
-		// closePopupVideoCall();
 
-		// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-		$.when(getTeamInfo()).done(function(teamResponse){
-			var teamInfo = teamResponse.success;
+		var message = {
+			'op': 'stopVideoAndClosePopupVideoAndCoordinatesSuccess',
+			'parameters': {
+				'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
 
-			scoreBeforeDashboardCoordinates = parseInt(teamInfo.score, 10);
+		// fallback, если Answer ещё не успел переключить этап
+		geoCoordinates();
+		showGeoCoordinatesCallHackedPopup();
+	});
 
-			// socket
-			var message = {
-				'op': 'stopVideoAndClosePopupVideoAndCoordinatesSuccess',
-				'parameters': {
-					'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
-					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-				}
-	        };
-	        sendMessageSocket(JSON.stringify(message));
-
-	        // запускаем обновление данных
-			geoCoordinates();
-		});
+	$('body').on('click', '.popup_call_hacked_close, .popup_call_hacked_bg', function(e){
+		hideGeoCoordinatesCallHackedPopup();
 	});
 });

@@ -50,16 +50,28 @@ if (isset($_POST['op'])) {
 					$sql = "SELECT `lang_abbr`, `id` FROM `langs` WHERE `status` = {?}";
 					$langs = $db->select($sql, [1]);
 
-					// видео Jane для inline-попапа телефона (по языкам)
+					// видео Jane/Elison для inline-попапа телефона (call_id=5, путь из БД)
 					$return['video_src'] = [];
 					if ($langs) {
 						foreach ($langs as $lang2) {
-							$return['video_src'][$lang2['lang_abbr']] = '/video/' . $lang2['lang_abbr'] . '/video_jane_2.mp4';
+							$call_info = $function->getCallVideoInfo(5, (int) $lang2['id']);
+							if ($call_info && !empty($call_info['video'])) {
+								$path = (string) $call_info['video'];
+								$return['video_src'][$lang2['lang_abbr']] = ($path[0] === '/') ? $path : '/' . $path;
+							} else {
+								$return['video_src'][$lang2['lang_abbr']] = '/video/' . $lang2['lang_abbr'] . '/video_jane_2.mp4';
+							}
 						}
 						$return['video_src'] = $lang->mirrorUkUaByLang($return['video_src']);
 					}
 					if (empty($return['video_src'])) {
-						$return['video_src'][$lang_abbr] = '/video/' . $lang_abbr . '/video_jane_2.mp4';
+						$call_info = $function->getCallVideoInfo(5, (int) $lang_id);
+						if ($call_info && !empty($call_info['video'])) {
+							$path = (string) $call_info['video'];
+							$return['video_src'][$lang_abbr] = ($path[0] === '/') ? $path : '/' . $path;
+						} else {
+							$return['video_src'][$lang_abbr] = '/video/' . $lang_abbr . '/video_jane_2.mp4';
+						}
 						$return['video_src'] = $lang->mirrorUkUaByLang($return['video_src']);
 					}
 
@@ -233,11 +245,10 @@ if (isset($_POST['op'])) {
 				(!empty($longitude1) || $longitude1 == '0') && 
 				(!empty($longitude2) || $longitude2 == '0') && 
 				(!empty($longitude3) || $longitude3 == '0')
-			) {
+			) {//answer cordinate
 				if (
-					($latitude1 == '2' && $latitude2 == '0' && $latitude3 == '0' && $longitude1 == '2' && $longitude2 == '29' && ($longitude3 == '59.999' || $longitude3 == '59,999')) || 
-					($latitude1 == '2' && $latitude2 == '48' && ($latitude3 == '14.883' || $latitude3 == '14,883') && $longitude1 == '3' && $longitude2 == '39' && ($longitude3 == '54.335' || $longitude3 == '54,335')) || 
-					($latitude1 == '2' && $latitude2 == '0' && $latitude3 == '0' && $longitude1 == '2' && $longitude2 == '30' && $longitude3 == '0')
+					$latitude1 == '42' && $latitude2 == '44' && ($latitude3 == '44.394' || $latitude3 == '44,394') &&
+					$longitude1 == '124' && $longitude2 == '29' && ($longitude3 == '50.377' || $longitude3 == '50,377')
 				) {
 					$return['success'] = 'ok';
 				} else {
@@ -364,6 +375,11 @@ if (isset($_POST['op'])) {
 			$team_info = $function->teamInfo($userInfo['team_id']);
 			if (!$team_info) {
 				$return['error'] = 'team_not_found';
+				print_r(json_encode($return));
+				break;
+			}
+			if (!$function->isVoiceDecoderStage($team_info)) {
+				$return['error'] = 'wrong_stage';
 				print_r(json_encode($return));
 				break;
 			}
@@ -576,8 +592,8 @@ if (isset($_POST['op'])) {
 
 			if (!empty($company_name) && !empty($country) && !empty($date)) {
 				$company_name = str_replace(' ', '', $company_name);
-//ответ Амеріканський партнер
-				if (mb_strtolower($company_name, 'UTF-8') == 'Royal Wolf' && $country == 'Egypt' && ($date == '20.09.2001' || $date == '20.09.01' || $date == '20.09.01' || $date == '20.09.01')) {
+				// ответ African / American partner
+				if (mb_strtolower($company_name, 'UTF-8') == 'royalwolf' && $country == 'Egypt' && ($date == '20.09.2001' || $date == '20.9.2001' || $date == '20.09.01' || $date == '20.9.01')) {
 					$return['success'] = 'ok';
 
 					// переводы для всех языков. Для синхронизации

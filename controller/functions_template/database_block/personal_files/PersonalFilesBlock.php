@@ -274,10 +274,9 @@ trait PersonalFilesBlock
                     <span class="dots_bottom_left"></span>
                     <span class="dots_bottom_right"></span>
                     <span class="private_individuals_huilov_text" data-bubble="' . $row['id'] . '">
-                                               <!-- Дудик заменить -->
 
-                          <!--  <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation[$row['text']]) . '</span>-->
-                    <span> **** </span>
+                          <span>' . (empty($user_info['private_individuals_print_text_huilov']) ? '' : $translation[$row['text']]) . '</span>
+                  
                           </span>
                 </div>
             </div>';

@@ -622,47 +622,32 @@ $(function() {
 		        acceptMission();
 		    }
 		} else if ($('#popup_video').hasClass('company_investigate_answer_incoming_video')) { // dashboard, company investigate
-			// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-			$.when(getTeamInfo()).done(function(teamResponse){
-				var teamInfo = teamResponse.success;
+			var message = {
+				'op': 'closePopupVideoAndCompanyInvestigateSuccess',
+				'parameters': {
+					'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
 
-				scoreBeforeDashboardCompanyInvestigate = parseInt(teamInfo.score, 10);
-
-				// socket
-				var message = {
-					'op': 'closePopupVideoAndCompanyInvestigateSuccess',
-					'parameters': {
-						'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
-						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-						'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-					}
-		        };
-		        sendMessageSocket(JSON.stringify(message));
-
-		        // запускаем обновление данных
-				companyInvestigate();
-			});
+	        // fallback, если этап ещё не переключён на Answer
+			companyInvestigate();
 		} else if ($('#popup_video').hasClass('geo_coordinates_answer_incoming_video')) { // dashboard, Geo coordinates
-			// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-			$.when(getTeamInfo()).done(function(teamResponse){
-				var teamInfo = teamResponse.success;
+			var message = {
+				'op': 'closePopupVideoAndCoordinatesSuccess',
+				'parameters': {
+					'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
 
-				scoreBeforeDashboardCoordinates = parseInt(teamInfo.score, 10);
-
-				// socket
-				var message = {
-					'op': 'closePopupVideoAndCoordinatesSuccess',
-					'parameters': {
-						'scoreBeforeDashboardCoordinates': scoreBeforeDashboardCoordinates,
-						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-						'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-					}
-		        };
-		        sendMessageSocket(JSON.stringify(message));
-
-		        // запускаем обновление данных
-				geoCoordinates();
-			});
+	        // fallback, если этап ещё не переключён на Answer
+			geoCoordinates();
+			showGeoCoordinatesCallHackedPopup();
 		} else if ($('#popup_video').hasClass('african_partner_answer_incoming_video')) { // dashboard, African partner
 			// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
 			$.when(getTeamInfo()).done(function(teamResponse){

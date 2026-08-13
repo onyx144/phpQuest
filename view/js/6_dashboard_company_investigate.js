@@ -2,6 +2,8 @@
 
 /* ОБЩИЕ ФУНКЦИИ */
 	var companyInvestigateJaneVideoSrc = '';
+	var companyInvestigateStageSwitched = false;
+	var companyInvestigateStagePersisted = false;
 
 	function getCompanyInvestigateJaneVideoSrc() {
 		if (companyInvestigateJaneVideoSrc) {
@@ -10,30 +12,134 @@
 		return '/video/' + $('html').attr('lang') + '/video_jane_2.mp4';
 	}
 
+	function companyInvestigateClearSuccessPopup() {
+		$('#popup_success')
+			.removeClass('popup_success_company_investigate')
+			.stop(true, true)
+			.hide();
+	}
+
+	function companyInvestigatePrepareDashboardSwitch() {
+		if (typeof dashboardCache !== 'undefined') {
+			dashboardCache.step = null;
+			dashboardCache.titles = null;
+			dashboardCache.content = null;
+		}
+		showDashboardTabsLoading();
+	}
+
+	function companyInvestigateShowGeoDashboard() {
+		companyInvestigatePrepareDashboardSwitch();
+		uploadTypeTabsDashboardStep('geo_coordinates', false);
+	}
+
+	// После старта видео только закрываем попап; этап уже переключён на Answer.
 	function companyInvestigateOnJaneVideoEnded() {
-		$.when(getTeamInfo()).done(function(teamResponse){
-			var teamInfo = teamResponse.success;
-
-			scoreBeforeDashboardCompanyInvestigate = parseInt(teamInfo.score, 10);
-
-			var message = {
-				'op': 'closePopupVideoAndCompanyInvestigateSuccess',
-				'parameters': {
-					'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
-					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-				}
-	        };
-	        sendMessageSocket(JSON.stringify(message));
-
-			companyInvestigate();
-		});
+		var message = {
+			'op': 'closePopupVideoAndCompanyInvestigateSuccess',
+			'parameters': {
+				'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
 	}
 
 	function companyInvestigatePlayJaneInlineVideo() {
-		playPopupVideoPhoneInline(getCompanyInvestigateJaneVideoSrc(), {
-			eventNamespace: 'companyInvestigateJane',
-			onEnded: companyInvestigateOnJaneVideoEnded
+		// call_id=5 — company investigate; путь берём из calls_description (uk: video_elison_2 и т.п.)
+		getCallVideoSrc(5, function(videoSrc) {
+			if (!videoSrc) {
+				videoSrc = getCompanyInvestigateJaneVideoSrc();
+			} else {
+				companyInvestigateJaneVideoSrc = videoSrc;
+			}
+
+			playPopupVideoPhoneInline(videoSrc, {
+				eventNamespace: 'companyInvestigateJane',
+				onEnded: companyInvestigateOnJaneVideoEnded
+			});
+		});
+	}
+
+	function companyInvestigateBroadcastStageSwitch() {
+		var message = {
+			'op': 'dashboardCompanyInvestigateSwitchStage',
+			'parameters': {
+				'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
+	}
+
+	// БД/очки/файлы — отдельно от UI дашборда, чтобы спиннер не зависел от UpdateHint.
+	function companyInvestigatePersistStage() {
+		if (companyInvestigateStagePersisted) {
+			return;
+		}
+		companyInvestigateStagePersisted = true;
+
+		var formData = new FormData();
+		formData.append('op', 'companyInvestigateUpdateHint');
+		formData.append('lang_abbr', $('html').attr('lang'));
+
+		$.ajax({
+			url: '/ajax/ajax_dashboard.php',
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(json) {
+				if (json.error_verify) {
+					window.location.href = json.error_verify;
+					return;
+				}
+
+				if (!json.success) {
+					companyInvestigateStagePersisted = false;
+					return;
+				}
+
+				$.when(getTeamInfo()).done(function(teamResponse){
+					var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+					if (teamInfo) {
+						incrementScore(parseInt(teamInfo.score, 10) + 100, 'main', teamInfo.score);
+					}
+				});
+
+				incrementProgressMission(5);
+				updateDontOpenFilesQt();
+				updateDontOpenToolsQt();
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				companyInvestigateStagePersisted = false;
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	function companyInvestigateStartStageWithVideo() {
+		companyInvestigateClearSuccessPopup();
+		companyInvestigatePlayJaneInlineVideo();
+
+		// UI сразу: спиннер + geo_coordinates, без ожидания getTeamInfo/UpdateHint
+		if (!companyInvestigateStageSwitched) {
+			companyInvestigateStageSwitched = true;
+			companyInvestigateShowGeoDashboard();
+		}
+
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+			scoreBeforeDashboardCompanyInvestigate = teamInfo ? (parseInt(teamInfo.score, 10) || 0) : 0;
+
+			companyInvestigateBroadcastStageSwitch();
+			companyInvestigatePersistStage();
+		}).fail(function(){
+			companyInvestigatePersistStage();
 		});
 	}
 	// нажали на кнопку отправки данных
@@ -272,64 +378,30 @@
 		$('#popup_video_phone').fadeIn(200);
 	}
 
-	// company investigate ввели верно - просмотрели incoming video либо закрыли попап входящего звонка
+	// company investigate ввели верно — сразу UI этапа, затем persist в БД
 	function companyInvestigate() {
-		var formData = new FormData();
-    	formData.append('op', 'companyInvestigateUpdateHint');
-    	formData.append('lang_abbr', $('html').attr('lang'));
+		companyInvestigateClearSuccessPopup();
 
-    	$.ajax({
-			url: '/ajax/ajax_dashboard.php',
-	        type: "POST",
-	        dataType: "json",
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: formData,
-			success: function(json) {
-				if (json.error_verify) {
-					window.location.href = json.error_verify;
-				} else {
-					$.when(getTeamInfo()).done(function(teamResponse){
-						var teamInfo = teamResponse.success;
+		if (!companyInvestigateStageSwitched) {
+			companyInvestigateStageSwitched = true;
+			companyInvestigateShowGeoDashboard();
+		}
 
-						// добавляем очки
-						incrementScore(parseInt(teamInfo.score, 10) + 100, 'main', teamInfo.score);
-					});
-
-					// обновляем mission progress
-					incrementProgressMission(5);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('geo_coordinates', false);
-
-					// Обновить к-во непрочитанных файлов
-					updateDontOpenFilesQt();
-
-					// Обновить к-во неоткрытых tools
-					updateDontOpenToolsQt();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {	
-				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
+		companyInvestigatePersistStage();
 	}
 	// если запуск из сокета дубляж (не увеличиваем значения в бд)
 	function companyInvestigateFromSocket() {
-		// добавляем очки
+		companyInvestigateClearSuccessPopup();
+
+		if (companyInvestigateStageSwitched) {
+			return;
+		}
+		companyInvestigateStageSwitched = true;
+		companyInvestigateShowGeoDashboard();
+
 		incrementScoreWithoutSaveDb(scoreBeforeDashboardCompanyInvestigate + 100, 'main', scoreBeforeDashboardCompanyInvestigate);
-
-		// обновляем mission progress
 		incrementProgressMissionWithoutSaveDb(5);
-
-		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('geo_coordinates', false);
-
-		// Обновить к-во непрочитанных файлов
 		updateDontOpenFilesQt();
-
-		// Обновить к-во неоткрытых tools
 		updateDontOpenToolsQt();
 	}
 
@@ -449,7 +521,9 @@ $(function() {
 
 	// company investigate ввели верно - принять входящий звонок
 	$('body').on('click', '.popup_video_phone_incoming_company_investigate .popup_video_phone_btn_answer_wrapper', function(e){
-		// socket
+		companyInvestigateClearSuccessPopup();
+
+		// socket — видео у остальных участников команды
 		var message = {
 			'op': 'dashboardCompanyInvestigateCallAnswer',
 			'parameters': {
@@ -478,8 +552,8 @@ $(function() {
 		clearInterval(incomingCallTimer);
 		incomingCallTimer = false;
 
-		// видео Jane в inline-рамке попапа телефона
-		companyInvestigatePlayJaneInlineVideo();
+		// сразу этап geo_coordinates + спиннер, параллельно стартует видео
+		companyInvestigateStartStageWithVideo();
 
 		// сохранить время просмотра видео в списке звонков команды
 		var formData = new FormData();
@@ -544,32 +618,22 @@ $(function() {
 		companyInvestigateCloseIncomingCall();
 	});
 
-	// company investigate - закрыть попап с видео
+	// company investigate - закрыть попап с видео (legacy fullscreen); этап уже переключён на Answer
 	$('body').on('click', '.company_investigate_answer_incoming_video .popup_video_phone_video_bg, .company_investigate_answer_incoming_video .popup_video_close', function(e){
 		stopVideo();
 		closePopupVideo();
-		// stopVideoCall();
-		// closePopupVideoCall();
 
-		// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-		$.when(getTeamInfo()).done(function(teamResponse){
-			var teamInfo = teamResponse.success;
+		var message = {
+			'op': 'stopVideoAndClosePopupVideoAndCompanyInvestigateSuccess',
+			'parameters': {
+				'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
 
-			scoreBeforeDashboardCompanyInvestigate = parseInt(teamInfo.score, 10);
-
-			// socket
-			var message = {
-				'op': 'stopVideoAndClosePopupVideoAndCompanyInvestigateSuccess',
-				'parameters': {
-					'scoreBeforeDashboardCompanyInvestigate': scoreBeforeDashboardCompanyInvestigate,
-					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-				}
-	        };
-	        sendMessageSocket(JSON.stringify(message));
-
-	        // запускаем обновление данных
-			companyInvestigate();
-		});
+		// fallback, если Answer ещё не успел переключить этап
+		companyInvestigate();
 	});
 });

@@ -86,11 +86,8 @@ g.e.m.
 green pace group
 
 
-2 0 0
-2 29 59.999
-
-2 48 14.883
-3 39 54.335
+42 44 44.394
+124 29 50.377
 
 
 GigaConsulting Nigeria 04.11.1997

@@ -5,12 +5,16 @@ var voiceDecoderCurrentId = null;
 var voiceDecoderLastAudioFind = [];
 
 function applyVoiceClipsAfterDynamicContent() {
+	// клипы только на этапе voice_decoder — иначе не трогаем видимость
+	if (!$('body').hasClass('voice_decoder_stage_active')) {
+		return;
+	}
 	if (voiceDecoderLastAudioFind.length && typeof hideFoundVoiceClips === 'function') {
 		hideFoundVoiceClips(voiceDecoderLastAudioFind);
 		return;
 	}
 	if (typeof refreshVoiceDecoderState === 'function') {
-		refreshVoiceDecoderState(true);
+		refreshVoiceDecoderState();
 	}
 }
 
@@ -39,6 +43,7 @@ function applyVoiceDecoderState(voiceCount) {
 
 function hideFoundVoiceClips(audioFind) {
 	var found = audioFind || [];
+	var stageActive = $('body').hasClass('voice_decoder_stage_active');
 	$('.voice_clip_widget').each(function() {
 		var id = parseInt($(this).attr('data-audio-id'), 10);
 		var isFound = false;
@@ -56,8 +61,10 @@ function hideFoundVoiceClips(audioFind) {
 				audioEl.currentTime = 0;
 			}
 			$(this).find('.voice_clip_btn').removeClass('is-playing');
-		} else if ($('body').hasClass('voice_decoder_stage_active')) {
+		} else if (stageActive) {
 			$(this).removeClass('voice_clip_widget_found').css('display', '');
+		} else {
+			$(this).removeClass('voice_clip_widget_found').hide();
 		}
 	});
 }
@@ -75,7 +82,34 @@ function applyVoiceDecoderFullState(json) {
 	}
 }
 
-function refreshVoiceDecoderState(forceShowClips) {
+function setVoiceDecoderStageActive(isActive) {
+	var wasActive = $('body').hasClass('voice_decoder_stage_active');
+	var nextActive = !!isActive;
+
+	if (nextActive) {
+		$('body').addClass('voice_decoder_stage_active');
+		$('.voice_clip_widget').not('.voice_clip_widget_found').css('display', '');
+	} else {
+		$('body').removeClass('voice_decoder_stage_active');
+		stopAllVoiceClipsExcept(null);
+		$('.voice_clip_widget').not('.voice_clip_widget_found').hide();
+	}
+
+	// сбрасываем кеш только при смене этапа, чтобы виджеты files/car_register появились/пропали
+	if (wasActive !== nextActive) {
+		if (typeof filesCache !== 'undefined') {
+			filesCache.content = null;
+			filesCache.titles = null;
+		}
+		if (typeof databasesCache !== 'undefined') {
+			databasesCache.content = null;
+			databasesCache.titles = null;
+			databasesCache.step = null;
+		}
+	}
+}
+
+function refreshVoiceDecoderState() {
 	var formData = new FormData();
 	formData.append('op', 'getVoiceDecoderState');
 
@@ -92,12 +126,9 @@ function refreshVoiceDecoderState(forceShowClips) {
 				if (json.audio_find) {
 					voiceDecoderLastAudioFind = json.audio_find;
 				}
+				var onStage = json.last_dashboard === 'voice_decoder';
+				setVoiceDecoderStageActive(onStage);
 				applyVoiceDecoderFullState(json);
-				if (forceShowClips || json.last_dashboard === 'voice_decoder') {
-					$('body').addClass('voice_decoder_stage_active');
-				} else {
-					$('body').removeClass('voice_decoder_stage_active');
-				}
 			}
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
@@ -110,10 +141,10 @@ function syncVoiceDecoderStageVisibility() {
 	$.when(getTeamInfo()).done(function(teamResponse){
 		var teamInfo = teamResponse.success;
 		if (teamInfo && teamInfo.last_dashboard === 'voice_decoder') {
-			$('body').addClass('voice_decoder_stage_active');
-			refreshVoiceDecoderState(true);
+			setVoiceDecoderStageActive(true);
+			refreshVoiceDecoderState();
 		} else {
-			$('body').removeClass('voice_decoder_stage_active');
+			setVoiceDecoderStageActive(false);
 		}
 	});
 }
@@ -205,7 +236,7 @@ function voiceDecoderDecryptSubmit(lang_abbr) {
 							return;
 						}
 						if (json && json.success) {
-							$('body').removeClass('voice_decoder_stage_active');
+							setVoiceDecoderStageActive(false);
 							uploadTypeTabsDashboardStep('voice_correct', false);
 
 							var message = {
@@ -217,7 +248,7 @@ function voiceDecoderDecryptSubmit(lang_abbr) {
 							};
 							sendMessageSocket(JSON.stringify(message));
 						} else {
-							refreshVoiceDecoderState(true);
+							refreshVoiceDecoderState();
 						}
 					},
 					error: function(xhr, ajaxOptions, thrownError) {
@@ -245,6 +276,10 @@ $(function() {
 	$('body').on('click', '.voice_clip_btn', function(e){
 		e.preventDefault();
 		e.stopPropagation();
+
+		if (!$('body').hasClass('voice_decoder_stage_active')) {
+			return;
+		}
 
 		var $widget = $(this).closest('.voice_clip_widget');
 		var audioId = parseInt($widget.attr('data-audio-id'), 10);
@@ -280,6 +315,10 @@ $(function() {
 	$('body').on('click', '.voice_clip_add_btn', function(e){
 		e.preventDefault();
 		e.stopPropagation();
+
+		if (!$('body').hasClass('voice_decoder_stage_active')) {
+			return;
+		}
 
 		var $btn = $(this);
 		var $widget = $btn.closest('.voice_clip_widget');

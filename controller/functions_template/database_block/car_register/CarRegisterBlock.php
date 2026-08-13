@@ -464,11 +464,17 @@ trait CarRegisterBlock
     {
         $bubbleClass = empty($user_info['car_register_print_text_huilov']) ? ' dashboard_car_register2_inner_bubble' : '';
         $bubbleTeamClass = empty($team_info['car_register_print_text_huilov']) ? ' dashboard_car_register2_inner_bubble_team' : '';
-        $voiceClipId = 3;
-        $voiceClipPos = 'car_register';
-        ob_start();
-        require ROOT . '/view/template/game/voice_clip_widget.php';
-        $voiceClipWidget = ob_get_clean();
+        $voiceClipWidget = '';
+        if ($team_info && $this->isVoiceDecoderStage($team_info)) {
+            $audio_find = $this->parseTeamAudioFind($team_info);
+            if (!in_array(3, $audio_find, true)) {
+                $voiceClipId = 3;
+                $voiceClipPos = 'car_register';
+                ob_start();
+                require ROOT . '/view/template/game/voice_clip_widget.php';
+                $voiceClipWidget = ob_get_clean();
+            }
+        }
 
         $printed = !empty($user_info['car_register_print_text_huilov']);
         $bubbleTexts = [

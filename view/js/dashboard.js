@@ -80,12 +80,20 @@
 				initMettingPlaceCountryAutocomplete();
 			}
 			if (step === 'voice_decoder') {
-				$('body').addClass('voice_decoder_stage_active');
+				if (typeof setVoiceDecoderStageActive === 'function') {
+					setVoiceDecoderStageActive(true);
+				} else {
+					$('body').addClass('voice_decoder_stage_active');
+				}
 				if (typeof refreshVoiceDecoderState === 'function') {
-					refreshVoiceDecoderState(true);
+					refreshVoiceDecoderState();
 				}
 			} else {
-				$('body').removeClass('voice_decoder_stage_active');
+				if (typeof setVoiceDecoderStageActive === 'function') {
+					setVoiceDecoderStageActive(false);
+				} else {
+					$('body').removeClass('voice_decoder_stage_active');
+				}
 			}
 			return;
 		}
@@ -125,12 +133,20 @@
 				}
 
 				if (step === 'voice_decoder') {
-					$('body').addClass('voice_decoder_stage_active');
+					if (typeof setVoiceDecoderStageActive === 'function') {
+						setVoiceDecoderStageActive(true);
+					} else {
+						$('body').addClass('voice_decoder_stage_active');
+					}
 					if (typeof refreshVoiceDecoderState === 'function') {
-						refreshVoiceDecoderState(true);
+						refreshVoiceDecoderState();
 					}
 				} else {
-					$('body').removeClass('voice_decoder_stage_active');
+					if (typeof setVoiceDecoderStageActive === 'function') {
+						setVoiceDecoderStageActive(false);
+					} else {
+						$('body').removeClass('voice_decoder_stage_active');
+					}
 				}
 
 				// Скрываем лоадинг и показываем контент

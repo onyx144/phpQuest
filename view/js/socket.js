@@ -1108,6 +1108,8 @@ $(function() {
 				} else if (op == 'dashboardCompanyInvestigateCloseIncomingCall') { // dashboard - company investigation - закрыть попап входящего звонка
 					companyInvestigateCloseIncomingCall();
 				} else if (op == 'dashboardCompanyInvestigateCallAnswer') { // dashboard - company investigation - ввели верно, принять входящий звонок
+					companyInvestigateClearSuccessPopup();
+
 					// запускаем фоновую музыку, если была
 					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
 						playMusic();
@@ -1130,13 +1132,16 @@ $(function() {
 					}
 
 					companyInvestigatePlayJaneInlineVideo();
+				} else if (op == 'dashboardCompanyInvestigateSwitchStage') { // сразу после Answer — смена этапа для команды
+					scoreBeforeDashboardCompanyInvestigate = parameters.scoreBeforeDashboardCompanyInvestigate;
+					companyInvestigateFromSocket();
 				} else if (op == 'closePopupVideoAndCompanyInvestigateSuccess') { // dashboard - company investigation. Видео доиграло до конца
 					// closePopupVideo();
 					closePopupVideoCall();
 
 					scoreBeforeDashboardCompanyInvestigate = parameters.scoreBeforeDashboardCompanyInvestigate;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback на старый сценарий
 					companyInvestigateFromSocket();
 				} else if (op == 'stopVideoAndClosePopupVideoAndCompanyInvestigateSuccess') { // dashboard - company investigation. Закрыть попап с видео
 					stopVideo();
@@ -1145,12 +1150,15 @@ $(function() {
 					// closePopupVideoCall();
 
 					if (questionEndVideo) {
-						$('#popup_end_video_question').css('display','block').attr('video-url', '/video/' + $('html').attr('lang') + '/video_jane_2.mp4');
+						getCallVideoSrc(5, function(videoSrc) {
+							var url = videoSrc || ('/video/' + $('html').attr('lang') + '/video_jane_2.mp4');
+							$('#popup_end_video_question').css('display','block').attr('video-url', url);
+						});
 					}
 
 					scoreBeforeDashboardCompanyInvestigate = parameters.scoreBeforeDashboardCompanyInvestigate;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback на старый сценарий
 					companyInvestigateFromSocket();
 				} else if (op == 'dashboardCoordinatesLatitude1Keyup') { // ввод символов при вводе dashboard - coordinates
 					if ($('.dashboard_tab_content_item_geo_coordinates_latitude1_input').length) {
@@ -1205,6 +1213,8 @@ $(function() {
 					// открываем попап исходящего звонка
 					geoCoordinatesOpenOutgoingCall();
 				} else if (op == 'dashboardCoordinatesCallAnswer') { // dashboard - coordinates - ввели верно, принять входящий звонок
+					geoCoordinatesClearPollutionPopup();
+
 					// запускаем фоновую музыку, если была
 					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
 						playMusic();
@@ -1226,43 +1236,37 @@ $(function() {
 						incomingCallTimer = false;
 					}
 
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные в блоке с телефоном
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
-
-					// открыть видео и сразу запустить его
-					playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-					openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_3.mp4', '', 'geo_coordinates_answer_incoming_video', 'call');
-					playVideo('call');
+					geoCoordinatesPlayJaneInlineVideo();
+				} else if (op == 'dashboardCoordinatesSwitchStage') { // сразу после Answer — смена этапа для команды
+					scoreBeforeDashboardCoordinates = parameters.scoreBeforeDashboardCoordinates;
+					geoCoordinatesFromSocket();
 				} else if (op == 'closePopupVideoAndCoordinatesSuccess') { // dashboard - coordinates. Видео доиграло до конца
 					closePopupVideo();
+					closePopupVideoCall();
 
 					scoreBeforeDashboardCoordinates = parameters.scoreBeforeDashboardCoordinates;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback + попап
 					geoCoordinatesFromSocket();
+					showGeoCoordinatesCallHackedPopup();
 				} else if (op == 'dashboardCoordinatesCloseIncomingCall') { // dashboard - coordinates - закрыть попап входящего звонка
 					dashboardCoordinatesCloseIncomingCall();
 				} else if (op == 'stopVideoAndClosePopupVideoAndCoordinatesSuccess') { // dashboard - coordinates. Закрыть попап с видео
 					stopVideo();
 					closePopupVideo();
-					// stopVideoCall();
-					// closePopupVideoCall();
 
 					if (questionEndVideo) {
-						$('#popup_end_video_question').css('display','block').attr('video-url', '/video/' + $('html').attr('lang') + '/video_jane_3.mp4');
+						getCallVideoSrc(6, function(videoSrc) {
+							var url = videoSrc || ('/video/' + $('html').attr('lang') + '/video_jane_3.mp4');
+							$('#popup_end_video_question').css('display','block').attr('video-url', url);
+						});
 					}
 
 					scoreBeforeDashboardCoordinates = parameters.scoreBeforeDashboardCoordinates;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback + попап
 					geoCoordinatesFromSocket();
+					showGeoCoordinatesCallHackedPopup();
 				} else if (op == 'voiceDecoderUpdateCount') { // dashboard - voice decoder, +1 и скрыть найденный audio у всей команды
 					if (parameters.audio_find) {
 						voiceDecoderLastAudioFind = parameters.audio_find;
@@ -1281,10 +1285,14 @@ $(function() {
 					if (typeof parameters.voice_count !== 'undefined' && typeof applyVoiceDecoderState === 'function') {
 						applyVoiceDecoderState(parameters.voice_count);
 					} else if (typeof refreshVoiceDecoderState === 'function') {
-						refreshVoiceDecoderState(true);
+						refreshVoiceDecoderState();
 					}
 				} else if (op == 'voiceDecoderDecryptSuccess') { // dashboard - voice decoder, переход на voice_correct
-					$('body').removeClass('voice_decoder_stage_active');
+					if (typeof setVoiceDecoderStageActive === 'function') {
+						setVoiceDecoderStageActive(false);
+					} else {
+						$('body').removeClass('voice_decoder_stage_active');
+					}
 					uploadTypeTabsDashboardStep('voice_correct', false);
 				} else if (op == 'voiceCorrectUpdateOrder') { // dashboard - voice_correct, синхрон порядка аудио
 					if (parameters.order && typeof renderVoiceCorrectOrder === 'function') {

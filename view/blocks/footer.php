@@ -431,6 +431,24 @@
             </div>
         </div>
 
+        <!-- popup call hacked (після 3-го дзвінка / geo coordinates) -->
+        <div id="popup_call_hacked">
+            <div class="popup_call_hacked_bg"></div>
+            <div class="popup_call_hacked_inner_main">
+                <div class="popup_call_hacked_inner">
+                    <button type="button" class="popup_call_hacked_close" aria-label="Close">
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="popup_call_hacked_inner2">
+                        <div class="popup_call_hacked_badge">ALERT</div>
+                        <div class="popup_call_hacked_title">Дзвінок взламано</div>
+                        <div class="popup_call_hacked_text">Дзвінок був скомпрометований, ми відключили його та зашифрували у голосових повідомленнях, відновіть голосове повідомлення щоб отримати подальші інструкції</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- popup minigame alarm -->
         <div id="popup_minigame_alarm">
             <div class="popup_minigame_alarm_bg"></div>
