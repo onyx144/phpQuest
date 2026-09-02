@@ -536,7 +536,7 @@ $(function() {
 
         	$('body').addClass('body_desktop_scale').css('transform', 'scale(' + koef + ')');
 
-        	$('#popup_video, #popup_mobile_calls_messages, #popup_video_phone, #popup_video_phone_outgoing, #popup_search_processing, #popup_search_error, #popup_call_mobile, #popup_data_transfer, #popup_success, #popup_exit, #popup_end_video_question, .fancybox-container, #popup_video_phone_video, #popup_start_mission, #popup_voice_correct_alison').css('height', ($('#main').outerHeight() * parseFloat((1920 / windowWidth).toFixed(2))) + 'px');
+        	$('#popup_video, #popup_mobile_calls_messages, #popup_video_phone, #popup_video_phone_outgoing, #popup_search_processing, #popup_search_error, #popup_call_mobile, #popup_data_transfer, #popup_success, #popup_exit, #popup_end_video_question, .fancybox-container, #popup_video_phone_video, #popup_start_mission, #popup_voice_correct_alison, #popup_success_pollution, #popup_call_hacked').css('height', ($('#main').outerHeight() * parseFloat((1920 / windowWidth).toFixed(2))) + 'px');
         }
 	}
 

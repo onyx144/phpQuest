@@ -58,24 +58,24 @@ trait BankTransactionsBlock
      */
     private function getBankTransactionsTitles($translation)
     {
-        return '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-database="false">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                    </div>
-                </div>
-                <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="bank_transactions1">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            ' . $this->getBankTransactionsIcon() . '
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text60'] . '</div>
-                    </div>
-                </div>';
+        return renderCyberBreadcrumbs([
+            [
+                'text' => $translation['text13'],
+                'url' => '#',
+                'data' => [
+                    'tab' => 'tab1',
+                    'step' => 'databases_start_four',
+                    'action-id' => 28,
+                    'database' => 'false',
+                ],
+            ],
+            [
+                'text' => $translation['text60'],
+                'data' => [
+                    'tab' => 'bank_transactions1',
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -83,33 +83,35 @@ trait BankTransactionsBlock
      */
     private function getBankTransactionsSuccessTitles($translation)
     {
-        return '<div class="dashboard_tab_title dashboard_tab_title_can_click" data-tab="tab1" data-step="databases_start_four" data-database="false">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 0H19V3L17.25 5H0V2L1.75 0ZM1.73684 2H3V3.2L2.26316 4H1V2.8L1.73684 2ZM6 2H4.73684L4 2.8V4H5.26316L6 3.2V2ZM7.73684 2H9V3.2L8.26316 4H7V2.8L7.73684 2ZM17 2H10.7368L10 2.8V4H16.2632L17 3.2V2Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 8H19V11L17.25 13H0V10L1.75 8ZM1.73684 10H3V11.2L2.26316 12H1V10.8L1.73684 10ZM6 10H4.73684L4 10.8V12H5.26316L6 11.2V10ZM7.73684 10H9V11.2L8.26316 12H7V10.8L7.73684 10ZM17 10H10.7368L10 10.8V12H16.2632L17 11.2V10Z" fill="#00F0FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.75 16H19V19L17.25 21H0V18L1.75 16ZM1.73684 18H3V19.2L2.26316 20H1V18.8L1.73684 18ZM6 18H4.73684L4 18.8V20H5.26316L6 19.2V18ZM7.73684 18H9V19.2L8.26316 20H7V18.8L7.73684 18ZM17 18H10.7368L10 18.8V20H16.2632L17 19.2V18Z" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 7)" fill="#00F0FF"/><rect width="15" height="1" transform="matrix(1 0 0 -1 2 15)" fill="#00F0FF"/></svg>
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text13'] . '</div>
-                    </div>
-                </div>
-                <div class="dashboard_tab_title" data-tab="bank_transactions1">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            ' . $this->getBankTransactionsIcon() . '
-                        </div>
-                        <div class="dashboard_tab_title_text">' . $translation['text60'] . '</div>
-                    </div>
-                </div>
-                <div class="dashboard_tab_title dashboard_tab_title_active" data-tab="bank_transactions2">
-                    <div class="dashboard_tab_title_active_skew_right"></div>
-                    <div class="dashboard_tab_title_inner">
-                        <div class="dashboard_tab_title_img_wrapper">
-                            ' . $this->getCardIcon() . '
-                        </div>
-                        <div class="dashboard_tab_title_text">Visa *5684</div>
-                    </div>
-                </div>';
+        $items = [];
+
+        $items[] = [
+            'text' => $translation['text13'],
+            'url' => '#',
+            'data' => [
+                'tab' => 'tab1',
+                'step' => 'databases_start_four',
+                'action-id' => 28,
+                'database' => 'false',
+            ],
+        ];
+
+        $items[] = [
+            'text' => $translation['text60'],
+            'url' => '#',
+            'data' => [
+                'tab' => 'bank_transactions1',
+            ],
+        ];
+
+        $items[] = [
+            'text' => 'Visa *5684',
+            'data' => [
+                'tab' => 'bank_transactions2',
+            ],
+        ];
+
+        return renderCyberBreadcrumbs($items);
     }
 
     /**
@@ -155,6 +157,7 @@ trait BankTransactionsBlock
                                 <div class="dashboard_car_register1_input_border_left"></div>
                                 <div class="dashboard_car_register1_input_border_right"></div>
                                 <input type="text" placeholder="' . $translation['text213'] . '" autocomplete="off" class="dashboard_bank_transactions1_date" value="' . $this->formatBankTransactionsDate($team_info['bank_transactions_date']) . '">
+                                <div class="dashboard_bank_transactions1_datepicker_wrap"></div>
                                 <div class="dashboard_bank_transactions1_date_error error_text_database_car_register">' . $translation['text86'] . '</div>
                             </div>
                         </div>
@@ -196,7 +199,7 @@ trait BankTransactionsBlock
         $transactions = [
             ['desc' => 'text220', 'debit' => '95,00', 'credit' => ''],
             ['desc' => 'text221', 'debit' => '', 'credit' => '500,00'],
-            ['desc' => 'text222', 'debit' => '2 402 000,00', 'credit' => ''],
+            ['desc' => 'text222', 'debit' => '2 402,00', 'credit' => ''],
             ['desc' => 'text223', 'debit' => '100 000,00', 'credit' => ''],
             ['desc' => 'text224', 'debit' => '410,00', 'credit' => ''],
             ['desc' => 'text225', 'debit' => '154,70', 'credit' => ''],
@@ -253,6 +256,38 @@ trait BankTransactionsBlock
 
         return '<script>
             $(function() {
+                if (!window.dashboardBankTransactionsDatepickerHidePatched) {
+                    window.dashboardBankTransactionsDatepickerHidePatched = true;
+                    var hideBankTransactionsDatepicker = $.datepicker._hideDatepicker;
+
+                    $.datepicker._hideDatepicker = function(input) {
+                        var inst = this._curInst;
+
+                        if (
+                            inst &&
+                            inst.input &&
+                            inst.input.hasClass("dashboard_bank_transactions1_date") &&
+                            this._datepickerShowing &&
+                            inst.dpDiv.hasClass("dashboard-bank-transactions-datepicker") &&
+                            inst.dpDiv.hasClass("is-visible")
+                        ) {
+                            var self = this;
+                            var $dp = inst.dpDiv;
+
+                            $dp.removeClass("is-visible");
+
+                            setTimeout(function() {
+                                hideBankTransactionsDatepicker.call(self, input);
+                                $dp.removeClass("dashboard-bank-transactions-datepicker");
+                            }, 220);
+
+                            return;
+                        }
+
+                        hideBankTransactionsDatepicker.call(this, input);
+                    };
+                }
+
                 $(".dashboard_bank_transactions1_date").datepicker({
                     dateFormat: "dd.mm.yy",
                     dayNamesShort: ' . json_encode($dayNames) . ',
@@ -283,28 +318,30 @@ trait BankTransactionsBlock
                                         "team_id": $("#section_game").length ? $("#section_game").attr("data-team-id") : 0
                                     }
                                 };
-                                sendMessageSocket(JSON.stringify(message)); 
+                                sendMessageSocket(JSON.stringify(message));
                             }
                         });
                     },
-                    beforeShow: function() {
-                        if (!is_touch_device()) {
-                            var pageSize = getPageSize();
-                            var windowWidth = pageSize[2];
-                            if (windowWidth < 1800) {
-                                $("body").removeClass("body_desktop_scale").css("transform", "scale(1)");
+                    beforeShow: function(input, inst) {
+                        var $wrap = $(input).siblings(".dashboard_bank_transactions1_datepicker_wrap");
 
-                                setTimeout(function() {
-                                    var pageSize = getPageSize();
-                                    var windowWidth = pageSize[0];
-                                    var koef = parseFloat((windowWidth / 1920).toFixed(2)) + 0.01;
-                                    $("body").addClass("body_desktop_scale").css("transform", "scale(" + koef + ")");
-                                    var curDatepickerPosition = parseFloat($(".ui-datepicker").css("left"));
-                                    var differentDatepickerPosition = (1920 - windowWidth) / 2;
-                                    $(".ui-datepicker").css("left", (curDatepickerPosition + differentDatepickerPosition + 7) + "px");
-                                }, 1);
-                            }
-                        }
+                        $wrap.append(inst.dpDiv);
+                        inst.dpDiv.addClass("dashboard-bank-transactions-datepicker");
+
+                        setTimeout(function() {
+                            var $dp = inst.dpDiv;
+
+                            $dp.css({
+                                position: "relative",
+                                top: "auto",
+                                left: "auto",
+                                zIndex: 9999
+                            });
+
+                            $dp.removeClass("is-visible");
+                            void $dp[0].offsetHeight;
+                            $dp.addClass("is-visible");
+                        }, 0);
                     }
                 });
             });

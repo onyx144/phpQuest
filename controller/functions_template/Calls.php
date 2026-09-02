@@ -14,6 +14,88 @@ public function getCallVideoInfo($call_id, $lang_id)
     return $this->db->selectRow($sql, [(int) $call_id, (int) $lang_id]);
 }
 
+/**
+ * Добавить звонок в teams.active_calls (или обновить datetime, если id уже есть).
+ * Не перезаписывает весь список — только дополняет / обновляет запись.
+ * UPDATE через SELECT ... FOR UPDATE, чтобы параллельные запросы не затирали друг друга.
+ */
+public function updateTeamActiveCall($team_id, $call_id, $datetime = null)
+{
+    $team_id = (int) $team_id;
+    $call_id = (int) $call_id;
+
+    if ($team_id <= 0 || $call_id <= 0) {
+        return false;
+    }
+
+    if ($datetime === null || $datetime === '') {
+        $datetime = date('Y-m-d H:i:s');
+    }
+
+    $this->db->query('START TRANSACTION');
+
+    $row = $this->db->selectRow(
+        'SELECT `active_calls` FROM `teams` WHERE `id` = {?} FOR UPDATE',
+        [$team_id]
+    );
+
+    if (!$row) {
+        $this->db->query('ROLLBACK');
+        return false;
+    }
+
+    $active_calls = [];
+    if (!empty($row['active_calls'])) {
+        $decoded = json_decode($row['active_calls'], true);
+        if (is_array($decoded)) {
+            $active_calls = $decoded;
+        }
+    }
+
+    $isset_call = false;
+    $new_calls = [];
+
+    foreach ($active_calls as $call) {
+        if (!is_array($call) || !isset($call['id'])) {
+            continue;
+        }
+
+        $existing_id = (int) $call['id'];
+        if ($existing_id === $call_id) {
+            $new_calls[] = [
+                'id' => $call_id,
+                'datetime' => $datetime,
+            ];
+            $isset_call = true;
+        } else {
+            $new_calls[] = [
+                'id' => $existing_id,
+                'datetime' => isset($call['datetime']) ? $call['datetime'] : '',
+            ];
+        }
+    }
+
+    if (!$isset_call) {
+        $new_calls[] = [
+            'id' => $call_id,
+            'datetime' => $datetime,
+        ];
+    }
+
+    $ok = $this->db->query(
+        'UPDATE `teams` SET `active_calls` = {?} WHERE `id` = {?}',
+        [json_encode($new_calls, JSON_UNESCAPED_UNICODE), $team_id]
+    );
+
+    if ($ok) {
+        $this->db->query('COMMIT');
+        return true;
+    }
+
+    $this->db->query('ROLLBACK');
+    return false;
+}
+
 public function uploadTypeTabsCallsStep($step, $lang_id, $team_id)
 {
     switch ($step) {
@@ -85,7 +167,13 @@ $return['titles'] = '
 $return['content'] = '<div class="space-y-3">';
 
 if ($team_info) {
-    $active_calls = json_decode($team_info['active_calls'], true);
+    $active_calls = [];
+    if (!empty($team_info['active_calls'])) {
+        $decoded = json_decode($team_info['active_calls'], true);
+        if (is_array($decoded)) {
+            $active_calls = $decoded;
+        }
+    }
 
     foreach ($active_calls as $call) {
         $call_info = $this->getCallVideoInfo($call['id'], $lang_id);

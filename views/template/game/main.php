@@ -36,5 +36,5 @@
 </div>
 <?php
 require_once(ROOT . '/view/template/bg_footer.php');
-require_once(ROOT . '/view/template/game/chat.php');
+require_once(ROOT . '/views/template/game/chat.php');
 require_once(ROOT . '/view/blocks/footer.php');

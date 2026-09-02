@@ -189,6 +189,62 @@ if (isset($_POST['op'])) {
 		]
 	];
 
+	// Активные языки + en/no (legacy). Текст бота: свой перевод или fallback на en.
+	$chat_lang_ids = [];
+	$active_langs = $db->select('SELECT `id` FROM `langs` WHERE `status` = {?}', [1]);
+	if ($active_langs) {
+		foreach ($active_langs as $active_lang) {
+			$chat_lang_ids[] = (int) $active_lang['id'];
+		}
+	}
+	foreach ([3, 4] as $legacy_lang_id) {
+		if (!in_array($legacy_lang_id, $chat_lang_ids, true)) {
+			$chat_lang_ids[] = $legacy_lang_id;
+		}
+	}
+
+	$resolveChatDefaultText = function ($message_id, $lang_id) use ($default_messages, $db) {
+		$from_db = $db->selectCell("
+			SELECT `cd`.`message`
+			FROM `chat_messages_description` `cd`
+			INNER JOIN `chat_messages` `c` ON `c`.`id` = `cd`.`chat_message_id`
+			WHERE `c`.`message_default_id` = {?} AND `cd`.`lang_id` = {?}
+			ORDER BY `cd`.`id` DESC
+			LIMIT 1
+		", [(int) $message_id, (int) $lang_id]);
+		if ($from_db !== false && $from_db !== null && $from_db !== '') {
+			return $from_db;
+		}
+
+		if (!isset($default_messages[$message_id])) {
+			return '';
+		}
+		if (isset($default_messages[$message_id][$lang_id])) {
+			return $default_messages[$message_id][$lang_id];
+		}
+		if (isset($default_messages[$message_id][3])) {
+			return $default_messages[$message_id][3];
+		}
+		$first = reset($default_messages[$message_id]);
+		return $first !== false ? $first : '';
+	};
+
+	$insertChatMessageDescriptions = function ($chat_message_id, $text_by_lang_or_resolver) use ($db, $chat_lang_ids) {
+		$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
+		foreach ($chat_lang_ids as $lang_id) {
+			if (is_callable($text_by_lang_or_resolver)) {
+				$text = $text_by_lang_or_resolver($lang_id);
+			} elseif (is_array($text_by_lang_or_resolver)) {
+				$text = isset($text_by_lang_or_resolver[$lang_id])
+					? $text_by_lang_or_resolver[$lang_id]
+					: (isset($text_by_lang_or_resolver[3]) ? $text_by_lang_or_resolver[3] : reset($text_by_lang_or_resolver));
+			} else {
+				$text = (string) $text_by_lang_or_resolver;
+			}
+			$db->query($sql, [$chat_message_id, $lang_id, $text]);
+		}
+	};
+
 	switch ($_POST['op']) {
 		// загрузить актуальное состояние чата
 		case 'updateChatMessages':
@@ -242,11 +298,9 @@ if (isset($_POST['op'])) {
 				$sql = "INSERT INTO `chat_messages` SET `team_id` = {?}, `side` = {?}, `datetime` = NOW(), `message_default_id` = {?}";
 				$chat_message_id = $db->query($sql, [$userInfo['team_id'], $side, $message_id]);
 				if ($chat_message_id) {
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 3, $default_messages[$message_id][3]]);
-
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 4, $default_messages[$message_id][4]]);
+					$insertChatMessageDescriptions($chat_message_id, function ($lang_id) use ($resolveChatDefaultText, $message_id) {
+						return $resolveChatDefaultText($message_id, $lang_id);
+					});
 				}
 			} else {
 				$return['error'] = 'ok';
@@ -272,11 +326,7 @@ if (isset($_POST['op'])) {
 				$sql = "INSERT INTO `chat_messages` SET `team_id` = {?}, `side` = {?}, `datetime` = NOW(), `message_default_id` = {?}";
 				$chat_message_id = $db->query($sql, [$userInfo['team_id'], 'team', 0]);
 				if ($chat_message_id) {
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 3, $message_text]);
-
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 4, $message_text]);
+					$insertChatMessageDescriptions($chat_message_id, $message_text);
 				}
 			}
 
@@ -290,8 +340,8 @@ if (isset($_POST['op'])) {
 					$message_text = mb_strtolower($message_text, 'UTF-8');
 					$message_text = str_replace(' ', '', $message_text);
 
-					// if (mb_strtolower($message_text, 'UTF-8') == 'axel rod' || mb_strtolower($message_text, 'UTF-8') == 'axelrod') {
-					if ($message_text == 'axelrod') {
+					// После lower + без пробелов: "Роберт Енгель" → "робертенгель"
+					if ($message_text == 'енгель' || $message_text == 'робертенгель') {
 						$return['success_text'] = 'true';
 					}
 				} elseif ($bot_last_message_default_id == 20 || $bot_last_message_default_id == 27) { // будем ли асистировать боту во взломе камеры
@@ -300,8 +350,8 @@ if (isset($_POST['op'])) {
 
 					// $no_array = ['nei', 'no', 'maybe', 'kanskje', 'vet ikke', 'don’t know', 'don\'t know', 'do not know', 'dont know', 'tja'];
 					// $yes_array = ['yes', 'ja', 'oh yes', 'hell yeah', 'så klart', 'sa klart', 'absolutt', 'ja da', 'ja vel', 'javel', 'sure', 'of course', 'absolutely', 'yeah', 'jepp', 'yep', 'yup'];
-					$no_array = ['nei', 'no', 'maybe', 'kanskje', 'vetikke', 'don’tknow', 'don\'t know', 'donotknow', 'dontknow', 'tja', 'hellno'];
-					$yes_array = ['yes', 'ja', 'ohyes', 'hellyeah', 'såklart', 'saklart', 'absolutt', 'jada', 'javel', 'sure', 'ofcourse', 'absolutely', 'yeah', 'jepp', 'yep', 'yup', 'hellyes'];
+					$no_array = ['nei', 'no', 'maybe', 'kanskje', 'vetikke', 'don’tknow', 'don\'t know', 'donotknow', 'dontknow', 'tja', 'hellno' , 'ні'];
+					$yes_array = ['yes', 'так', 'таке', 'такі', 'таке', 'ja', 'ohyes', 'hellyeah', 'såklart', 'saklart', 'absolutt', 'jada', 'javel', 'sure', 'ofcourse', 'absolutely', 'yeah', 'jepp', 'yep', 'yup', 'hellyes'];
 
 					if (in_array($message_text, $no_array)) {
 						$return['success_text'] = 'false_no';
@@ -345,40 +395,49 @@ if (isset($_POST['op'])) {
 				if ($message_btn_text == 'back') {
 					$text_en = 'BACK';
 					$text_no = 'TILBAKE';
+					$text_ua = 'НАЗАД';
 				} elseif ($message_btn_text == 'wait_him') {
 					$text_en = 'Wait for him to come out';
 					$text_no = 'Vente til han kommer ut';
+					$text_ua = 'Зачекати, поки він вийде';
 				} elseif ($message_btn_text == 'connect_mobile') {
 					$text_en = 'Connect to his mobile phone';
 					$text_no = 'Koble til hans mobiltelefon';
+					$text_ua = 'Підключитися до його мобільного телефону';
 				} elseif ($message_btn_text == 'hack_camera') {
 					$text_en = 'Hack the cameras on place';
 					$text_no = 'Hacke kameraene på stedet';
+					$text_ua = 'Зламати камери на місці';
 				} elseif ($message_btn_text == 'hack_camera_ready_now') {
 					$text_en = 'We are ready now';
 					$text_no = 'Vi er klare nå';
+					$text_ua = 'Ми готові зараз';
 				} elseif ($message_btn_text == 'hack_camera_done') {
 					$text_en = 'DONE';
 					$text_no = 'FERDIG';
+					$text_ua = 'ГОТОВО';
 				} elseif ($message_btn_text == 'great_job') {
 					$text_en = 'WE HAVE FOUND A TRACE';
 					$text_no = 'VI HAR FUNNET ET SPOR';
+					$text_ua = 'МИ ЗНАЙШЛИ СЛІД';
 				} elseif ($message_btn_text == 'great_job2') {
 					$text_en = 'DONE, WE IDENTIFIED THE MEETING PLACE';
 					$text_no = 'FERDIG, VI IDENTIFISERTE MØTESTEDET';
+					$text_ua = 'ГОТОВО, МИ ВИЗНАЧИЛИ МІСЦЕ ЗУСТРІЧІ';
 				} elseif ($message_btn_text == 'no_trace') {
 					$text_en = 'WE FIND NO TRACE';
 					$text_no = 'VI FINNER IKKE NOEN SPOR';
+					$text_ua = 'МИ НЕ ЗНАЙШЛИ ЖОДНОГО СЛІДУ';
 				}
 
 				$sql = "INSERT INTO `chat_messages` SET `team_id` = {?}, `side` = {?}, `datetime` = NOW(), `message_default_id` = {?}";
 				$chat_message_id = $db->query($sql, [$userInfo['team_id'], 'team', 0]);
 				if ($chat_message_id) {
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 3, $text_en]);
-
-					$sql = "INSERT INTO `chat_messages_description` SET `chat_message_id` = {?}, `lang_id` = {?}, `message` = {?}";
-					$db->query($sql, [$chat_message_id, 4, $text_no]);
+					$insertChatMessageDescriptions($chat_message_id, [
+						3 => $text_en,
+						4 => $text_no,
+						2 => $text_ua,
+					]);
 				}
 			}
 

@@ -387,6 +387,7 @@ private function uploadDashboardVoiceCorrect($lang_id, $team_id)
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 3.5L6 9L11.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="dashboard_voice_correct_center">
+                <div class="dashboard_voice_correct_num">' . ($index + 1) . '</div>
                 <button type="button" class="dashboard_voice_correct_play" aria-label="Play">
                     <span class="dashboard_voice_correct_play_icon">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5V14.5L14.5 9L6 3.5Z" fill="currentColor"/></svg>

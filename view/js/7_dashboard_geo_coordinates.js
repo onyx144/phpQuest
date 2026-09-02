@@ -39,7 +39,25 @@
 			return;
 		}
 		geoCoordinatesHackedPopupShown = true;
-		$('#popup_call_hacked').stop(true, true).css('display', 'block').hide().fadeIn(200);
+
+		$('#popup_call_hacked').stop(true, true).css('display', 'block');
+
+		if (!is_touch_device()) {
+			var pageSize = getPageSize();
+			var windowWidth = pageSize[2];
+			var windowHeight = pageSize[1];
+			if (windowWidth < 1800) {
+				$('body').removeClass('body_desktop_scale').css('transform', 'scale(1)');
+
+				pageSize = getPageSize();
+				var koef = parseFloat((windowWidth / 1920).toFixed(2)) + 0.01;
+
+				$('body').addClass('body_desktop_scale').css('transform', 'scale(' + koef + ')');
+				$('#popup_call_hacked').css('height', windowHeight + 'px');
+			}
+		}
+
+		$('#popup_call_hacked').hide().fadeIn(200);
 	}
 
 	function hideGeoCoordinatesCallHackedPopup() {

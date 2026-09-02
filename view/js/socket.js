@@ -1358,6 +1358,8 @@ $(function() {
 					// открываем попап входящего звонка
 					africanPartnerOpenOutgoingCall();
 				} else if (op == 'dashboardAfricanPartnerCallAnswer') { // dashboard - african partner - ввели верно, принять входящий звонок
+					africanPartnerClearSuccessPopup();
+
 					// запускаем фоновую музыку, если была
 					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
 						playMusic();
@@ -1379,29 +1381,20 @@ $(function() {
 						incomingCallTimer = false;
 					}
 
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные в блоке с телефоном
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
-
-					// открыть видео и сразу запустить его
-					playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-					openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_4.mp4', '', 'african_partner_answer_incoming_video', 'call');
-					playVideo('call');
-					// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_4.mp4', '', 'african_partner_answer_incoming_video', 'call_jane');
-					// playVideoCall();
-				} else if (op == 'closePopupVideoAndAfricanPartnerSuccess') { // dashboard - african partner. Видео доиграло до конца
-					// closePopupVideo();
+					africanPartnerPlayJaneInlineVideo();
+				} else if (op == 'dashboardAfricanPartnerSwitchStage') { // сразу после Answer — смена этапа для команды
+					scoreBeforeDashboardAfricanPartner = parameters.scoreBeforeDashboardAfricanPartner;
+					africanPartnerFromSocket();
+				} else if (op == 'closePopupVideoAndAfricanPartnerSuccess') { // dashboard - african partner. Видео доиграло / закрыли
+					if (typeof stopPopupVideoPhoneInline === 'function') {
+						stopPopupVideoPhoneInline('africanPartnerJane');
+					}
+					$('#popup_video_phone').stop(true, true).fadeOut(200);
 					closePopupVideoCall();
 
 					scoreBeforeDashboardAfricanPartner = parameters.scoreBeforeDashboardAfricanPartner;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback UI (чат пишет только инициатор)
 					africanPartnerFromSocket();
 				} else if (op == 'updateChatMessages') { // обновить сообщения в чатботе
 					updateChatMessages(false);
@@ -1410,16 +1403,23 @@ $(function() {
 				} else if (op == 'stopVideoAndClosePopupVideoAndAfricanPartnerSuccess') { // dashboard - african partner. Закрыть попап с видео
 					stopVideo();
 					closePopupVideo();
+					if (typeof stopPopupVideoPhoneInline === 'function') {
+						stopPopupVideoPhoneInline('africanPartnerJane');
+					}
+					$('#popup_video_phone').stop(true, true).fadeOut(200);
 					// stopVideoCall();
 					// closePopupVideoCall();
 
 					if (questionEndVideo) {
-						$('#popup_end_video_question').css('display','block').attr('video-url', '/video/' + $('html').attr('lang') + '/video_jane_4.mp4');
+						getCallVideoSrc(7, function(videoSrc) {
+							var url = videoSrc || ('/video/' + $('html').attr('lang') + '/video_jane_4.mp4');
+							$('#popup_end_video_question').css('display','block').attr('video-url', url);
+						});
 					}
 
 					scoreBeforeDashboardAfricanPartner = parameters.scoreBeforeDashboardAfricanPartner;
 
-					// событие уже сработало
+					// этап уже переключён на Answer; fallback
 					africanPartnerFromSocket();
 				} else if (op == 'databasesBankTransactionsKeyupDigits') { // ввод символов при вводе databases - Bank Transactions - digits
 					if ($('.dashboard_bank_transactions1_digits').length) {
@@ -1527,12 +1527,14 @@ $(function() {
 					// открываем попап входящего звонка
 					mettingPlaceOpenOutgoingCall();
 				} else if (op == 'dashboardMettingPlaceCallAnswer') { // dashboard - metting place - ввели верно, принять входящий звонок
-					// запускаем фоновую музыку, если была
+					if (typeof mettingPlaceClearSuccessPopup === 'function') {
+						mettingPlaceClearSuccessPopup();
+					}
+
 					if ($('.music_on').length && $('.music_on').hasClass('music_active')) {
 						playMusic();
 					}
 
-					// останавливаем звук звонка
 					if (incomingMusicTimer) {
 						clearInterval(incomingMusicTimer);
 						incomingMusicTimer = false;
@@ -1542,51 +1544,46 @@ $(function() {
 						}
 					}
 
-					// останавливаем обновление времени
 					if (incomingCallTimer) {
 						clearInterval(incomingCallTimer);
 						incomingCallTimer = false;
 					}
 
-					// скрываем блок с телефоном
-					$('#popup_video_phone').fadeOut(200);
-
-					// очищаем данные в блоке с телефоном
-					setTimeout(function(){
-						$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-						$('#popup_video_phone .popup_video_phone_name').html('');
-						$('#popup_video_phone').attr('class','');
-					}, 210);
-
-					// открыть видео и сразу запустить его
-					playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-					// openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_5.mp4', '', 'metting_place_answer_incoming_video', 'call');
-					// playVideo('call');
-					openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_5.mp4', '', 'metting_place_answer_incoming_video', 'call_jane');
-					playVideoCall();
-				} else if (op == 'closePopupVideoAndMettingPlaceSuccess') { // dashboard - metting place. Видео доиграло до конца
-					// closePopupVideo();
+					if (typeof mettingPlacePlayJaneInlineVideo === 'function') {
+						mettingPlacePlayJaneInlineVideo();
+					}
+				} else if (op == 'dashboardMettingPlaceSwitchStage') { // сразу после Answer — смена этапа для команды
+					scoreBeforeDashboardMettingPlace = parameters.scoreBeforeDashboardMettingPlace;
+					mettingPlaceFromSocket();
+				} else if (op == 'closePopupVideoAndMettingPlaceSuccess') { // dashboard - metting place. Видео доиграло / закрыли
+					if (typeof stopPopupVideoPhoneInline === 'function') {
+						stopPopupVideoPhoneInline('mettingPlaceJane');
+					}
+					$('#popup_video_phone').stop(true, true).fadeOut(200);
 					closePopupVideoCall();
 
 					scoreBeforeDashboardMettingPlace = parameters.scoreBeforeDashboardMettingPlace;
 
-					// событие уже сработало
 					mettingPlaceFromSocket();
 				} else if (op == 'dashboardMettingPlaceCloseIncomingCall') { // dashboard - metting place - закрыть попап входящего звонка
 					mettingPlaceCloseIncomingCall();
 				} else if (op == 'stopVideoAndClosePopupVideoAndMettingPlaceSuccess') { // dashboard - metting place. Закрыть попап с видео
-					// stopVideo();
-					// closePopupVideo();
 					stopVideoCall();
 					closePopupVideoCall();
+					if (typeof stopPopupVideoPhoneInline === 'function') {
+						stopPopupVideoPhoneInline('mettingPlaceJane');
+					}
+					$('#popup_video_phone').stop(true, true).fadeOut(200);
 
 					if (questionEndVideo) {
-						$('#popup_end_video_question').css('display','block').attr('video-url', '/video/' + $('html').attr('lang') + '/video_jane_5.mp4');
+						getCallVideoSrc(8, function(videoSrc) {
+							var url = videoSrc || ('/video/' + $('html').attr('lang') + '/video_jane_5.mp4');
+							$('#popup_end_video_question').css('display','block').attr('video-url', url);
+						});
 					}
 
 					scoreBeforeDashboardMettingPlace = parameters.scoreBeforeDashboardMettingPlace;
 
-					// событие уже сработало
 					mettingPlaceFromSocket();
 				} else if (op == 'toolsScanChangeValueDegree') { // tools scan, градус "спидометра"
 					// стрелка

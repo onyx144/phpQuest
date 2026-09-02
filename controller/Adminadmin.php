@@ -953,6 +953,8 @@ class Adminadmin
         $selected_lang = null;
         $words = [];
         $words_with_english = [];
+        $chat_messages_with_english = [];
+        $is_chat_messages_page = false;
         /** Админка: один «срез» словаря по page (несколько строк с одним field и разным page — отдельные записи) */
         $dict_page_scope = isset($_GET['dict_page_scope']) ? trim((string) $_GET['dict_page_scope']) : 'game';
         if ($dict_page_scope === '') {
@@ -998,7 +1000,13 @@ class Adminadmin
                 if (!in_array('game', $available_dict_pages, true)) {
                     array_unshift($available_dict_pages, 'game');
                 }
+                if (!in_array('chat_messages', $available_dict_pages, true)) {
+                    $available_dict_pages[] = 'chat_messages';
+                }
 
+                $is_chat_messages_page = ($dict_page_scope === 'chat_messages');
+
+                if (!$is_chat_messages_page) {
                 $dict_limit = max(50, (int) ($this->settings['limit'] ?? 20));
 
                 $this->pagination = new Pagination();
@@ -1152,6 +1160,78 @@ class Adminadmin
                             'missing_in_selected' => false,
                         ];
                     }
+                }
+                }
+
+                if ($is_chat_messages_page) {
+                $chat_ids_rows = $this->db->select("SELECT DISTINCT `message_default_id` FROM `chat_messages` WHERE `message_default_id` > 0 ORDER BY `message_default_id` ASC");
+                $chat_ids = [];
+                if ($chat_ids_rows) {
+                    foreach ($chat_ids_rows as $chat_id_row) {
+                        $chat_ids[] = (int) $chat_id_row['message_default_id'];
+                    }
+                }
+
+                $chat_val_by_id = [];
+                $chat_en_by_id = [];
+                if (!empty($chat_ids)) {
+                    $chat_sel_rows = $this->db->select("
+                        SELECT `t`.`message_default_id`, `d`.`message`
+                        FROM (
+                            SELECT `c`.`message_default_id`, MAX(`d`.`id`) AS `max_id`
+                            FROM `chat_messages` `c`
+                            INNER JOIN `chat_messages_description` `d` ON `d`.`chat_message_id` = `c`.`id` AND `d`.`lang_id` = {?}
+                            WHERE `c`.`message_default_id` > 0
+                            GROUP BY `c`.`message_default_id`
+                        ) `t`
+                        INNER JOIN `chat_messages_description` `d` ON `d`.`id` = `t`.`max_id`
+                    ", [$selected_lang_id]);
+                    if ($chat_sel_rows) {
+                        foreach ($chat_sel_rows as $chat_sel_row) {
+                            $chat_val_by_id[(int) $chat_sel_row['message_default_id']] = (string) $chat_sel_row['message'];
+                        }
+                    }
+
+                    if ($english_lang_id && (int) $english_lang_id !== (int) $selected_lang_id) {
+                        $chat_en_rows = $this->db->select("
+                            SELECT `t`.`message_default_id`, `d`.`message`
+                            FROM (
+                                SELECT `c`.`message_default_id`, MAX(`d`.`id`) AS `max_id`
+                                FROM `chat_messages` `c`
+                                INNER JOIN `chat_messages_description` `d` ON `d`.`chat_message_id` = `c`.`id` AND `d`.`lang_id` = {?}
+                                WHERE `c`.`message_default_id` > 0
+                                GROUP BY `c`.`message_default_id`
+                            ) `t`
+                            INNER JOIN `chat_messages_description` `d` ON `d`.`id` = `t`.`max_id`
+                        ", [$english_lang_id]);
+                        if ($chat_en_rows) {
+                            foreach ($chat_en_rows as $chat_en_row) {
+                                $chat_en_by_id[(int) $chat_en_row['message_default_id']] = (string) $chat_en_row['message'];
+                            }
+                        }
+                    }
+                }
+
+                foreach ($chat_ids as $chat_default_id) {
+                    $chat_val = isset($chat_val_by_id[$chat_default_id]) ? $chat_val_by_id[$chat_default_id] : '';
+                    if ($english_lang_id && (int) $english_lang_id === (int) $selected_lang_id) {
+                        $chat_english_val = $chat_val;
+                    } else {
+                        $chat_english_val = isset($chat_en_by_id[$chat_default_id]) ? $chat_en_by_id[$chat_default_id] : '';
+                    }
+                    if ($search !== '') {
+                        $haystack = (string) $chat_default_id . ' ' . $chat_val . ' ' . $chat_english_val;
+                        if (mb_stripos($haystack, $search) === false) {
+                            continue;
+                        }
+                    }
+                    $chat_messages_with_english[] = [
+                        'message_default_id' => $chat_default_id,
+                        'val' => $chat_val,
+                        'english_val' => $chat_english_val,
+                        'missing_in_selected' => ($chat_val === '' && $chat_english_val !== ''),
+                    ];
+                }
                 }
             }
         }

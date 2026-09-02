@@ -1288,7 +1288,7 @@ body:not(.body_desktop_scale) .btn_wrapper_red:hover .btn_bg_triangle_right {
 }
 .music_icon {
     float: left;
-    margin: 7px 5px 0 -5px;
+    margin: 0;
     cursor: pointer;
 }
 .music_text {
@@ -2542,7 +2542,7 @@ a.language_hidden_item {
     text-align: center;
     height: 50px;
     line-height: 50px;
-    top: 18px;
+    top: 35px;
     cursor: pointer;
 }
 .chat_send_btn svg {
@@ -4019,7 +4019,8 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     margin: 0;
     overflow: visible;
 }
-.dashboard_african_partner_datepicker_wrap {
+.dashboard_african_partner_datepicker_wrap,
+.dashboard_bank_transactions1_datepicker_wrap {
     position: absolute;
     left: 0;
     bottom: calc(100% + 4px);
@@ -4027,11 +4028,15 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     z-index: 20;
     pointer-events: none;
 }
-.dashboard_african_partner_datepicker_wrap .ui-datepicker {
+.dashboard_african_partner_datepicker_wrap .ui-datepicker,
+.dashboard_bank_transactions1_datepicker_wrap .ui-datepicker {
     pointer-events: auto;
 }
 .dashboard_tab_content_item_african_partner_inner,
-.dashboard_african_partner_fields_bottom {
+.dashboard_african_partner_fields_bottom,
+.dashboard_bank_transactions1_inner,
+.dashboard_tab_content_item_bank_transactions .dashboard_car_register1_fields_bottom,
+.dashboard_bank_transactions1_input_wrapper_date {
     overflow: visible;
 }
 .dashboard_metting_place_fields_bottom {
@@ -4162,7 +4167,8 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     width: 310px;
     padding: 10px .2em 0;
 }
-.ui-datepicker.dashboard-african-partner-datepicker {
+.ui-datepicker.dashboard-african-partner-datepicker,
+.ui-datepicker.dashboard-bank-transactions-datepicker {
     position: relative !important;
     top: auto !important;
     left: auto !important;
@@ -4173,7 +4179,8 @@ body:not(.body_desktop_scale) .dashboard_tab_content_item_start_four_inner_item_
     transform-origin: center bottom;
     transition: transform 0.22s ease, opacity 0.22s ease;
 }
-.ui-datepicker.dashboard-african-partner-datepicker.is-visible {
+.ui-datepicker.dashboard-african-partner-datepicker.is-visible,
+.ui-datepicker.dashboard-bank-transactions-datepicker.is-visible {
     transform: scale(1);
     opacity: 1;
 }
@@ -6312,11 +6319,10 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     right: -10px;
     bottom: -8px;
 }
-.voice_clip_pos_chat {
+.voice_clip_pos_tools {
     position: absolute;
-    left: 50%;
-    top: -78px;
-    transform: translateX(-50%);
+    right: 40px;
+    top: 40px;
 }
 
 /* Voice Correct stage */
@@ -6348,6 +6354,9 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     width: 100%;
     z-index: 9999;
 }
+.dashboard_voice_correct_list.is-animating {
+    pointer-events: none;
+}
 .dashboard_voice_correct_item {
     display: flex;
     flex-direction: row;
@@ -6357,6 +6366,12 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     padding: 14px 10px;
     border: 1px solid rgba(0, 240, 255, 0.45);
     background: rgba(16, 35, 72, 0.55);
+    position: relative;
+}
+.dashboard_voice_correct_item.is-swapping {
+    z-index: 6;
+    pointer-events: none;
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.55);
 }
 .dashboard_voice_correct_center {
     display: flex;
@@ -6364,6 +6379,14 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     align-items: center;
     gap: 8px;
     min-width: 70px;
+}
+.dashboard_voice_correct_num {
+    color: #00f0ff;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.55);
 }
 .dashboard_voice_correct_play {
     width: 48px;
@@ -6592,7 +6615,7 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     float: right;
 }
 .dashboard_bank_transactions2_table_tbody .dashboard_bank_transactions2_table_td {
-    font-size: 18px;
+    font-size: 15px;
     color: white;
     font-style: italic;
 }
@@ -6600,7 +6623,7 @@ body.voice_decoder_stage_active .voice_clip_widget:not(.voice_clip_widget_found)
     background: #011220;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
 }
 .dashboard_bank_transactions2_table_tbody .dashboard_bank_transactions2_table_tr:nth-child(even) .dashboard_bank_transactions2_table_td {
     background: rgba(255, 255, 255, 0.22);
@@ -8293,7 +8316,7 @@ body:not(.body_desktop_scale) .btn_wrapper_blue:hover .btn_bg_center_line {
         right: 93px;
     }
 }*/
-/* popup call hacked — після 3-го дзвінка */
+/* popup call hacked пїЅ пїЅпїЅпїЅпїЅ 3-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 #popup_call_hacked {
     z-index: 20;
 }

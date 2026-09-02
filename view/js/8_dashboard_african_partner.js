@@ -1,6 +1,192 @@
 /* === DASHBOARD - AFRICAN PARTNER === */
 
 /* ОБЩИЕ ФУНКЦИИ */
+	var africanPartnerJaneVideoSrc = '';
+	var africanPartnerStageSwitched = false;
+	var africanPartnerStagePersisted = false;
+	var africanPartnerChatStarted = false;
+	var africanPartnerShouldStartChat = false;
+
+	function getAfricanPartnerJaneVideoSrc() {
+		if (africanPartnerJaneVideoSrc) {
+			return africanPartnerJaneVideoSrc;
+		}
+		return '/video/' + $('html').attr('lang') + '/video_jane_4.mp4';
+	}
+
+	function africanPartnerClearSuccessPopup() {
+		$('#popup_success')
+			.removeClass('popup_success_african_partner')
+			.stop(true, true)
+			.hide();
+	}
+
+	function africanPartnerPrepareDashboardSwitch() {
+		if (typeof dashboardCache !== 'undefined') {
+			dashboardCache.step = null;
+			dashboardCache.titles = null;
+			dashboardCache.content = null;
+		}
+		showDashboardTabsLoading();
+	}
+
+	function africanPartnerShowMettingPlaceDashboard() {
+		africanPartnerPrepareDashboardSwitch();
+		uploadTypeTabsDashboardStep('metting_place', false);
+	}
+
+	function africanPartnerApplySideEffects(isSocket) {
+		updateDontOpenDatabasesQt();
+		updateDontOpenToolsQt();
+
+		$('.dashboard_item[data-dashboard="calls"]').find('.dashboard_item_text_qt').html('1').css('display', 'inline-block');
+
+		if (!isSocket && $('.call_mobile').length > 0) {
+			$('.call_mobile .dashboard_item_text_qt').html('1').css('display', 'inline-block');
+		}
+	}
+
+	// Чат стартует после конца/закрытия видеозвонка (ajax_chatbot), не на Answer
+	function africanPartnerStartChat() {
+		if (!africanPartnerShouldStartChat || africanPartnerChatStarted) {
+			return;
+		}
+		africanPartnerChatStarted = true;
+
+		if (typeof chatPrintFirstMessagesFromBot === 'function') {
+			chatPrintFirstMessagesFromBot();
+		}
+	}
+
+	function africanPartnerBroadcastVideoFinished() {
+		var message = {
+			'op': 'closePopupVideoAndAfricanPartnerSuccess',
+			'parameters': {
+				'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
+	}
+
+	// playPopupVideoPhoneInline уже закрыл попап — здесь только синк + чат
+	function africanPartnerOnJaneVideoEnded() {
+		africanPartnerBroadcastVideoFinished();
+		africanPartnerStartChat();
+	}
+
+	// Ручное закрытие во время inline-видео
+	function africanPartnerCloseJaneVideoEarly() {
+		if (typeof stopPopupVideoPhoneInline === 'function') {
+			stopPopupVideoPhoneInline('africanPartnerJane');
+		}
+
+		$('#popup_video_phone').stop(true, true).fadeOut(200, function() {
+			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
+			$('#popup_video_phone .popup_video_phone_name').html('');
+			$('#popup_video_phone').attr('class', '');
+		});
+
+		africanPartnerBroadcastVideoFinished();
+		africanPartnerStartChat();
+	}
+
+	function africanPartnerPlayJaneInlineVideo() {
+		// call_id=7 — african partner; путь из calls_description (uk: video_elison_4 и т.п.)
+		getCallVideoSrc(7, function(videoSrc) {
+			if (!videoSrc) {
+				videoSrc = getAfricanPartnerJaneVideoSrc();
+			} else {
+				africanPartnerJaneVideoSrc = videoSrc;
+			}
+
+			playPopupVideoPhoneInline(videoSrc, {
+				eventNamespace: 'africanPartnerJane',
+				onEnded: africanPartnerOnJaneVideoEnded
+			});
+		});
+	}
+
+	function africanPartnerBroadcastStageSwitch() {
+		var message = {
+			'op': 'dashboardAfricanPartnerSwitchStage',
+			'parameters': {
+				'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
+	}
+
+	function africanPartnerPersistStage() {
+		if (africanPartnerStagePersisted) {
+			return;
+		}
+		africanPartnerStagePersisted = true;
+
+		var formData = new FormData();
+		formData.append('op', 'africanPartnerUpdateHint');
+		formData.append('lang_abbr', $('html').attr('lang'));
+
+		$.ajax({
+			url: '/ajax/ajax_dashboard.php',
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(json) {
+				if (json.error_verify) {
+					window.location.href = json.error_verify;
+					return;
+				}
+
+				if (!json.success) {
+					africanPartnerStagePersisted = false;
+					return;
+				}
+
+				$.when(getTeamInfo()).done(function(teamResponse){
+					var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+					if (teamInfo) {
+						incrementScore(parseInt(teamInfo.score, 10) + 200, 'main', teamInfo.score);
+					}
+				});
+
+				incrementProgressMission(10);
+				africanPartnerApplySideEffects(false);
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				africanPartnerStagePersisted = false;
+				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	function africanPartnerStartStageWithVideo() {
+		africanPartnerClearSuccessPopup();
+		africanPartnerShouldStartChat = true;
+		africanPartnerPlayJaneInlineVideo();
+
+		if (!africanPartnerStageSwitched) {
+			africanPartnerStageSwitched = true;
+			africanPartnerShowMettingPlaceDashboard();
+		}
+
+		$.when(getTeamInfo()).done(function(teamResponse){
+			var teamInfo = teamResponse && teamResponse.success ? teamResponse.success : null;
+			scoreBeforeDashboardAfricanPartner = teamInfo ? (parseInt(teamInfo.score, 10) || 0) : 0;
+
+			africanPartnerBroadcastStageSwitch();
+			africanPartnerPersistStage();
+		}).fail(function(){
+			africanPartnerPersistStage();
+		});
+	}
+
 	function initAfricanPartnerCountryAutocomplete() {
 		var $root = $('#dashboard-african-partner-country-select');
 		if (!$root.length) {
@@ -105,81 +291,30 @@
 		$('#popup_video_phone').fadeIn(200);
 	}
 
-	// african partner ввели верно - просмотрели incoming video либо закрыли попап с видео
+	// african partner ввели верно — сразу UI этапа, затем persist в БД
 	function africanPartner() {
-		var formData = new FormData();
-    	formData.append('op', 'africanPartnerUpdateHint');
-    	formData.append('lang_abbr', $('html').attr('lang'));
+		africanPartnerClearSuccessPopup();
 
-    	$.ajax({
-			url: '/ajax/ajax_dashboard.php',
-	        type: "POST",
-	        dataType: "json",
-	        cache: false,
-	        contentType: false,
-	        processData: false,
-	        data: formData,
-			success: function(json) {
-				if (json.error_verify) {
-					window.location.href = json.error_verify;
-				} else {
-					$.when(getTeamInfo()).done(function(teamResponse){
-						var teamInfo = teamResponse.success;
+		if (!africanPartnerStageSwitched) {
+			africanPartnerStageSwitched = true;
+			africanPartnerShowMettingPlaceDashboard();
+		}
 
-						// добавляем очки
-						incrementScore(parseInt(teamInfo.score, 10) + 200, 'main', teamInfo.score);
-					});
-
-					// обновляем mission progress
-					incrementProgressMission(10);
-
-					// обновляем содержимое dashboard
-					uploadTypeTabsDashboardStep('metting_place', false);
-
-					// Обновить к-во неоткрытых баз данных
-					updateDontOpenDatabasesQt();
-
-					// Обновить к-во неоткрытых tools
-					updateDontOpenToolsQt();
-
-					// открываем чатбот и пишем первые 2 сообщения
-					chatPrintFirstMessagesFromBot();
-
-					// Добавляем к Calls единичку как индикатор того, что доступна кнопка Call mobile
-					$('.dashboard_item[data-dashboard="calls"]').find('.dashboard_item_text_qt').html('1').css('display', 'inline-block');
-
-					if ($('.call_mobile').length > 0) {
-						$('.call_mobile .dashboard_item_text_qt').html('1').css('display', 'inline-block');
-					}
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {	
-				console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
+		africanPartnerPersistStage();
 	}
 	// если запуск из сокета дубляж (не увеличиваем значения в бд)
 	function africanPartnerFromSocket() {
-		// добавляем очки
+		africanPartnerClearSuccessPopup();
+
+		if (africanPartnerStageSwitched) {
+			return;
+		}
+		africanPartnerStageSwitched = true;
+		africanPartnerShowMettingPlaceDashboard();
+
 		incrementScoreWithoutSaveDb(scoreBeforeDashboardAfricanPartner + 200, 'main', scoreBeforeDashboardAfricanPartner);
-
-		// обновляем mission progress
 		incrementProgressMissionWithoutSaveDb(10);
-
-		// обновляем содержимое dashboard
-		uploadTypeTabsDashboardStep('metting_place', false);
-
-		// Обновить к-во неоткрытых баз данных
-		updateDontOpenDatabasesQt();
-
-		// Обновить к-во неоткрытых tools
-		updateDontOpenToolsQt();
-
-		// открываем чатбот и пишем первые 2 сообщения
-		// chatPrintFirstMessagesFromBot();
-
-		// Добавляем к Calls единичку как индикатор того, что доступна кнопка Call mobile
-		$('.dashboard_item[data-dashboard="calls"]').find('.dashboard_item_text_qt').html('1').css('display', 'inline-block');
+		africanPartnerApplySideEffects(true);
 	}
 
 	// нажали на кнопку отправки данных
@@ -462,7 +597,9 @@ $(function() {
 
 	// african partner ввели верно - принять входящий звонок
 	$('body').on('click', '.popup_video_phone_outgoing_african_partner .popup_video_phone_btn_answer_wrapper', function(e){
-		// socket
+		africanPartnerClearSuccessPopup();
+
+		// socket — видео у остальных участников команды
 		var message = {
 			'op': 'dashboardAfricanPartnerCallAnswer',
 			'parameters': {
@@ -491,30 +628,8 @@ $(function() {
 		clearInterval(incomingCallTimer);
 		incomingCallTimer = false;
 
-		// скрываем блок с телефоном
-		$('#popup_video_phone').fadeOut(200);
-
-		// очищаем данные в блоке с телефоном
-		setTimeout(function(){
-			$('#popup_video_phone .popup_video_phone_wifi_icons').html('');
-			$('#popup_video_phone .popup_video_phone_name').html('');
-			$('#popup_video_phone').attr('class','');
-		}, 210);
-
-		// открыть видео и сразу запустить его
-		playVideoByNotControls = true; // указываем, что запускалось через кнопку Play, а не через Controls
-		openFileVideoPopup(0, 'video/' + $('html').attr('lang') + '/video_jane_4.mp4', '', 'african_partner_answer_incoming_video', 'call');
-		playVideo('call');
-		// openFileVideoPopupCall(0, 'video/' + $('html').attr('lang') + '/video_jane_4.mp4', '', 'african_partner_answer_incoming_video', 'call_jane');
-		// playVideoCall();
-
-		/*// когда видео доиграло до конца, то закрываем и производим нужные действия
-		$('.african_partner_answer_incoming_video video').on('ended', function() {
-			closePopupVideo();
-
-			// запускаем обновление данных
-			africanPartner();
-		});*/
+		// сразу metting_place + спиннер, параллельно стартует видео
+		africanPartnerStartStageWithVideo();
 
 		// сохранить время просмотра видео в списке звонков команды
 		var formData = new FormData();
@@ -563,8 +678,14 @@ $(function() {
 		});
 	});*/
 
-	// african partner - закрыть попап входящего звонка
+	// african partner - закрыть попап входящего звонка / прервать inline-видео
 	$('body').on('click', '.popup_video_phone_outgoing_african_partner .popup_video_phone_bg, .popup_video_phone_outgoing_african_partner .popup_video_phone_btn_decline_wrapper', function(e){
+		// во время inline-видео — закрыть звонок и стартовать чат
+		if ($('#popup_video_phone .popup_video_phone_inline_video').is(':visible')) {
+			africanPartnerCloseJaneVideoEarly();
+			return;
+		}
+
 		// socket
 		var message = {
 			'op': 'dashboardAfricanPartnerCloseIncomingCall',
@@ -578,33 +699,23 @@ $(function() {
         africanPartnerCloseIncomingCall();
 	});
 
-	// african partner - закрыть попап с видео
+	// african partner - закрыть попап с видео (legacy fullscreen)
 	$('body').on('click', '.african_partner_answer_incoming_video .popup_video_phone_video_bg, .african_partner_answer_incoming_video .popup_video_close', function(e){
-		// function
 		stopVideo();
 		closePopupVideo();
-		// stopVideoCall();
-		// closePopupVideoCall();
 
-		// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-		$.when(getTeamInfo()).done(function(teamResponse){
-			var teamInfo = teamResponse.success;
+		var message = {
+			'op': 'stopVideoAndClosePopupVideoAndAfricanPartnerSuccess',
+			'parameters': {
+				'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
+				'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+				'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+			}
+		};
+		sendMessageSocket(JSON.stringify(message));
 
-			scoreBeforeDashboardAfricanPartner = parseInt(teamInfo.score, 10);
-
-			// socket
-			var message = {
-				'op': 'stopVideoAndClosePopupVideoAndAfricanPartnerSuccess',
-				'parameters': {
-					'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
-					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-				}
-	        };
-	        sendMessageSocket(JSON.stringify(message));
-
-	        // запускаем обновление данных
-			africanPartner();
-		});
+		// fallback, если Answer ещё не успел переключить этап
+		africanPartner();
+		africanPartnerStartChat();
 	});
 });

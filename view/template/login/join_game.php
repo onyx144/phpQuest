@@ -295,14 +295,15 @@
 			<div class="cyber-panel mb-16">
 				<div class="p-8">
 					<h3 class="text-2xl font-bold mb-6 text-[#00f3ff]"><?php echo $t('game_trailer'); ?></h3>
-					<div class="aspect-video bg-[#1a1a1a]/20 rounded-lg flex items-center justify-center border-2 border-dashed border-[#333333]">
-						<div class="text-center">
-							<svg class="h-16 w-16 text-[#00f3ff] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg>
-							<p class="text-gray-400"><?php echo $t('video_placeholder'); ?></p>
-						</div>
+					<div class="aspect-video rounded-lg overflow-hidden border-2 border-[#333333]">
+						<iframe
+							class="w-full h-full"
+							src="https://www.youtube.com/embed/bB-OJsMCqYE"
+							title="<?php echo $t('game_trailer'); ?>"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							allowfullscreen
+						></iframe>
 					</div>
 				</div>
 			</div>

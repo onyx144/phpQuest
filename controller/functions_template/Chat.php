@@ -4,13 +4,26 @@ trait Chat
 {
 public function getChatMessages($team_id, $lang_id)
 {
+    $messages = $this->fetchChatMessagesByLang($team_id, $lang_id);
+
+    // Сообщения historically писались только для en(3)/no(4).
+    // Если текущего языка нет (например uk=2) — берём en, чтобы чат не был пустым.
+    if (!$messages && (int) $lang_id !== 3) {
+        $messages = $this->fetchChatMessagesByLang($team_id, 3);
+    }
+
+    return $messages;
+}
+
+private function fetchChatMessagesByLang($team_id, $lang_id)
+{
     $sql = "
         SELECT c.id, c.team_id, c.side, c.datetime, c.message_default_id, cd.lang_id, cd.message
         FROM chat_messages c
         JOIN chat_messages_description cd ON c.id = cd.chat_message_id
         WHERE c.team_id = {?}
         AND cd.lang_id = {?}
-        ORDER BY c.datetime
+        ORDER BY c.datetime, c.id
     ";
     return $this->db->select($sql, [(int) $team_id, (int) $lang_id]);
 }

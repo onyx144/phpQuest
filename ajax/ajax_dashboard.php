@@ -593,7 +593,7 @@ if (isset($_POST['op'])) {
 			if (!empty($company_name) && !empty($country) && !empty($date)) {
 				$company_name = str_replace(' ', '', $company_name);
 				// ответ African / American partner
-				if (mb_strtolower($company_name, 'UTF-8') == 'royalwolf' && $country == 'Egypt' && ($date == '20.09.2001' || $date == '20.9.2001' || $date == '20.09.01' || $date == '20.9.01')) {
+				if (mb_strtolower($company_name, 'UTF-8') == 'royalwolf' && $country == 'Egypt' && ($date == '11.12.2016' || $date == '11.12.2016' || $date == '11.12.16' || $date == '11.12.16')) {
 					$return['success'] = 'ok';
 
 					// переводы для всех языков. Для синхронизации
@@ -696,99 +696,9 @@ if (isset($_POST['op'])) {
 			print_r(json_encode($return));
 		    break;
 
-		// правильно ввели metting place - обновляем список подсказок
+		// правильно ввели metting place - обновляем список подсказок и переключаем этап
 		case 'mettingPlaceUpdateHint':
-			$sql = "SELECT `mission_accept_datetime`, `score` FROM `teams` WHERE `id` = {?} AND `mission_accept_datetime` != {?} AND `mission_accept_datetime` != {?} AND `mission_accept_datetime` != {?} AND `mission_accept_datetime` IS NOT NULL";
-            $row = $db->selectRow($sql, [$userInfo['team_id'], '', '0000-00-00 00:00:00', 'null']);
-            if ($row) {
-                $old = new DateTime($row['mission_accept_datetime']);
-                $now = new DateTime();
-
-                $interval = $old->diff($now);
-
-                $return['second'] = $interval->s;
-                $return['minute'] = $interval->i;
-                $return['hours'] = $interval->h;
-
-                // общее к-во секунд от начала отсчета
-                $second_sum = $interval->days * 24 * 60;
-                $second_sum += $interval->h * 60 * 60;
-                $second_sum += $interval->i * 60;
-                $second_sum += $interval->s;
-
-                $sql = "UPDATE `teams` SET `mission_finish_seconds` = {?}, `mission_finish_datetime` = NOW(), `score` = {?} WHERE `id` = {?}";
-                $db->query($sql, [$second_sum, ((int) $row['score'] + 150), $userInfo['team_id']]);
-                
-                // бонус, если меньше 120 минут. за каждые минус 5 минут бонусные 50 баллов
-				$check_minutes = $interval->i + $interval->h * 60;
-
-            	if ($check_minutes <= 120) {
-	            	$bonus = 0;
-
-	            	if ($check_minutes >= 115 && $check_minutes <= 120) {
-	            		$bonus = 50;
-	            	} elseif ($check_minutes >= 110 && $check_minutes < 115) {
-	            		$bonus = 100;
-	            	} elseif ($check_minutes >= 105 && $check_minutes < 110) {
-	            		$bonus = 150;
-	            	} elseif ($check_minutes >= 100 && $check_minutes < 105) {
-	            		$bonus = 200;
-	            	} elseif ($check_minutes >= 95 && $check_minutes < 100) {
-	            		$bonus = 250;
-	            	} elseif ($check_minutes >= 90 && $check_minutes < 95) {
-	            		$bonus = 300;
-	            	} elseif ($check_minutes >= 85 && $check_minutes < 90) {
-	            		$bonus = 350;
-	            	} elseif ($check_minutes >= 80 && $check_minutes < 85) {
-	            		$bonus = 400;
-	            	} elseif ($check_minutes >= 75 && $check_minutes < 80) {
-	            		$bonus = 450;
-	            	} elseif ($check_minutes >= 70 && $check_minutes < 75) {
-	            		$bonus = 500;
-	            	} elseif ($check_minutes >= 65 && $check_minutes < 70) {
-	            		$bonus = 550;
-	            	} elseif ($check_minutes >= 60 && $check_minutes < 65) {
-	            		$bonus = 600;
-	            	} elseif ($check_minutes >= 55 && $check_minutes < 60) {
-	            		$bonus = 650;
-	            	} elseif ($check_minutes >= 50 && $check_minutes < 55) {
-	            		$bonus = 700;
-	            	} elseif ($check_minutes >= 45 && $check_minutes < 50) {
-	            		$bonus = 750;
-	            	} elseif ($check_minutes >= 40 && $check_minutes < 45) {
-	            		$bonus = 800;
-	            	} elseif ($check_minutes >= 35 && $check_minutes < 40) {
-	            		$bonus = 850;
-	            	} elseif ($check_minutes >= 30 && $check_minutes < 35) {
-	            		$bonus = 900;
-	            	} elseif ($check_minutes >= 25 && $check_minutes < 30) {
-	            		$bonus = 950;
-	            	} elseif ($check_minutes >= 20 && $check_minutes < 25) {
-	            		$bonus = 1000;
-	            	} elseif ($check_minutes >= 15 && $check_minutes < 20) {
-	            		$bonus = 1050;
-	            	} elseif ($check_minutes >= 10 && $check_minutes < 15) {
-	            		$bonus = 1100;
-	            	} elseif ($check_minutes >= 5 && $check_minutes < 10) {
-	            		$bonus = 1150;
-	            	} elseif ($check_minutes < 5) {
-	            		$bonus = 1200;
-	            	}
-
-	            	if ($bonus > 0) {
-	            		$sql = "UPDATE `teams` SET `score` = {?} WHERE `id` = {?}";
-	            		$db->query($sql, [((int) $row['score'] + $bonus + 150), $userInfo['team_id']]);
-	            	}
-	            }
-
-	            // возвращаем также к-во очков
-	            $sql = "SELECT `score` FROM `teams` WHERE `id` = {?}";
-	            $return['score'] = $db->selectCell($sql, [$userInfo['team_id']]);
-            }
-
-			print_r(json_encode($return));
-		    break;
-			/*$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
+			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
 			$translation = $lang->getWordsByPage('game', $lang_id);
@@ -798,10 +708,7 @@ if (isset($_POST['op'])) {
 			} else {
 				$team_info = $function->teamInfo($userInfo['team_id']);
 				if ($team_info) {
-					// список открытых
 					$active_hints = [];
-
-					// список доступных
 					$list_hints = [];
 
 					$hints_by_step = $function->getHintsByStep('3d_plan', $lang_id);
@@ -811,17 +718,12 @@ if (isset($_POST['op'])) {
 						}
 					}
 
-					// сохраняем обновленный список подсказок + запоминаем новый открытый dashboard + теперь всегда доступен новый tools 3d scan
-					$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?}, `tools_3d_bulding_scan_access` = {?} WHERE `id` = {?}";
-					$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'room_name', 1, $userInfo['team_id']]);
+					$sql = "UPDATE `teams` SET `active_hints` = {?}, `list_hints` = {?}, `list_hints_title_lang_var` = {?}, `list_hints_text_lang_var` = {?}, `last_dashboard` = {?}, `tools_3d_bulding_scan_access` = {?}, `chat_send_message_access` = {?} WHERE `id` = {?}";
+					$db->query($sql, [json_encode($active_hints, JSON_UNESCAPED_UNICODE), json_encode($list_hints, JSON_UNESCAPED_UNICODE), 'text44', 'text45', 'room_name', 1, 0, $userInfo['team_id']]);
 
-					// добавляем новый файл к списку доступных
 					$function->updateTeamListFiles($userInfo['team_id'], 8);
-
-					// обновляем актуальный список доступных tools
 					$function->updateTeamListTools($userInfo['team_id'], '3d_building_scan');
 
-					// возвращаем чат к первоначальному состоянию. Ввод данных недоступен
 					$sql = "SELECT `id` FROM `chat_messages` WHERE `team_id` = {?}";
 					$messages = $db->select($sql, [$userInfo['team_id']]);
 					if ($messages) {
@@ -831,16 +733,17 @@ if (isset($_POST['op'])) {
 						}
 					}
 
-				    $sql = "DELETE FROM `chat_messages` WHERE `team_id` = {?}";
+					$sql = "DELETE FROM `chat_messages` WHERE `team_id` = {?}";
 					$db->query($sql, [$userInfo['team_id']]);
 
-					$sql = "UPDATE `teams` SET `chat_send_message_access` = {?} WHERE `id` = {?}";
-					$db->query($sql, [0, $userInfo['team_id']]);
+					$return['success'] = 'ok';
+				} else {
+					$return['error'] = $translation['text29'];
 				}
 			}
 
 			print_r(json_encode($return));
-		    break;*/
+		    break;
 
 		// dashboard - metting place. Проверка правильности ввода данных
 		case 'validateMettingPlaceSearch':
@@ -858,12 +761,13 @@ if (isset($_POST['op'])) {
 				$street_name = mb_strtolower($street_name, 'UTF-8');
 
 				if (
-					in_array($street_name, ['voskresenska', 'voskresenskastreet']) && 
-					$house_number == '22' && 
-					mb_strtolower($city, 'UTF-8') == 'dnipro' &&
+					in_array($street_name, ['каштанова', 'каштановавулица']) && 
+					$house_number == '15' && 
+					mb_strtolower($city, 'UTF-8') == 'дніпро' &&
 					(
 						($lang_abbr == 'en' && $country == 'Ukraine') || 
-						($lang_abbr == 'no' && $country == 'Ukraine')
+						($lang_abbr == 'no' && $country == 'Ukraine') ||
+						($lang_abbr == 'uk' && $country == 'Ukraine')
 					)
 				) {
 					$return['success'] = 'ok';

@@ -649,26 +649,18 @@ $(function() {
 			geoCoordinates();
 			showGeoCoordinatesCallHackedPopup();
 		} else if ($('#popup_video').hasClass('african_partner_answer_incoming_video')) { // dashboard, African partner
-			// фиксируем к-во очков, которое было у команды перед успешным результатом поиска. Для правильного подсчета очков команды
-			$.when(getTeamInfo()).done(function(teamResponse){
-				var teamInfo = teamResponse.success;
+			var message = {
+				'op': 'closePopupVideoAndAfricanPartnerSuccess',
+				'parameters': {
+					'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
+					'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
+					'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
+				}
+	        };
+	        sendMessageSocket(JSON.stringify(message));
 
-				scoreBeforeDashboardAfricanPartner = parseInt(teamInfo.score, 10);
-
-				// socket
-				var message = {
-					'op': 'closePopupVideoAndAfricanPartnerSuccess',
-					'parameters': {
-						'scoreBeforeDashboardAfricanPartner': scoreBeforeDashboardAfricanPartner,
-						'user_id': $('#section_game').length ? $('#section_game').attr('data-user-id') : 0,
-						'team_id': $('#section_game').length ? $('#section_game').attr('data-team-id') : 0
-					}
-		        };
-		        sendMessageSocket(JSON.stringify(message));
-
-		        // запускаем обновление данных
-				africanPartner();
-			});
+	        // fallback, если этап ещё не переключён на Answer
+			africanPartner();
 		} else if ($('#popup_video').hasClass('arrest_video')) {
         	// победная музыка
 			finishAudio = new Audio;

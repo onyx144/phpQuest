@@ -5,17 +5,32 @@ var voiceCorrectFullPlaylist = [];
 var voiceCorrectFullIndex = 0;
 var voiceCorrectSaving = false;
 var voiceCorrectFinishing = false;
+var voiceCorrectAnimating = false;
+var voiceCorrectPendingOrder = null;
+var VOICE_CORRECT_SWAP_MS = 420;
 
 function getVoiceCorrectOrderFromDom() {
 	var order = [];
-	$('.dashboard_voice_correct_item').each(function() {
+	$('.dashboard_voice_correct_list .dashboard_voice_correct_item').each(function() {
 		order.push(parseInt($(this).attr('data-audio-id'), 10));
 	});
 	return order;
 }
 
+function voiceCorrectOrdersEqual(a, b) {
+	if (!a || !b || a.length !== b.length) {
+		return false;
+	}
+	for (var i = 0; i < a.length; i++) {
+		if (parseInt(a[i], 10) !== parseInt(b[i], 10)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 function updateVoiceCorrectArrowStates() {
-	var $items = $('.dashboard_voice_correct_item');
+	var $items = $('.dashboard_voice_correct_list .dashboard_voice_correct_item');
 	var total = $items.length;
 	$items.each(function(index) {
 		var $item = $(this);
@@ -50,7 +65,7 @@ function stopAllVoiceCorrectPlayback() {
 	});
 }
 
-function renderVoiceCorrectOrder(order) {
+function applyVoiceCorrectDomOrder(order) {
 	var $list = $('.dashboard_voice_correct_list');
 	if (!$list.length || !order || !order.length) {
 		return;
@@ -58,17 +73,113 @@ function renderVoiceCorrectOrder(order) {
 
 	var map = {};
 	$list.find('.dashboard_voice_correct_item').each(function() {
-		map[parseInt($(this).attr('data-audio-id'), 10)] = $(this);
+		map[parseInt($(this).attr('data-audio-id'), 10)] = this;
 	});
 
 	for (var i = 0; i < order.length; i++) {
 		var id = parseInt(order[i], 10);
-		if (map[id] && map[id].length) {
+		if (map[id]) {
 			$list.append(map[id]);
 		}
 	}
+}
 
+function animateVoiceCorrectToOrder(order, onDone) {
+	var $list = $('.dashboard_voice_correct_list');
+	if (!$list.length || !order || !order.length) {
+		if (onDone) {
+			onDone();
+		}
+		return;
+	}
+
+	if (voiceCorrectOrdersEqual(getVoiceCorrectOrderFromDom(), order)) {
+		updateVoiceCorrectArrowStates();
+		if (onDone) {
+			onDone();
+		}
+		return;
+	}
+
+	var $items = $list.find('.dashboard_voice_correct_item');
+	var firstRects = {};
+	$items.each(function() {
+		firstRects[parseInt($(this).attr('data-audio-id'), 10)] = this.getBoundingClientRect();
+	});
+
+	$list.addClass('is-animating');
+	applyVoiceCorrectDomOrder(order);
 	updateVoiceCorrectArrowStates();
+
+	var moving = [];
+	$items.each(function() {
+		var el = this;
+		var id = parseInt(el.getAttribute('data-audio-id'), 10);
+		var first = firstRects[id];
+		if (!first) {
+			return;
+		}
+		var last = el.getBoundingClientRect();
+		var dx = first.left - last.left;
+		var dy = first.top - last.top;
+		if (!dx && !dy) {
+			return;
+		}
+		moving.push(el);
+		el.classList.add('is-swapping');
+		el.style.transition = 'none';
+		el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+	});
+
+	if (!moving.length) {
+		$list.removeClass('is-animating');
+		if (onDone) {
+			onDone();
+		}
+		return;
+	}
+
+	requestAnimationFrame(function() {
+		requestAnimationFrame(function() {
+			for (var i = 0; i < moving.length; i++) {
+				moving[i].style.transition = 'transform ' + (VOICE_CORRECT_SWAP_MS / 1000) + 's cubic-bezier(0.22, 1, 0.36, 1)';
+				moving[i].style.transform = '';
+			}
+		});
+	});
+
+	setTimeout(function() {
+		for (var i = 0; i < moving.length; i++) {
+			moving[i].classList.remove('is-swapping');
+			moving[i].style.transition = '';
+			moving[i].style.transform = '';
+		}
+		$list.removeClass('is-animating');
+		if (onDone) {
+			onDone();
+		}
+	}, VOICE_CORRECT_SWAP_MS + 40);
+}
+
+function renderVoiceCorrectOrder(order) {
+	if (!order || !order.length) {
+		return;
+	}
+
+	if (voiceCorrectAnimating) {
+		voiceCorrectPendingOrder = order;
+		return;
+	}
+
+	voiceCorrectAnimating = true;
+	animateVoiceCorrectToOrder(order, function() {
+		voiceCorrectAnimating = false;
+		if (voiceCorrectPendingOrder) {
+			var nextOrder = voiceCorrectPendingOrder;
+			voiceCorrectPendingOrder = null;
+			renderVoiceCorrectOrder(nextOrder);
+		}
+	});
 }
 
 function saveVoiceCorrectOrder(order, sendSocket) {
@@ -91,7 +202,6 @@ function saveVoiceCorrectOrder(order, sendSocket) {
 		data: formData,
 		success: function(json) {
 			if (json && json.success === 'ok') {
-				renderVoiceCorrectOrder(json.order || order);
 				if (sendSocket) {
 					var message = {
 						'op': 'voiceCorrectUpdateOrder',
@@ -115,23 +225,38 @@ function saveVoiceCorrectOrder(order, sendSocket) {
 }
 
 function moveVoiceCorrectItem($item, direction) {
-	if (!$item.length || voiceCorrectSaving) {
+	if (!$item.length || voiceCorrectSaving || voiceCorrectAnimating) {
 		return;
 	}
 
 	var $target = direction === 'left' ? $item.prev('.dashboard_voice_correct_item') : $item.next('.dashboard_voice_correct_item');
+
 	if (!$target.length) {
 		return;
 	}
 
-	if (direction === 'left') {
-		$item.insertBefore($target);
-	} else {
-		$item.insertAfter($target);
+	var order = getVoiceCorrectOrderFromDom();
+	var fromId = parseInt($item.attr('data-audio-id'), 10);
+	var toId = parseInt($target.attr('data-audio-id'), 10);
+	var fromIdx = order.indexOf(fromId);
+	var toIdx = order.indexOf(toId);
+	if (fromIdx < 0 || toIdx < 0) {
+		return;
 	}
 
-	updateVoiceCorrectArrowStates();
-	saveVoiceCorrectOrder(getVoiceCorrectOrderFromDom(), true);
+	order[fromIdx] = toId;
+	order[toIdx] = fromId;
+
+	voiceCorrectAnimating = true;
+	animateVoiceCorrectToOrder(order, function() {
+		voiceCorrectAnimating = false;
+		saveVoiceCorrectOrder(order, true);
+		if (voiceCorrectPendingOrder) {
+			var nextOrder = voiceCorrectPendingOrder;
+			voiceCorrectPendingOrder = null;
+			renderVoiceCorrectOrder(nextOrder);
+		}
+	});
 }
 
 function showVoiceCorrectErrorPopup() {

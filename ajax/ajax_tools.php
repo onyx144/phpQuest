@@ -124,9 +124,9 @@ if (isset($_POST['op'])) {
 			$lang_abbr = isset($_POST['lang_abbr']) ? strip_tags(trim($_POST['lang_abbr'])) : '';
 
 			$lang_id = $lang->getLangIdByHtmlAttr($lang_abbr);
-//временно 
+
 			if (
-				/*($degree && ($degree == 94 || $degree == '94')) && 
+				($degree && ($degree == 94 || $degree == '94')) && 
 				(!empty($input1) && ($input1 == 679 || $input1 == '679')) && 
 				(!empty($input2) && ($input2 == 100 || $input2 == '100')) && 
 				(!empty($input3) && $input3 == '071') && 
@@ -138,7 +138,7 @@ if (isset($_POST['op'])) {
 				($dot_w !== false && $dot_w == 3) && 
 				($checkbox_n !== false && $checkbox_n == 1) && 
 				($checkbox_s !== false && $checkbox_s == 0) && 
-				($checkbox_e !== false && $checkbox_e == 0) && */
+				($checkbox_e !== false && $checkbox_e == 0) &&
 				($checkbox_w !== false && $checkbox_w == 1)
 			) {
 				$return['success'] = 'ok';

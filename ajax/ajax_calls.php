@@ -53,32 +53,7 @@ if (isset($_POST['op'])) {
 			if (!$function->isActiveVerifyCode($userInfo['team_id'])) {
 				$return['error_verify'] = $translation['text4'];
 			} else {
-				$team_info = $function->teamInfo($userInfo['team_id']);
-				if ($team_info) {
-					// текущий список
-					$active_calls = json_decode($team_info['active_calls'], true);
-
-					// обновленный список
-					$new_calls = [];
-
-					$isset_call = false;
-					foreach ($active_calls as $call) {
-						if ($call['id'] == $call_id) {
-							$new_calls[] = ['id' => $call['id'], 'datetime' => date('Y-m-d H:i:s')];
-							$isset_call = true;
-						} else {
-							$new_calls[] = ['id' => $call['id'], 'datetime' => $call['datetime']];
-						}
-					}
-
-					if (!$isset_call) {
-						$new_calls[] = ['id' => $call_id, 'datetime' => date('Y-m-d H:i:s')];
-					}
-
-					// сохраняем обновленный список
-					$sql = "UPDATE `teams` SET `active_calls` = {?} WHERE `id` = {?}";
-					$db->query($sql, [json_encode($new_calls, JSON_UNESCAPED_UNICODE), $userInfo['team_id']]);
-
+				if ($function->updateTeamActiveCall($userInfo['team_id'], $call_id)) {
 					$return['success'] = 'ok';
 				} else {
 					$return['error'] = $translation['text29'];
@@ -127,12 +102,7 @@ if (isset($_POST['op'])) {
 
 								// если не Fake Call 3, то пишем в список осуществленных
 								if ($call_info['id'] != 4) {
-									// пишем звонок в список осуществленных
-									$active_calls = json_decode($team_info['active_calls'], true);
-									$active_calls[] = ['id' => $call_info['id'], 'datetime' => date('Y-m-d H:i:s')];
-
-									$sql = "UPDATE `teams` SET `active_calls` = {?} WHERE `id` = {?}";
-									$db->query($sql, [json_encode($active_calls, JSON_UNESCAPED_UNICODE), $userInfo['team_id']]);
+									$function->updateTeamActiveCall($userInfo['team_id'], $call_info['id']);
 								}
 
 								// обновляем звонок, который будет идти следующим

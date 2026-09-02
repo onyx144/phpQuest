@@ -53,7 +53,17 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                     </div>
                 </div>
 
-                <?php if ($selected_lang && !empty($words_with_english)): ?>
+                <?php
+                $dict_pages_for_select = !empty($available_dict_pages) && is_array($available_dict_pages) ? $available_dict_pages : ['game'];
+                if (!in_array('game', $dict_pages_for_select, true)) {
+                    array_unshift($dict_pages_for_select, 'game');
+                }
+                if (!in_array('chat_messages', $dict_pages_for_select, true)) {
+                    $dict_pages_for_select[] = 'chat_messages';
+                }
+                ?>
+
+                <?php if ($selected_lang && empty($is_chat_messages_page) && !empty($words_with_english)): ?>
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
@@ -84,12 +94,6 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                 </div>
                             </div>
                             <div class="card-body">
-                                <?php
-                                $dict_pages_for_select = !empty($available_dict_pages) && is_array($available_dict_pages) ? $available_dict_pages : ['game'];
-                                if (!in_array('game', $dict_pages_for_select, true)) {
-                                    array_unshift($dict_pages_for_select, 'game');
-                                }
-                                ?>
                                 <form method="get" action="/language" class="mb-4">
                                     <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
                                     <div class="row g-2 align-items-end">
@@ -101,10 +105,10 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                         </div>
                                         <div class="col-md-4 col-lg-3">
                                             <label for="dict-page-scope" class="form-label mb-0">Page:</label>
-                                            <select class="form-select" id="dict-page-scope" name="dict_page_scope">
+                                            <select class="form-select dict-page-scope-select" id="dict-page-scope" name="dict_page_scope">
                                                 <?php foreach ($dict_pages_for_select as $dict_page_option): ?>
                                                     <option value="<?php echo htmlspecialchars((string) $dict_page_option); ?>" <?php echo ((string) ($dict_page_scope ?? 'game') === (string) $dict_page_option) ? 'selected' : ''; ?>>
-                                                        <?php echo htmlspecialchars((string) $dict_page_option); ?>
+                                                        <?php echo htmlspecialchars((string) $dict_page_option === 'chat_messages' ? 'Chat Messages' : (string) $dict_page_option); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -225,19 +229,13 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                         </div>
                     </div>
                 </div>
-                <?php elseif ($selected_lang && empty($words_with_english)): ?>
+                <?php elseif ($selected_lang && empty($is_chat_messages_page) && empty($words_with_english)): ?>
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <form method="get" action="/language" class="mb-3">
                                     <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
-                                    <?php
-                                    $dict_pages_for_select = !empty($available_dict_pages) && is_array($available_dict_pages) ? $available_dict_pages : ['game'];
-                                    if (!in_array('game', $dict_pages_for_select, true)) {
-                                        array_unshift($dict_pages_for_select, 'game');
-                                    }
-                                    ?>
                                     <div class="row g-2 align-items-end">
                                         <div class="col-md-6 col-lg-4">
                                             <label for="search-field-empty" class="form-label mb-0">Search by Field (Code) or Word:</label>
@@ -247,10 +245,10 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                         </div>
                                         <div class="col-md-4 col-lg-3">
                                             <label for="dict-page-scope-empty" class="form-label mb-0">Page:</label>
-                                            <select class="form-select" id="dict-page-scope-empty" name="dict_page_scope">
+                                            <select class="form-select dict-page-scope-select" id="dict-page-scope-empty" name="dict_page_scope">
                                                 <?php foreach ($dict_pages_for_select as $dict_page_option): ?>
                                                     <option value="<?php echo htmlspecialchars((string) $dict_page_option); ?>" <?php echo ((string) ($dict_page_scope ?? 'game') === (string) $dict_page_option) ? 'selected' : ''; ?>>
-                                                        <?php echo htmlspecialchars((string) $dict_page_option); ?>
+                                                        <?php echo htmlspecialchars((string) $dict_page_option === 'chat_messages' ? 'Chat Messages' : (string) $dict_page_option); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -270,6 +268,133 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
                                     No words found for this language. Click "Add Word" to start adding words.
                                     <?php endif; ?>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if ($selected_lang && !empty($is_chat_messages_page)): ?>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h5 class="card-title mb-0">
+                                            Chat Messages: <?php echo htmlspecialchars($selected_lang['lang_name']); ?>
+                                            <span class="badge bg-dark">page: chat_messages</span>
+                                            <?php if ($selected_lang['lang_abbr'] == 'en'): ?>
+                                                <span class="badge bg-info">English</span>
+                                            <?php endif; ?>
+                                        </h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-sm btn-success" id="btn-add-chat-message">
+                                            <i class="fas fa-plus"></i> Add Word
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-info" id="btn-import-chat-json">
+                                            <i class="fas fa-file-import"></i> Import JSON
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-warning" id="btn-export-chat-json">
+                                            <i class="fas fa-file-export"></i> Export JSON
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form method="get" action="/language" class="mb-4">
+                                    <input type="hidden" name="lang_id" value="<?php echo (int)$selected_lang_id; ?>">
+                                    <div class="row g-2 align-items-end">
+                                        <div class="col-md-6 col-lg-4">
+                                            <label for="chat-search-field" class="form-label mb-0">Search by ID or Message:</label>
+                                            <input type="text" class="form-control" id="chat-search-field" name="search"
+                                                   value="<?php echo htmlspecialchars($search); ?>"
+                                                   placeholder="Enter message id or text...">
+                                        </div>
+                                        <div class="col-md-4 col-lg-3">
+                                            <label for="dict-page-scope-chat" class="form-label mb-0">Page:</label>
+                                            <select class="form-select dict-page-scope-select" id="dict-page-scope-chat" name="dict_page_scope">
+                                                <?php foreach ($dict_pages_for_select as $dict_page_option): ?>
+                                                    <option value="<?php echo htmlspecialchars((string) $dict_page_option); ?>" <?php echo ((string) ($dict_page_scope ?? 'game') === (string) $dict_page_option) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars((string) $dict_page_option === 'chat_messages' ? 'Chat Messages' : (string) $dict_page_option); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                            <?php if ($search !== ''): ?>
+                                            <a href="/language?lang_id=<?php echo (int)$selected_lang_id; ?>&dict_page_scope=chat_messages" class="btn btn-outline-secondary">Clear</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </form>
+                                <p class="text-muted small mb-2">
+                                    Bot message templates from <code>chat_messages_description</code>, grouped by <code>message_default_id</code>.
+                                    Saving a translation updates every existing copy for this language, and new chat messages will use the latest saved text.
+                                </p>
+                                <?php if (!empty($chat_messages_with_english)): ?>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover card-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%;">Message ID</th>
+                                                <th style="width: 40%;">Message in <?php echo htmlspecialchars($selected_lang['lang_name']); ?></th>
+                                                <th style="width: 38%;">English Equivalent</th>
+                                                <th style="width: 12%;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="chat-messages-table-body">
+                                            <?php foreach ($chat_messages_with_english as $chat_msg): ?>
+                                                <?php $chat_missing = !empty($chat_msg['missing_in_selected']); ?>
+                                                <tr data-message-default-id="<?php echo (int) $chat_msg['message_default_id']; ?>">
+                                                    <td>
+                                                        <code><?php echo (int) $chat_msg['message_default_id']; ?></code>
+                                                    </td>
+                                                    <td>
+                                                        <div class="chat-val-static" style="max-height: 6.5rem; overflow: auto; white-space: pre-wrap; word-break: break-word;">
+                                                            <?php if ($chat_missing): ?>
+                                                                <span class="chat-val-display text-muted fst-italic">empty</span>
+                                                                <br><small class="text-muted">Defined in English only — add a translation here.</small>
+                                                            <?php else: ?>
+                                                                <span class="chat-val-display"><?php echo htmlspecialchars(($chat_msg['val'] ?? '') !== '' ? $chat_msg['val'] : '(empty)'); ?></span>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                        <textarea class="form-control form-control-sm chat-val-input d-none" rows="4"><?php echo htmlspecialchars($chat_msg['val'] ?? ''); ?></textarea>
+                                                    </td>
+                                                    <td>
+                                                        <div class="chat-english-static" style="max-height: 6.5rem; overflow: auto; white-space: pre-wrap; word-break: break-word;">
+                                                            <span class="chat-english-display"><?php echo htmlspecialchars(($chat_msg['english_val'] ?? '') !== '' ? $chat_msg['english_val'] : '(empty)'); ?></span>
+                                                            <?php if ($chat_missing): ?>
+                                                                <br><small class="text-success">In English</small>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-primary edit-chat-message-btn">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-success save-chat-message-btn d-none"
+                                                                data-message-default-id="<?php echo (int) $chat_msg['message_default_id']; ?>">
+                                                            <i class="fas fa-save"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-secondary cancel-chat-edit-btn d-none">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php else: ?>
+                                <div class="alert alert-info mb-0">
+                                    No chat message templates found in <code>chat_messages_description</code>.
+                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -380,6 +505,69 @@ require_once(ROOT . '/admin/view/template/blocks/nav.php');
     </div>
 </div>
 
+<!-- Modal: Add Chat Message -->
+<div class="modal fade" id="addChatMessageModal" tabindex="-1" aria-labelledby="addChatMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addChatMessageModalLabel">Add Chat Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-chat-message-form">
+                    <input type="hidden" id="add-chat-lang-id" value="<?php echo (int) $selected_lang_id; ?>">
+                    <div class="mb-3">
+                        <label for="chat_message_default_id" class="form-label">Message ID:</label>
+                        <input type="number" class="form-control" id="chat_message_default_id" name="chat_message_default_id" required min="1">
+                        <small class="form-text text-muted">Unique <code>message_default_id</code> for this bot template.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="chat_message_val" class="form-label">Message in <?php echo !empty($selected_lang) ? htmlspecialchars($selected_lang['lang_name']) : 'Language'; ?>:</label>
+                        <textarea class="form-control" id="chat_message_val" name="chat_message_val" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="chat_message_english_val" class="form-label">English Equivalent:</label>
+                        <textarea class="form-control" id="chat_message_english_val" name="chat_message_english_val" rows="4" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-chat-message-add-btn">Save Word</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Import Chat JSON -->
+<div class="modal fade" id="importChatJsonModal" tabindex="-1" aria-labelledby="importChatJsonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importChatJsonModalLabel">Import Chat Messages from JSON</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="import-chat-json-form">
+                    <input type="hidden" id="import-chat-json-lang-id" value="<?php echo (int) $selected_lang_id; ?>">
+                    <div class="mb-3">
+                        <label for="chat_json_data" class="form-label">JSON Data:</label>
+                        <textarea class="form-control" id="chat_json_data" name="chat_json_data" rows="15" required></textarea>
+                        <small class="form-text text-muted">
+                            Applies to <code>chat_messages_description</code>.<br>
+                            Format: <code>{"1": {"val": "…", "english": "…"}, "2": "text for this language"}</code>
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="import-chat-json-btn">Import JSON</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function() {
     console.log('Language management script loaded');
@@ -387,11 +575,16 @@ $(document).ready(function() {
     // Language selection change
     $('#language-select').on('change', function() {
         var langId = $(this).val();
+        var pageScope = <?php echo json_encode((string) ($dict_page_scope ?? 'game')); ?>;
         if (langId > 0) {
-            window.location.href = '/language?lang_id=' + langId;
+            window.location.href = '/language?lang_id=' + langId + '&dict_page_scope=' + encodeURIComponent(pageScope);
         } else {
             window.location.href = '/language';
         }
+    });
+
+    $(document).on('change', '.dict-page-scope-select', function() {
+        $(this).closest('form').submit();
     });
 
     // Open modals via JavaScript (works with both Bootstrap 4 and 5)
@@ -430,6 +623,26 @@ $(document).ready(function() {
             bsModal.show();
         } else {
             // Bootstrap 4
+            modal.modal('show');
+        }
+    });
+
+    $('#btn-add-chat-message').on('click', function() {
+        var modal = $('#addChatMessageModal');
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            var bsModal = new bootstrap.Modal(modal[0]);
+            bsModal.show();
+        } else {
+            modal.modal('show');
+        }
+    });
+
+    $('#btn-import-chat-json').on('click', function() {
+        var modal = $('#importChatJsonModal');
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            var bsModal = new bootstrap.Modal(modal[0]);
+            bsModal.show();
+        } else {
             modal.modal('show');
         }
     });
@@ -885,6 +1098,360 @@ $(document).ready(function() {
         });
     });
 
+    $('#chat-search-field').on('input', function() {
+        var q = $.trim($(this).val()).toLowerCase();
+        $('#chat-messages-table-body tr').each(function() {
+            var $row = $(this);
+            if (!q) {
+                $row.removeClass('d-none');
+                return;
+            }
+            var hay = $row.text().toLowerCase();
+            $row.toggleClass('d-none', hay.indexOf(q) === -1);
+        });
+    });
+
+    $(document).on('click', '.edit-chat-message-btn', function() {
+        var row = $(this).closest('tr');
+        row.data('original-message', row.find('.chat-val-input').val());
+        row.find('.chat-val-static').addClass('d-none');
+        row.find('.chat-val-input').removeClass('d-none');
+        row.find('.edit-chat-message-btn').addClass('d-none');
+        row.find('.save-chat-message-btn').removeClass('d-none');
+        row.find('.cancel-chat-edit-btn').removeClass('d-none');
+        row.find('.chat-val-input').trigger('focus');
+    });
+
+    $(document).on('click', '.cancel-chat-edit-btn', function() {
+        var row = $(this).closest('tr');
+        var originalVal = row.data('original-message');
+        if (typeof originalVal !== 'undefined') {
+            row.find('.chat-val-input').val(originalVal);
+        }
+        row.find('.chat-val-static').removeClass('d-none');
+        row.find('.chat-val-input').addClass('d-none');
+        row.find('.edit-chat-message-btn').removeClass('d-none');
+        row.find('.save-chat-message-btn').addClass('d-none');
+        row.find('.cancel-chat-edit-btn').addClass('d-none');
+    });
+
+    $(document).on('click', '.save-chat-message-btn', function() {
+        var btn = $(this);
+        var row = btn.closest('tr');
+        var messageDefaultId = btn.data('message-default-id');
+        var val = row.find('.chat-val-input').val();
+        var langId = <?php echo $selected_lang_id ? (int) $selected_lang_id : 0; ?>;
+
+        if (!langId || langId <= 0) {
+            alert('Please select a language first');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('op', 'updateChatMessage');
+        formData.append('message_default_id', messageDefaultId);
+        formData.append('lang_id', langId);
+        formData.append('message', val);
+
+        $.ajax({
+            url: '/admin/ajax/ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(json) {
+                if (json.success) {
+                    var $static = row.find('.chat-val-static');
+                    $static.removeClass('d-none').empty().append(
+                        $('<span class="chat-val-display"></span>').text(val || '(empty)')
+                    );
+                    row.data('original-message', val);
+                    row.find('.chat-english-static small').remove();
+                    row.find('.chat-val-input').addClass('d-none');
+                    row.find('.edit-chat-message-btn').removeClass('d-none');
+                    row.find('.save-chat-message-btn').addClass('d-none');
+                    row.find('.cancel-chat-edit-btn').addClass('d-none');
+
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Chat message updated for this language',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: json.error || 'Failed to update chat message'
+                        });
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX Error',
+                        text: thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
+                    });
+                }
+            }
+        });
+    });
+
+    $('#btn-export-chat-json').on('click', function() {
+        var langId = <?php echo $selected_lang_id ? (int) $selected_lang_id : 0; ?>;
+
+        if (!langId || langId <= 0) {
+            alert('Please select a language first');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('op', 'exportChatMessagesJson');
+        formData.append('lang_id', langId);
+
+        $.ajax({
+            url: '/admin/ajax/ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(json) {
+                if (json.success && json.data) {
+                    var jsonString = JSON.stringify(json.data, null, 2);
+                    var blob = new Blob([jsonString], { type: 'application/json' });
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'chat_messages_' + langId + '_export.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Chat messages exported successfully',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                } else {
+                    var errorMsg = json.error || 'Failed to export chat messages';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert('Error: ' + errorMsg);
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var errorMsg = thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX Error',
+                        text: errorMsg
+                    });
+                } else {
+                    alert('AJAX Error: ' + errorMsg);
+                }
+            }
+        });
+    });
+
+    $('#save-chat-message-add-btn').on('click', function() {
+        var langId = $('#add-chat-lang-id').val();
+        var messageDefaultId = $('#chat_message_default_id').val();
+        var val = $('#chat_message_val').val();
+        var englishVal = $('#chat_message_english_val').val();
+
+        if (!langId || langId <= 0) {
+            alert('Please select a language first');
+            return;
+        }
+        if (!messageDefaultId || !val || !englishVal) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('op', 'addChatMessage');
+        formData.append('lang_id', langId);
+        formData.append('message_default_id', messageDefaultId);
+        formData.append('val', val);
+        formData.append('english_val', englishVal);
+
+        $.ajax({
+            url: '/admin/ajax/ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(json) {
+                if (json.success) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Chat message saved successfully',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            var modal = $('#addChatMessageModal');
+                            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                                var bsModal = bootstrap.Modal.getInstance(modal[0]);
+                                if (bsModal) bsModal.hide();
+                            } else {
+                                modal.modal('hide');
+                            }
+                            location.reload();
+                        });
+                    } else {
+                        alert('Chat message saved successfully');
+                        $('#addChatMessageModal').modal('hide');
+                        location.reload();
+                    }
+                } else {
+                    var errorMsg = json.error || 'Failed to save chat message';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert('Error: ' + errorMsg);
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var errorMsg = thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX Error',
+                        text: errorMsg
+                    });
+                } else {
+                    alert('AJAX Error: ' + errorMsg);
+                }
+            }
+        });
+    });
+
+    $('#import-chat-json-btn').on('click', function() {
+        var jsonData = $('#chat_json_data').val();
+        var langId = $('#import-chat-json-lang-id').val();
+
+        if (!langId || langId <= 0) {
+            alert('Please select a language first');
+            return;
+        }
+        if (!jsonData || jsonData.trim() === '') {
+            alert('Please enter JSON data');
+            return;
+        }
+
+        try {
+            JSON.parse(jsonData);
+        } catch (e) {
+            var errorMsg = 'Please check your JSON format: ' + e.message;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid JSON',
+                    text: errorMsg
+                });
+            } else {
+                alert('Invalid JSON: ' + errorMsg);
+            }
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('op', 'importChatMessagesJson');
+        formData.append('lang_id', langId);
+        formData.append('json_data', jsonData);
+
+        $.ajax({
+            url: '/admin/ajax/ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(json) {
+                if (json.success) {
+                    var successMsg = json.message || 'Chat messages imported successfully';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: successMsg,
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            var modal = $('#importChatJsonModal');
+                            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                                var bsModal = bootstrap.Modal.getInstance(modal[0]);
+                                if (bsModal) bsModal.hide();
+                            } else {
+                                modal.modal('hide');
+                            }
+                            location.reload();
+                        });
+                    } else {
+                        alert(successMsg);
+                        $('#importChatJsonModal').modal('hide');
+                        location.reload();
+                    }
+                } else {
+                    var errorMsg = json.error || 'Failed to import chat messages';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorMsg
+                        });
+                    } else {
+                        alert('Error: ' + errorMsg);
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var errorMsg = thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX Error',
+                        text: errorMsg
+                    });
+                } else {
+                    alert('AJAX Error: ' + errorMsg);
+                }
+            }
+        });
+    });
+
     // Очистка форм при закрытии модальных окон (работает для Bootstrap 4 и 5)
     $('#addLanguageModal').on('hidden.bs.modal hidden', function () {
         $('#add-language-form')[0].reset();
@@ -894,6 +1461,12 @@ $(document).ready(function() {
     });
     $('#importJsonModal').on('hidden.bs.modal hidden', function () {
         $('#import-json-form')[0].reset();
+    });
+    $('#addChatMessageModal').on('hidden.bs.modal hidden', function () {
+        $('#add-chat-message-form')[0].reset();
+    });
+    $('#importChatJsonModal').on('hidden.bs.modal hidden', function () {
+        $('#import-chat-json-form')[0].reset();
     });
 });
 </script>

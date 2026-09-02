@@ -288,7 +288,7 @@
             <div class="popup_voice_correct_alison_bg"></div>
             <div class="popup_voice_correct_alison_inner">
                 <div class="popup_voice_correct_alison_photo">
-                    <img src="/images/agent_face3.jpg" alt="Elison">
+                    <img src="/images/agent_profile.jpg" alt="Elison">
                 </div>
                 <div class="popup_voice_correct_alison_title">VOICE MESSAGE — ELISON</div>
                 <div class="popup_voice_correct_alison_status">PLAYING FULL AUDIO...</div>
@@ -431,7 +431,7 @@
             </div>
         </div>
 
-        <!-- popup call hacked (після 3-го дзвінка / geo coordinates) -->
+        <!-- popup call hacked -->
         <div id="popup_call_hacked">
             <div class="popup_call_hacked_bg"></div>
             <div class="popup_call_hacked_inner_main">

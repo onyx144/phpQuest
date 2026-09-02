@@ -663,6 +663,7 @@ if (isset($_POST['op'])) {
 								'list_databases' => [],
 								'last_databases' => 'no_access',
 								'calls_outgoing_id' => 2,
+								// call_id: 1 accept, 5 company, 6 geo, 7 african, 8 meeting, 9 room, 10 minigame
 								'active_calls' => [['id' => 1, 'datetime' => '']],
 								'last_calls' => 'no_access',
 								'view_call_jane_btn' => 0,
@@ -681,6 +682,15 @@ if (isset($_POST['op'])) {
 								'dashboard_interpol_access' => 0
 							];
 
+							$callsSeed = function () {
+								$args = func_get_args();
+								$list = [];
+								foreach ($args as $id) {
+									$list[] = ['id' => (int) $id, 'datetime' => ''];
+								}
+								return $list;
+							};
+
 							if ($stage == 'company_name') {
 								$stage_state['list_hints'] = $getHintIdsByStep('accept_mission');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -690,6 +700,7 @@ if (isset($_POST['op'])) {
 								$stage_state['last_databases'] = 'databases_start_four';
 								$stage_state['last_calls'] = 'call_list';
 								$stage_state['view_call_jane_btn'] = 1;
+								$stage_state['active_calls'] = $callsSeed(1);
 							} elseif ($stage == 'geo_coordinates') {
 								$stage_state['list_hints'] = $getHintIdsByStep('company_investigate');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -701,6 +712,7 @@ if (isset($_POST['op'])) {
 								$stage_state['view_call_jane_btn'] = 1;
 								$stage_state['list_tools'] = ['gps_coordinates'];
 								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['active_calls'] = $callsSeed(1, 5);
 							} elseif ($stage == 'voice_decoder') {
 								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -712,6 +724,7 @@ if (isset($_POST['op'])) {
 								$stage_state['view_call_jane_btn'] = 1;
 								$stage_state['list_tools'] = ['gps_coordinates'];
 								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6);
 							} elseif ($stage == 'voice_correct') {
 								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -723,6 +736,7 @@ if (isset($_POST['op'])) {
 								$stage_state['view_call_jane_btn'] = 1;
 								$stage_state['list_tools'] = ['gps_coordinates'];
 								$stage_state['last_tools'] = 'tools_start_four';
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6);
 							} elseif ($stage == 'african_partner') {
 								$stage_state['list_hints'] = $getHintIdsByStep('geo_coordinates');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -735,6 +749,7 @@ if (isset($_POST['op'])) {
 								$stage_state['list_tools'] = ['gps_coordinates', 'advanced_search_engine'];
 								$stage_state['last_tools'] = 'tools_start_four';
 								$stage_state['tools_advanced_search_engine_access'] = 1;
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6);
 							} elseif ($stage == 'metting_place') {
 								$stage_state['list_hints'] = $getHintIdsByStep('african_partner');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -750,6 +765,7 @@ if (isset($_POST['op'])) {
 								$stage_state['tools_advanced_search_engine_access'] = 1;
 								$stage_state['tools_symbol_decoder_access'] = 1;
 								$stage_state['databases_bank_transactions_access'] = 1;
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6, 7);
 							} elseif ($stage == 'room_name') {
 								$stage_state['list_hints'] = $getHintIdsByStep('3d_plan');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -766,6 +782,7 @@ if (isset($_POST['op'])) {
 								$stage_state['tools_symbol_decoder_access'] = 1;
 								$stage_state['tools_3d_bulding_scan_access'] = 1;
 								$stage_state['databases_bank_transactions_access'] = 1;
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6, 7, 8);
 							} elseif ($stage == 'password') {
 								$stage_state['list_hints'] = $getHintIdsByStep('minigame');
 								$stage_state['list_hints_title_lang_var'] = 'text44';
@@ -782,6 +799,7 @@ if (isset($_POST['op'])) {
 								$stage_state['tools_symbol_decoder_access'] = 1;
 								$stage_state['tools_3d_bulding_scan_access'] = 1;
 								$stage_state['databases_bank_transactions_access'] = 1;
+								$stage_state['active_calls'] = $callsSeed(1, 5, 6, 7, 8, 9, 10);
 							}
 
 							$sql = "UPDATE `teams` SET
@@ -1180,6 +1198,227 @@ if (isset($_POST['op'])) {
 
 			print_r(json_encode($return));
 			break;
+
+		// Обновить перевод шаблона чата (chat_messages_description)
+		case 'updateChatMessage':
+			if ($userInfo['role_id'] == 2) {
+				$message_default_id = isset($_POST['message_default_id']) ? (int) $_POST['message_default_id'] : 0;
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$message = isset($_POST['message']) ? trim($_POST['message']) : '';
+
+				if ($message_default_id <= 0 || $lang_id <= 0) {
+					$return['error'] = 'Message ID and Language ID are required';
+				} else {
+					$sql = "
+						UPDATE `chat_messages_description` `cd`
+						INNER JOIN `chat_messages` `c` ON `c`.`id` = `cd`.`chat_message_id`
+						SET `cd`.`message` = {?}
+						WHERE `c`.`message_default_id` = {?} AND `cd`.`lang_id` = {?}
+					";
+					$db->query($sql, [$message, $message_default_id, $lang_id]);
+
+					$sql = "
+						INSERT INTO `chat_messages_description` (`chat_message_id`, `lang_id`, `message`)
+						SELECT `c`.`id`, {?}, {?}
+						FROM `chat_messages` `c`
+						LEFT JOIN `chat_messages_description` `cd`
+							ON `cd`.`chat_message_id` = `c`.`id` AND `cd`.`lang_id` = {?}
+						WHERE `c`.`message_default_id` = {?} AND `cd`.`id` IS NULL
+					";
+					$db->query($sql, [$lang_id, $message, $lang_id, $message_default_id]);
+
+					$return['success'] = 'ok';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		case 'addChatMessage':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$message_default_id = isset($_POST['message_default_id']) ? (int) $_POST['message_default_id'] : 0;
+				$val = isset($_POST['val']) ? trim($_POST['val']) : '';
+				$english_val = isset($_POST['english_val']) ? trim($_POST['english_val']) : '';
+
+				if ($lang_id <= 0 || $message_default_id <= 0 || $val === '') {
+					$return['error'] = 'Language, Message ID and message text are required';
+				} else {
+					$english_lang_id = (int) $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+					$is_new_template = !((int) $db->selectCell("SELECT `id` FROM `chat_messages` WHERE `message_default_id` = {?} LIMIT 1", [$message_default_id]));
+					adminEnsureChatMessageTemplate($db, $message_default_id);
+
+					if ($is_new_template) {
+						$chat_lang_ids = [];
+						$active_langs = $db->select('SELECT `id` FROM `langs` WHERE `status` = {?}', [1]);
+						if ($active_langs) {
+							foreach ($active_langs as $active_lang) {
+								$chat_lang_ids[] = (int) $active_lang['id'];
+							}
+						}
+						if ($lang_id && !in_array($lang_id, $chat_lang_ids, true)) {
+							$chat_lang_ids[] = $lang_id;
+						}
+						if ($english_lang_id && !in_array($english_lang_id, $chat_lang_ids, true)) {
+							$chat_lang_ids[] = $english_lang_id;
+						}
+						foreach ($chat_lang_ids as $chat_lang_id) {
+							if ($chat_lang_id === $lang_id) {
+								$text = $val;
+							} elseif ($english_lang_id && $chat_lang_id === $english_lang_id) {
+								$text = ($english_val !== '') ? $english_val : $val;
+							} else {
+								$text = ($english_val !== '') ? $english_val : $val;
+							}
+							adminUpsertChatMessageLang($db, $message_default_id, $chat_lang_id, $text);
+						}
+					} else {
+						adminUpsertChatMessageLang($db, $message_default_id, $lang_id, $val);
+						if ($english_lang_id && $english_val !== '' && $english_lang_id !== $lang_id) {
+							adminUpsertChatMessageLang($db, $message_default_id, $english_lang_id, $english_val);
+						}
+					}
+
+					$return['success'] = 'ok';
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		case 'importChatMessagesJson':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+				$json_data = isset($_POST['json_data']) ? $_POST['json_data'] : '';
+
+				if ($lang_id <= 0 || $json_data === '') {
+					$return['error'] = 'Language ID and JSON data are required';
+				} else {
+					$data = json_decode($json_data, true);
+					if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+						$return['error'] = 'Invalid JSON format: ' . json_last_error_msg();
+					} else {
+						$english_lang_id = (int) $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+						$imported_count = 0;
+						$updated_count = 0;
+
+						foreach ($data as $message_id_key => $value) {
+							$message_default_id = (int) $message_id_key;
+							if ($message_default_id <= 0) {
+								continue;
+							}
+
+							if (is_array($value)) {
+								$val = isset($value['val']) ? trim((string) $value['val']) : '';
+								$english_val = isset($value['english']) ? trim((string) $value['english']) : '';
+							} else {
+								$val = trim((string) $value);
+								$english_val = '';
+							}
+
+							if ($val === '' && $english_val === '') {
+								continue;
+							}
+
+							$already_exists = (int) $db->selectCell("SELECT `id` FROM `chat_messages` WHERE `message_default_id` = {?} LIMIT 1", [$message_default_id]);
+							adminEnsureChatMessageTemplate($db, $message_default_id);
+
+							if ($val !== '') {
+								adminUpsertChatMessageLang($db, $message_default_id, $lang_id, $val);
+							}
+							if ($english_lang_id && $english_val !== '' && $english_lang_id !== $lang_id) {
+								adminUpsertChatMessageLang($db, $message_default_id, $english_lang_id, $english_val);
+							} elseif ($english_lang_id && $val !== '' && $lang_id === $english_lang_id) {
+								adminUpsertChatMessageLang($db, $message_default_id, $english_lang_id, $val);
+							}
+
+							if ($already_exists) {
+								$updated_count++;
+							} else {
+								$imported_count++;
+							}
+						}
+
+						$return['success'] = 'ok';
+						$return['message'] = "Imported: {$imported_count} messages, Updated: {$updated_count} messages";
+					}
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
+
+		case 'exportChatMessagesJson':
+			if ($userInfo['role_id'] == 2) {
+				$lang_id = isset($_POST['lang_id']) ? (int) $_POST['lang_id'] : 0;
+
+				if ($lang_id <= 0) {
+					$return['error'] = 'Language ID is required';
+				} else {
+					$lang_info = $db->selectRow("SELECT `id`, `lang_name`, `lang_abbr` FROM `langs` WHERE `id` = {?} LIMIT 1", [$lang_id]);
+					if (!$lang_info) {
+						$return['error'] = 'Language not found';
+					} else {
+						$english_lang_id = (int) $db->selectCell("SELECT `id` FROM `langs` WHERE `lang_abbr` = {?} AND `status` = {?} LIMIT 1", ['en', 1]);
+						$ids = $db->select("SELECT DISTINCT `message_default_id` FROM `chat_messages` WHERE `message_default_id` > 0 ORDER BY `message_default_id` ASC");
+						$export_data = [];
+
+						if ($ids) {
+							foreach ($ids as $id_row) {
+								$message_default_id = (int) $id_row['message_default_id'];
+								$val = $db->selectCell("
+									SELECT `d`.`message`
+									FROM `chat_messages_description` `d`
+									INNER JOIN `chat_messages` `c` ON `c`.`id` = `d`.`chat_message_id`
+									WHERE `c`.`message_default_id` = {?} AND `d`.`lang_id` = {?}
+									ORDER BY `d`.`id` DESC
+									LIMIT 1
+								", [$message_default_id, $lang_id]);
+								$val = ($val === false || $val === null) ? '' : (string) $val;
+
+								$english_word = '';
+								if ($english_lang_id) {
+									if ($lang_id === $english_lang_id) {
+										$english_word = $val;
+									} else {
+										$english_word = $db->selectCell("
+											SELECT `d`.`message`
+											FROM `chat_messages_description` `d`
+											INNER JOIN `chat_messages` `c` ON `c`.`id` = `d`.`chat_message_id`
+											WHERE `c`.`message_default_id` = {?} AND `d`.`lang_id` = {?}
+											ORDER BY `d`.`id` DESC
+											LIMIT 1
+										", [$message_default_id, $english_lang_id]);
+										$english_word = ($english_word === false || $english_word === null) ? '' : (string) $english_word;
+									}
+								}
+
+								if ($val !== '' || $english_word !== '') {
+									$export_data[(string) $message_default_id] = [
+										'val' => $val,
+										'english' => $english_word
+									];
+								}
+							}
+						}
+
+						$return['success'] = 'ok';
+						$return['data'] = $export_data;
+						$return['language'] = $lang_info['lang_name'] . ' (' . $lang_info['lang_abbr'] . ')';
+					}
+				}
+			} else {
+				$return['error'] = 'Access is denied';
+			}
+
+			print_r(json_encode($return));
+			break;
 	}
 }
 
@@ -1211,4 +1450,38 @@ function fromRusDatetimeToEng($datetime) {
     }
 
     return $return;
+}
+
+function adminEnsureChatMessageTemplate($db, $message_default_id)
+{
+    $existing = $db->selectCell("SELECT `id` FROM `chat_messages` WHERE `message_default_id` = {?} LIMIT 1", [(int) $message_default_id]);
+    if ($existing) {
+        return (int) $existing;
+    }
+
+    return $db->query(
+        "INSERT INTO `chat_messages` SET `team_id` = {?}, `side` = {?}, `datetime` = NOW(), `message_default_id` = {?}",
+        [0, 'bot', (int) $message_default_id]
+    );
+}
+
+function adminUpsertChatMessageLang($db, $message_default_id, $lang_id, $message)
+{
+    $sql = "
+        UPDATE `chat_messages_description` `cd`
+        INNER JOIN `chat_messages` `c` ON `c`.`id` = `cd`.`chat_message_id`
+        SET `cd`.`message` = {?}
+        WHERE `c`.`message_default_id` = {?} AND `cd`.`lang_id` = {?}
+    ";
+    $db->query($sql, [$message, (int) $message_default_id, (int) $lang_id]);
+
+    $sql = "
+        INSERT INTO `chat_messages_description` (`chat_message_id`, `lang_id`, `message`)
+        SELECT `c`.`id`, {?}, {?}
+        FROM `chat_messages` `c`
+        LEFT JOIN `chat_messages_description` `cd`
+            ON `cd`.`chat_message_id` = `c`.`id` AND `cd`.`lang_id` = {?}
+        WHERE `c`.`message_default_id` = {?} AND `cd`.`id` IS NULL
+    ";
+    $db->query($sql, [(int) $lang_id, $message, (int) $lang_id, (int) $message_default_id]);
 }
